@@ -9,13 +9,12 @@ from . import utils
 class GenConfView(FormView):
     form_class = forms.GenConfForm
     template_name = 'genconf/home.html'
-    success_url = '/'
 
-    # def get_success_urls(self):
-    #     return reverse('home')
+    def get_success_url(self):
+        return reverse('home')
 
     def form_valid(self, form):
-        config = utils.get_config(form.cleaned_date)
+        config = utils.get_config(form.cleaned_data)
         cisco = utils.get_cisco_config(config, 0)
-        print cisco[0:200]
+        print cisco
         return super(GenConfView, self).form_valid(form)
