@@ -17,7 +17,7 @@ clock timezone GMT+1 1
 clock summer-time CDT recurring
 !mmi polling-interval 60
 !no mmi auto-configure
-!no mmi pvc
+!no mmi pvc!!
 !mmi snmp-timeout 180
 !
 !
