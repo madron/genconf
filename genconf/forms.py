@@ -75,11 +75,12 @@ class GenConfForm(forms.Form):
     line1_lan3_vrf = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
-        super(GenConfForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_method = 'get'
+        # self.helper.form_method = 'get'
         self.helper.form_class = 'form-horizontal'
-        self.helper.layout = self.get_layout()
+        self.helper.add_input(Submit('submit', 'Submit'))
+        # self.helper.layout = self.get_layout()
+        super(GenConfForm, self).__init__(*args, **kwargs)
 
     def get_layout(self):
         layout = Layout(
