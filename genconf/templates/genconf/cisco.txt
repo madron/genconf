@@ -1,0 +1,348 @@
+
+no service pad
+service timestamps debug datetime localtime show-timezone
+service timestamps log datetime localtime show-timezone
+service password-encryption
+!
+hostname {{ line.router_type }}_{{ common.project_name }}
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 4096 debugging
+enable secret {{ common.enable_secret }}
+!
+no aaa new-model
+clock timezone GMT+1 1
+clock summer-time CDT recurring
+!mmi polling-interval 60
+!no mmi auto-configure
+!no mmi pvc
+!mmi snmp-timeout 180
+!
+!
+!
+!
+ip cef
+ip name-server 80.68.177.58
+
+{% for lan in line.lines %}
+{% if lan.vrf %}
+ip vrf {{ lan.vrf }}
+{% endif %}
+{% endfor %}
+!
+!
+!
+!
+{% if line.access_type == shdsl %}
+controller DSL {{ line.cpeslotif }}
+ mode atm
+ line-term cpe
+ line-mode auto
+ dsl-mode shdsl symmetric annex B
+ ignore-error-duration  15
+ line-rate auto
+{% endif %}
+!
+!
+!
+{% if line.vcs.0.loopback_ip %}
+interface Loopback1
+ ip address {{ line.vcs.0.loopback_ip }} 255.255.255.255
+ ip nat outside
+ ip virtual-reassembly
+{% endif %}
+!
+!
+
+{% if line.access_type in atm_access_types %}
+
+{% if line.vc.0.cpevcid %}
+interface ATM{{ line.cpeslotif }}
+ description TD: 926652/99
+ no ip address
+ load-interval 30
+ no atm ilmi-keepalive
+{% endif %}
+!
+interface ATM{{ line.cpeslotif }}.1 point-to-point
+ description Internet Service
+ pvc 18/35
+  oam-pvc manage
+  encapsulation aal5mux ppp dialer
+  dialer pool-member 1
+ !
+!
+interface ATM{{ line.cpeslotif }}.2 point-to-point
+ description VoIP Service
+ pvc 18/36
+  oam-pvc manage
+  encapsulation aal5mux ppp dialer
+  dialer pool-member 2
+ !
+!
+interface ATM0.3 point-to-point
+ description VPN Service
+ pvc 18/37
+  oam-pvc manage
+  encapsulation aal5mux ppp dialer
+  dialer pool-member 3
+ !
+{% endif %}
+
+!
+interface FastEthernet0
+ description Link to Voicer ip-1
+ ip vrf forwarding VRF-VoipPrivato
+ ip address 10.6.11.141 255.255.255.252
+ speed auto
+!
+interface FastEthernet1
+ description Link to INTERNAL LAN SWITCH
+!
+interface FastEthernet2
+ description Link to Cross CPE BK
+ switchport mode trunk
+!
+interface FastEthernet3
+!
+interface FastEthernet4
+!
+interface Vlan1
+ ip address 192.168.0.78 255.255.255.0
+ ip access-group 170 in
+ ip nat inside
+ ip virtual-reassembly
+ ip tcp adjust-mss 1452
+ standby 1 ip 192.168.0.160
+ standby 1 priority 110
+!
+interface Vlan2
+ no ip address
+!
+interface Vlan4
+ no ip address
+!
+interface Vlan5
+ no ip address
+!
+interface Vlan6
+ no ip address
+!
+interface Vlan7
+ no ip address
+!
+interface Dialer0
+ description Internet Service
+ ip address negotiated
+ ip nat outside
+ ip virtual-reassembly
+ encapsulation ppp
+ load-interval 30
+ dialer pool 1
+ no cdp enable
+ ppp chap hostname aldabra-hdsl-internet@mynet.it
+ ppp chap password 7 060908344E4A100E1C
+ ppp direction dedicated
+!
+interface Dialer1
+ description VoIP Service
+ ip vrf forwarding VRF-VoipPrivato
+ ip address negotiated
+ encapsulation ppp
+ load-interval 30
+ dialer pool 2
+ no cdp enable
+ ppp chap hostname aldabra-conc-voip@mynet.it
+ ppp chap password 7 0110090F520F001A25
+ ppp direction dedicated
+ ppp ipcp route default
+!
+interface Dialer2
+ description VPN Service
+ ip address negotiated
+ encapsulation ppp
+ load-interval 30
+ dialer pool 3
+ no cdp enable
+ ppp chap hostname aldabra-conc-vpn@mynet.it
+ ppp chap password 7 141B0702070E233930
+ ppp direction dedicated
+!
+router bgp 65534
+ bgp router-id 80.68.181.217
+ bgp log-neighbor-changes
+ neighbor 93.91.128.251 remote-as 31263
+ neighbor 93.91.128.251 description Mynet-ISP-BACKUP-PEER
+ neighbor 172.28.10.1 remote-as 31263
+ neighbor 172.28.10.1 description Mynet-ISP-MASTER-PEER
+ neighbor 192.168.0.77 remote-as 65534
+ neighbor 192.168.0.77 description Customer_IBGP
+ neighbor 192.168.0.77 update-source Vlan1
+ !
+ address-family ipv4
+  neighbor 93.91.128.251 activate
+  neighbor 93.91.128.251 prefix-list default in
+  neighbor 93.91.128.251 prefix-list aggregate out
+  neighbor 93.91.128.251 route-map RM-Mynet-Backup-in in
+  neighbor 93.91.128.251 route-map RM-Mynet-Backup-out out
+  neighbor 172.28.10.1 activate
+  neighbor 172.28.10.1 prefix-list PL-ALDABRA-CONC-VPN-IN in
+  neighbor 172.28.10.1 prefix-list PL-ALDABRA-CONC-VPN-OUT out
+  neighbor 192.168.0.77 activate
+  neighbor 192.168.0.77 next-hop-self
+  no auto-summary
+  no synchronization
+  network 80.68.181.66 mask 255.255.255.255
+  network 93.91.137.109 mask 255.255.255.255
+  network 93.91.137.110 mask 255.255.255.255
+  network 93.91.137.111 mask 255.255.255.255
+  network 192.168.0.0
+ exit-address-family
+!
+ip local policy route-map viaHDSL
+ip forward-protocol nd
+no ip http server
+!
+ip nat pool IPPOOL 192.168.0.193 192.168.0.193 netmask 255.255.255.0 type rotary
+ip nat inside source list 110 interface Loopback1 overload
+ip nat inside source list 111 interface Loopback2 overload
+ip nat inside source list 112 interface Loopback11 overload
+ip nat inside source static 192.168.0.254 interface Loopback11
+ip nat inside source static udp 192.168.0.155 6400 interface Loopback1 6400
+ip nat inside source static udp 192.168.0.155 6100 interface Loopback1 6100
+ip nat inside source static tcp 192.168.0.155 6400 interface Loopback1 6400
+ip nat inside source static tcp 192.168.0.16 5900 interface Loopback1 5900
+ip nat inside source static tcp 192.168.0.193 56751 interface Loopback1 56751
+ip nat inside source static udp 192.168.0.193 56751 interface Loopback1 56751
+ip nat inside source static tcp 192.168.0.193 51967 interface Loopback1 51967
+ip nat inside source static udp 192.168.0.193 4549 interface Loopback1 4549
+ip nat inside source static tcp 192.168.0.155 80 interface Loopback1 88
+ip nat inside source static tcp 192.168.0.155 6100 interface Loopback1 6100
+ip nat inside source static tcp 192.168.0.159 41794 interface Loopback1 41794
+ip nat inside source static tcp 192.168.0.159 41795 interface Loopback1 41795
+ip nat inside source static tcp 192.168.0.3 443 interface Loopback1 443
+ip nat inside source static tcp 192.168.0.3 80 interface Loopback1 80
+ip nat inside source static tcp 192.168.0.42 443 interface Loopback2 443
+ip nat inside source static tcp 192.168.0.42 80 interface Loopback2 80
+ip nat inside source static tcp 192.168.0.193 411 interface Loopback1 411
+ip nat inside source static tcp 192.168.0.193 65500 interface Loopback1 65500
+ip nat inside source static tcp 192.168.0.193 65501 interface Loopback1 65501
+ip nat inside source static udp 192.168.0.193 65500 interface Loopback1 65500
+ip nat inside destination list ACL-PORT-RANGE pool IPPOOL
+!
+!
+!
+ip prefix-list PL-ALDABRA-CONC-VPN-IN seq 5 permit 192.168.1.0/24
+ip prefix-list PL-ALDABRA-CONC-VPN-IN seq 10 permit 172.27.127.0/24 le 32
+!
+ip prefix-list PL-ALDABRA-CONC-VPN-OUT seq 5 permit 192.168.0.0/24
+!
+ip prefix-list aggregate seq 5 permit 93.91.137.108/30 le 32
+ip prefix-list aggregate seq 10 permit 80.68.181.66/32
+!
+ip prefix-list default seq 5 permit 0.0.0.0/0
+!
+ip access-list extended ACL-PORT-RANGE
+ permit tcp any any range 1025 10500
+ deny   ip any any
+access-list 1 permit 80.68.181.254
+access-list 1 permit 80.68.179.196
+access-list 1 permit 80.68.176.33
+access-list 1 permit 80.68.176.34
+access-list 1 permit 80.68.176.5
+access-list 1 permit 80.68.179.5
+access-list 1 permit 80.68.176.1
+access-list 1 permit 80.68.176.3
+access-list 1 permit 80.68.176.30
+access-list 1 permit 93.91.137.110
+access-list 1 permit 93.91.137.109
+access-list 1 permit 93.91.128.0 0.0.0.255
+access-list 1 permit 80.68.179.64 0.0.0.7
+access-list 1 permit 192.168.0.0 0.0.0.255
+access-list 1 permit 10.5.0.0 0.0.255.255
+access-list 1 permit 10.6.0.0 0.0.255.255
+access-list 1 permit 10.4.23.0 0.0.0.255
+access-list 18 permit 10.32.16.3
+access-list 18 permit 10.32.16.130
+access-list 18 permit 80.68.179.68
+access-list 22 remark *** RM ACL ***
+access-list 22 permit 80.68.181.217
+access-list 110 remark *** NAT ACL ***
+access-list 110 deny   ip host 192.168.0.160 any
+access-list 110 permit ip 192.168.0.0 0.0.0.255 any
+access-list 111 remark *** NAT ACL ***
+access-list 111 permit ip host 192.168.0.42 any
+access-list 112 remark *** NAT ACL ***
+access-list 112 permit ip host 192.168.0.254 any
+access-list 170 remark *** ACL NO-Facebook ***
+access-list 170 permit ip host 192.168.0.193 any
+access-list 170 permit ip host 192.168.0.157 any
+access-list 170 permit ip host 192.168.0.174 any
+access-list 170 permit ip host 192.168.0.190 any
+access-list 170 deny   ip any 31.13.24.0 0.0.7.255
+access-list 170 deny   ip any 31.13.64.0 0.0.31.255
+access-list 170 deny   ip any 31.13.69.0 0.0.0.255
+access-list 170 deny   ip any 31.13.72.0 0.0.0.255
+access-list 170 deny   ip any 31.13.75.0 0.0.0.255
+access-list 170 deny   ip any 31.13.76.0 0.0.0.255
+access-list 170 deny   ip any 31.13.77.0 0.0.0.255
+access-list 170 deny   ip any 66.220.144.0 0.0.7.255
+access-list 170 deny   ip any 66.220.152.0 0.0.7.255
+access-list 170 deny   ip any 69.63.176.0 0.0.0.255
+access-list 170 deny   ip any 69.63.176.0 0.0.7.255
+access-list 170 deny   ip any 69.63.176.0 0.0.15.255
+access-list 170 deny   ip any 69.63.184.0 0.0.7.255
+access-list 170 deny   ip any 69.171.224.0 0.0.15.255
+access-list 170 deny   ip any 69.171.239.0 0.0.0.255
+access-list 170 deny   ip any 69.171.240.0 0.0.15.255
+access-list 170 deny   ip any 69.171.255.0 0.0.0.255
+access-list 170 deny   ip any 74.119.76.0 0.0.3.255
+access-list 170 deny   ip any 103.4.96.0 0.0.3.255
+access-list 170 deny   ip any 173.252.64.0 0.0.31.255
+access-list 170 deny   ip any 173.252.70.0 0.0.0.255
+access-list 170 deny   ip any 173.252.96.0 0.0.31.255
+access-list 170 deny   ip any 204.15.20.0 0.0.3.255
+access-list 170 deny   ip any 204.15.16.0 0.0.7.255
+access-list 170 permit ip any any
+snmp-server community ichutmef RO 18
+snmp-server ifindex persist
+no cdp run
+!
+route-map RM-Mynet-Backup-out permit 10
+ match ip address prefix-list aggregate
+ set metric 10
+!
+route-map RM-Mynet-Backup-out permit 20
+!
+route-map RM-Mynet-Backup-in permit 10
+ set local-preference 90
+!
+route-map viaHDSL permit 10
+ match ip address 22
+ set ip next-hop 93.91.128.251
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line aux 0
+ access-class 1 in vrf-also
+ password 7 105A1B1C001D000407
+ login
+ transport input telnet
+ transport output telnet
+line vty 0 4
+ access-class 1 in vrf-also
+ password 7 105A1B1C001D000407
+ login
+ transport input telnet
+!
+ntp clock-period 17180128
+ntp server 80.68.177.58
+ntp server 62.173.174.62
+ntp server 10.32.16.2
+end

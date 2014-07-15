@@ -1,0 +1,16 @@
+{% extends "genconf/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+    {% if form.is_valid %}
+    {% endif %}
+
+    {% crispy form %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+<html>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <table>
+
+    <tr>
+
+        <td>
+            {{ form.line1_id.errors }}
+            <label for="id_line1_id">line1_id:</label>
+            {{ form.line1_id }}
+            <table>
+                <tr>
+                    <td>
+                        {{ form.line1vc1_brasname }}<br/>
+                        {{ form.line1vc1_brasname }}<br/>
+                        {{ form.line1vc1_brasname }}<br/>
+                        {{ form.line1vc1_brasname }}<br/>
+                        {{ form.line1vc1_brasname }}<br/>
+                        {{ form.line1vc1_brasname }}<br/>
+                    </td>
+                    <td>{{ form.line1vc2_brasname }}</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            {{ form.line2_id.errors }}
+            <label for="id_line2_id">line2_id:</label>
+            {{ form.line2_id }}
+        </td>
+
+    </tr>
+
+    </table>
+
+<input type="submit" value="Submit" />
+</form>
+</html>
