@@ -58,7 +58,8 @@ def random_password(length=16):
 
 def get_cisco_config(config, line):
     config['line'] = config['lines'][line]
-    config['line']['atm_access_types'] = ('adsl', 'shdsl')
+    config['atm_access_types'] = ['adsl', 'shdsl']
+    config['serial_access_types'] = ['hdsl']
     template = get_template('genconf/cisco.txt')
     context = Context(config)
     return template.render(context)

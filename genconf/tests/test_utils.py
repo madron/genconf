@@ -78,39 +78,49 @@ class UtilsTest(TestCase):
 
     def test_get_cisco_config(self):
         cleaned_data = dict(
-            project_name='customer_01',
-            lan1_standby_ip='',
-            lan2_standby_ip='',
-            line1_id='',
+            project_name='project_name',
+            lan1_standby_ip='lan1_standby_ip',
+            lan2_standby_ip='lan2_standby_ip',
+            lan3_standby_ip='lan3_standby_ip',
+            line1_id='line1_id',
             line1_access_type='adsl',
-            line1_router_type='',
-            line1_cpeslotif='',
-            line1_vc1_cpevcid='',
-            line1_vc1_loopback_ip='',
-            line1_vc2_cpevcid='',
-            line1_lan1_interface='',
-            line1_lan1_ip='',
-            line1_lan1_vrf='',
-            line1_lan2_interface='',
-            line1_lan2_ip='',
-            line1_lan2_vrf='',
-            line2_id='',
-            line2_access_type='shdsl',
-            line2_router_type='',
-            line2_cpeslotif='',
-            line2_vc1_cpevcid='',
-            line2_vc1_loopback_ip='',
-            line2_vc2_cpevcid='',
-            line2_lan1_interface='',
-            line2_lan1_ip='',
-            line2_lan1_vrf='',
-            line2_lan2_interface='',
-            line2_lan2_ip='',
-            line2_lan2_vrf='',
+            line1_router_type='line1_router_type',
+            line1_cpeslotif='0/0',
+            line1_vc1_brasname='line1_vc1_brasname',
+            line1_vc1_brasvcid='line1_vc1_brasvcid',
+            line1_vc1_brasip='line1_vc1_brasip',
+            line1_vc1_cpevcid='line1_vc1_cpevcid',
+            line1_vc1_cpeip='line1_vc1_cpeip',
+            line1_vc1_cpedescr='line1_vc1_cpedescr',
+            line1_vc1_loopback_ip='line1_vc1_loopback_ip',
+            line1_vc2_brasname='line1_vc2_brasname',
+            line1_vc2_brasvcid='line1_vc2_brasvcid',
+            line1_vc2_brasip='line1_vc2_brasip',
+            line1_vc2_cpevcid='line1_vc2_cpevcid',
+            line1_vc2_cpeip='line1_vc2_cpeip',
+            line1_vc2_cpedescr='line1_vc2_cpedescr',
+            line1_vc3_brasname='line1_vc3_brasname',
+            line1_vc3_brasvcid='line1_vc3_brasvcid',
+            line1_vc3_brasip='line1_vc3_brasip',
+            line1_vc3_cpevcid='line1_vc3_cpevcid',
+            line1_vc3_cpeip='line1_vc3_cpeip',
+            line1_vc3_cpedescr='line1_vc3_cpedescr',
+            line1_lan1_interface='line1_lan1_interface',
+            line1_lan1_ip='line1_lan1_ip',
+            line1_lan1_vrf='line1_lan1_vrf',
+            line1_lan2_interface='line1_lan2_interface',
+            line1_lan2_ip='line1_lan2_ip',
+            line1_lan2_vrf='line1_lan2_vrf',
+            line1_lan3_interface='line1_lan3_interface',
+            line1_lan3_ip='line1_lan3_ip',
+            line1_lan3_vrf='line1_lan3_vrf',
         )
-        config = utils.get_cisco_config(utils.get_config(cleaned_data), 0)
-        start = 0
-        lines = config.splitlines()
+        config = utils.get_config(cleaned_data)
+        from pprint import pprint
+        pprint(config)
+        cisco = utils.get_cisco_config(config, 0)
+        start = 40
+        lines = cisco.splitlines()
         for i in range(start, start + 35):
             print lines[i]
-        self.assertTrue('boot-start-marker' in config)
+        self.assertTrue('boot-start-marker' in cisco)

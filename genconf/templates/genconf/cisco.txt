@@ -57,7 +57,6 @@ interface Loopback1
 !
 
 {% if line.access_type in atm_access_types %}
-
 {% if line.vc.cpevcid %}
 interface ATM{{ line.cpeslotif }}
  description {{ line.id }}
@@ -66,17 +65,31 @@ interface ATM{{ line.cpeslotif }}
  no atm ilmi-keepalive
 {% endif %}
 !
-{% for vc in line.vcs %}
-interface ATM{{ line.cpeslotif }}.{{ vc }} point-to-point
- description {{ line.vc.cpedescr }}
- pvc {{ line.vc.cpevcid }}
-  oam-pvc manage
-  encapsulation aal5mux ppp dialer
-  dialer pool-member {{ vc }}
- !
+{% for vc in line.vcs %}{% if vc.cpevcid %}
+    interface ATM{{ line.cpeslotif }}.{{ forloop.counter }} point-to-point
+     description {{ vc.cpedescr }}
+     pvc {{ vc.cpevcid }}
+      encapsulation aal5mux ppp dialer
+      dialer pool-member {{ forloop.counter }}
+{% endif %} {% endfor %}
+
+{% elif line.access_type in serial_access_types %}
+{% if line.vc.cpevcid %}
+interface Serial{{ line.cpeslotif }}
+ description {{ line.id }}
+ no ip address
+ load-interval 30
+ encapsulation frame-relay
+ <FIXME> ecc ecc...
+{% endif %}
 !
-{% endfor %}
-!
+{% for vc in line.vcs %} {% if vc.cpevcid %}
+    interface Serial{{ line.cpeslotif }}.{{ vc.cpevcid }} point-to-point
+     description {{ vc.cpedescr }}
+     <FIXME> ecc ecc...
+{% endif %}{% endfor %}
+
+
 {% endif %}
 
 !
