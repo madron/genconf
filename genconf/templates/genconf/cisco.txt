@@ -17,7 +17,7 @@ clock timezone GMT+1 1
 clock summer-time CDT recurring
 !mmi polling-interval 60
 !no mmi auto-configure
-!no mmi pvc!!
+!no mmi pvc
 !mmi snmp-timeout 180
 !
 !
@@ -58,37 +58,25 @@ interface Loopback1
 
 {% if line.access_type in atm_access_types %}
 
-{% if line.vc.0.cpevcid %}
+{% if line.vc.cpevcid %}
 interface ATM{{ line.cpeslotif }}
- description TD: 926652/99
+ description {{ line.id }}
  no ip address
  load-interval 30
  no atm ilmi-keepalive
 {% endif %}
 !
-interface ATM{{ line.cpeslotif }}.1 point-to-point
- description Internet Service
- pvc 18/35
+{% for vc in line.vcs %}
+interface ATM{{ line.cpeslotif }}.{{ vc }} point-to-point
+ description {{ line.vc.cpedescr }}
+ pvc {{ line.vc.cpevcid }}
   oam-pvc manage
   encapsulation aal5mux ppp dialer
-  dialer pool-member 1
+  dialer pool-member {{ vc }}
  !
 !
-interface ATM{{ line.cpeslotif }}.2 point-to-point
- description VoIP Service
- pvc 18/36
-  oam-pvc manage
-  encapsulation aal5mux ppp dialer
-  dialer pool-member 2
- !
+{% endfor %}
 !
-interface ATM0.3 point-to-point
- description VPN Service
- pvc 18/37
-  oam-pvc manage
-  encapsulation aal5mux ppp dialer
-  dialer pool-member 3
- !
 {% endif %}
 
 !

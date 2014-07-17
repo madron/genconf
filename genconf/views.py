@@ -14,6 +14,7 @@ class GenConfView(FormView):
         return reverse('home')
 
     def form_valid(self, form):
+        print config
         config = utils.get_config(form.cleaned_data)
         cisco = utils.get_cisco_config(config, 0)
         print cisco

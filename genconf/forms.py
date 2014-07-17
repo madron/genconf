@@ -51,6 +51,7 @@ class GenConfForm(forms.Form):
     line1_vc1_brasip = forms.CharField(required=False)
     line1_vc1_cpevcid = forms.CharField(required=False)
     line1_vc1_cpeip = forms.CharField(required=False)
+    line1_vc1_cpedescr = forms.CharField(required=False)
     line1_vc1_loopback_ip = forms.CharField(required=False)
 
     line1_vc2_brasname = forms.CharField(required=False)
@@ -58,11 +59,14 @@ class GenConfForm(forms.Form):
     line1_vc2_brasip = forms.CharField(required=False)
     line1_vc2_cpevcid = forms.CharField(required=False)
     line1_vc2_cpeip = forms.CharField(required=False)
+    line1_vc2_cpedescr = forms.CharField(required=False)
+
     line1_vc3_brasname = forms.CharField(required=False)
     line1_vc3_brasvcid = forms.CharField(required=False)
     line1_vc3_brasip = forms.CharField(required=False)
     line1_vc3_cpevcid = forms.CharField(required=False)
     line1_vc3_cpeip = forms.CharField(required=False)
+    line1_vc3_cpedescr = forms.CharField(required=False)
 
     line1_lan1_interface = forms.CharField(required=False)
     line1_lan1_ip = forms.CharField(required=False)
