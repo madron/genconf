@@ -59,6 +59,25 @@ class UtilsTest(TestCase):
         self.assertEqual(config['lines'][1]['lans'][0]['interface'], '')
         self.assertEqual(config['lines'][1]['lans'][1]['interface'], '')
 
+    def test_get_config_no_line1(self):
+        data = dict(
+            project_name='customer_01',
+            line2_vc2_cpevcid='',
+            line2_lan2_ip='',
+        )
+        config = utils.get_config(data)
+        # Common
+        self.assertEqual(config['common']['project_name'], 'customer_01')
+        self.assertEqual(len(config['common']['enable_secret']), 16)
+        self.assertEqual(len(config['common']['vty_password']), 16)
+        # Line 1
+        self.assertEqual(config['lines'][0], dict())
+        # Line 2
+        self.assertEqual(config['lines'][1]['vcs'][0], dict())
+        self.assertEqual(config['lines'][1]['vcs'][1]['cpevcid'], '')
+        self.assertEqual(config['lines'][1]['lans'][0], dict())
+        self.assertEqual(config['lines'][1]['lans'][1]['ip'], '')
+
     def test_get_cisco_config(self):
         config = utils.get_cisco_config(utils.get_config(CLEANED_DATA), 0)
         start = 0

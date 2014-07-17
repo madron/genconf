@@ -29,7 +29,7 @@ def get_config(cleaned_data):
                 lan_varname = line_varname[5:]
                 if 'lans' not in config['lines'][line_index]:
                     config['lines'][line_index]['lans'] = []
-                while vc_index >= len(config['lines'][line_index]['lans']):
+                while lan_index >= len(config['lines'][line_index]['lans']):
                     config['lines'][line_index]['lans'].append(dict())
                 config['lines'][line_index]['lans'][lan_index][lan_varname] = value
             else:
