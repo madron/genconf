@@ -59,7 +59,30 @@ def get_raw_config(cleaned_data):
 
 
 def get_custom_config(config):
+    for cpe in config['cpes']:
+        cpe = get_custom_cpe_config(config, cpe)
     return config
+
+
+def get_custom_cpe_config(config, cpe):
+    for line in cpe['lines']:
+        line = get_custom_line_config(config, cpe, line)
+    for lan in cpe['lans']:
+        lan = get_custom_lan_config(config, cpe, lan)
+    return config
+
+
+def get_custom_line_config(config, cpe, line):
+    for vc in line['vcs']:
+        vc = get_custom_vc_config(config, cpe, line, vc)
+
+
+def get_custom_vc_config(config, cpe, line, vc):
+    return vc
+
+
+def get_custom_lan_config(config, cpe, lan):
+    return lan
 
 
 def random_password(length=16):
