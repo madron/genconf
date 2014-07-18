@@ -5,6 +5,11 @@ from django.template.loader import get_template
 
 
 def get_config(cleaned_data):
+    config = get_raw_config(cleaned_data)
+    return get_custom_config(config)
+
+
+def get_raw_config(cleaned_data):
     config = dict(
         common=dict(),
         cpes=[],
@@ -15,7 +20,6 @@ def get_config(cleaned_data):
             cpe_varname = key[5:]
             while cpe_index >= len(config['cpes']):
                 config['cpes'].append(dict(lines=[], lans=[]))
-
             if cpe_varname.startswith('line'):
                 line_index = int(cpe_varname[4:5]) - 1
                 line_varname = cpe_varname[6:]
@@ -47,11 +51,14 @@ def get_config(cleaned_data):
                 config['cpes'][cpe_index]['lans'][common_lan_index][common_lan_varname] = value
             else:
                 config['cpes'][cpe_index][cpe_varname] = value
-
         else:
             config['common'][key] = value
     config['common']['enable_secret'] = random_password(length=16)
     config['common']['vty_password'] = random_password(length=16)
+    return config
+
+
+def get_custom_config(config):
     return config
 
 
@@ -65,7 +72,6 @@ def random_password(length=16):
 
 
 def get_cisco_config(config, cpe):
-    print cpe
     config['cpe'] = config['cpes'][cpe]
     config['atm_access_types'] = ['adsl', 'shdsl']
     config['serial_access_types'] = ['hdsl']

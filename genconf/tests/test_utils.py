@@ -8,7 +8,7 @@ CLEANED_DATA = dict(
     cpe1_lan1_standby_ip='',
     cpe1_line1_id='',
     cpe1_line1_access_type='adsl',
-    cpe1_line1_cpeslotif='',
+    cpe1_line1_cpeslotif='0/0',
     cpe1_line1_vc1_cpevcid='',
     cpe1_line1_vc1_loopback_ip='',
     cpe1_line1_vc2_cpevcid='',
@@ -23,7 +23,7 @@ CLEANED_DATA = dict(
     cpe2_lan2_standby_ip='',
     cpe2_line2_id='',
     cpe2_line2_access_type='shdsl',
-    cpe2_line2_cpeslotif='',
+    cpe2_line2_cpeslotif='0/1',
     cpe2_line2_vc1_cpevcid='',
     cpe2_line2_vc1_loopback_ip='',
     cpe2_line2_vc2_cpevcid='',
@@ -37,8 +37,8 @@ CLEANED_DATA = dict(
 
 
 class UtilsTest(TestCase):
-    def test_get_config(self):
-        config = utils.get_config(CLEANED_DATA)
+    def test_get_raw_config(self):
+        config = utils.get_raw_config(CLEANED_DATA)
         # Common
         self.assertEqual(config['common']['project_name'], 'customer_01')
         self.assertEqual(len(config['common']['enable_secret']), 16)
@@ -79,13 +79,13 @@ class UtilsTest(TestCase):
         self.assertEqual(lines[1]['lans'][0]['interface'], '')
         self.assertEqual(lines[1]['lans'][1]['interface'], '')
 
-    def test_get_config_no_first_element(self):
+    def test_get_raw_config_no_first_element(self):
         data = dict(
             project_name='customer_01',
             cpe2_line2_vc2_cpevcid='',
             cpe2_line2_lan2_ip='',
         )
-        config = utils.get_config(data)
+        config = utils.get_raw_config(data)
         # Common
         self.assertEqual(config['common']['project_name'], 'customer_01')
         self.assertEqual(len(config['common']['enable_secret']), 16)
