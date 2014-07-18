@@ -45,6 +45,8 @@ def get_config(cleaned_data):
                 while common_lan_index >= len(config['cpes'][cpe_index]['lans']):
                     config['cpes'][cpe_index]['lans'].append(dict())
                 config['cpes'][cpe_index]['lans'][common_lan_index][common_lan_varname] = value
+            else:
+                config['cpes'][cpe_index][cpe_varname] = value
 
         else:
             config['common'][key] = value

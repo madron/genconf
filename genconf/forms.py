@@ -37,6 +37,8 @@ class VcForm(forms.Form):
 class GenConfForm(forms.Form):
     project_name = forms.CharField(required=True)
 
+    cpe1_router_type = forms.ChoiceField(choices=ROUTER_TYPE_CHOICES)
+
     cpe1_lan1_ip = forms.CharField(required=False)
     cpe1_lan1_standby_ip = forms.CharField(required=False)
     cpe1_lan2_ip = forms.CharField(required=False)
@@ -46,7 +48,6 @@ class GenConfForm(forms.Form):
 
     cpe1_line1_id = forms.CharField(required=False)
     cpe1_line1_access_type = forms.ChoiceField(choices=ACCESS_TYPE_CHOICES)
-    cpe1_line1_router_type = forms.ChoiceField(choices=ROUTER_TYPE_CHOICES)
     cpe1_line1_cpeslotif = forms.CharField(required=False)
 
     cpe1_line1_vc1_brasname = forms.CharField(required=False)
