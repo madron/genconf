@@ -99,6 +99,27 @@ class UtilsTest(TestCase):
         self.assertEqual(config['cpes'][1]['lines'][1]['lans'][0], dict())
         self.assertEqual(config['cpes'][1]['lines'][1]['lans'][1]['ip'], '')
 
+
+    def test_get_custom_vc_config_c1841(self):
+        config = dict()
+        cpe = dict(router_type='c1841')
+        line = dict(cpeslotif='0/0')
+        vc = dict()
+        vc_index = 1
+        vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
+        self.assertEqual(vc['custom_field'], 'F0/0.20')
+
+
+    def test_get_custom_vc_config_c3550(self):
+        config = dict()
+        cpe = dict(router_type='c3550')
+        line = dict(cpeslotif='0/0')
+        vc = dict()
+        vc_index = 1
+        vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
+        self.assertEqual(vc['custom_field'], 'VLAN20')
+
+
     def test_get_cisco_config(self):
         cleaned_data = dict(
             project_name='project_name',

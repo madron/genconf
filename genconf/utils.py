@@ -73,11 +73,15 @@ def get_custom_cpe_config(config, cpe):
 
 
 def get_custom_line_config(config, cpe, line):
-    for vc in line['vcs']:
-        vc = get_custom_vc_config(config, cpe, line, vc)
+    for vc_index, vc in enumerate(line['vcs']):
+        vc = get_custom_vc_config(config, cpe, line, vc, vc_index)
 
 
-def get_custom_vc_config(config, cpe, line, vc):
+def get_custom_vc_config(config, cpe, line, vc, vc_index):
+    if cpe['router_type'] == 'c1841':
+        vc['custom_field'] = 'F%s.%d0' % (line['cpeslotif'], vc_index + 1)
+    if cpe['router_type'] == 'c3550':
+        vc['custom_field'] = 'VLAN%d0' % (vc_index + 1)
     return vc
 
 
