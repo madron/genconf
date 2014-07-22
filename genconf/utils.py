@@ -65,27 +65,27 @@ def get_custom_config(config):
 
 
 def get_custom_cpe_config(config, cpe):
-    for line in cpe['lines']:
-        line = get_custom_line_config(config, cpe, line)
-    for lan in cpe['lans']:
-        lan = get_custom_lan_config(config, cpe, lan)
+    for line_index, line in enumerate(cpe['lines']):
+        line = get_custom_line_config(config, cpe, line, line_index)
+    for lan_index, lan in enumerate(cpe['lans']):
+        lan = get_custom_lan_config(config, cpe, lan, lan_index)
     return config
 
 
-def get_custom_line_config(config, cpe, line):
+def get_custom_line_config(config, cpe, line, line_index):
     for vc_index, vc in enumerate(line['vcs']):
         vc = get_custom_vc_config(config, cpe, line, vc, vc_index)
 
 
 def get_custom_vc_config(config, cpe, line, vc, vc_index):
-    if cpe['router_type'] == 'c1841':
-        vc['custom_field'] = 'F%s.%d0' % (line['cpeslotif'], vc_index + 1)
-    if cpe['router_type'] == 'c3550':
-        vc['custom_field'] = 'VLAN%d0' % (vc_index + 1)
     return vc
 
 
-def get_custom_lan_config(config, cpe, lan):
+def get_custom_lan_config(config, cpe, lan, lan_index):
+    if cpe['router_type'] == 'c1841':
+        lan['custom_field'] = 'Fx.%d0' % (lan_index + 1)
+    if cpe['router_type'] == 'c3550':
+        lan['custom_field'] = 'VLAN%d0' % (lan_index + 1)
     return lan
 
 
