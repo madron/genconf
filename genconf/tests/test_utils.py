@@ -131,27 +131,27 @@ class UtilsTest(TestCase):
             cpe1_line1_cpeslotif='0/0',
             cpe1_line1_vc1_brasname='MANTITAU-10K',
             cpe1_line1_vc1_brasvcid='cpe1_line1_vc1_brasvcid',
-            cpe1_line1_vc1_brasip='cpe1_line1_vc1_brasip',
+#            cpe1_line1_vc1_brasip='cpe1_line1_vc1_brasip',
             cpe1_line1_vc1_cpevcid='cpe1_line1_vc1_cpevcid',
-            cpe1_line1_vc1_cpeip='cpe1_line1_vc1_cpeip',
+            cpe1_line1_vc1_cpeip='100.65.10.1/32',
             cpe1_line1_vc1_cpedescr='cpe1_line1_vc1_cpedescr',
             cpe1_line1_vc1_loopback='Loop2',
             cpe1_line1_vc1_bgp='yes',
             cpe1_line1_vc1_type='ipaccess',
             cpe1_line1_vc2_brasname='BRESITAW-10K',
             cpe1_line1_vc2_brasvcid='cpe1_line1_vc2_brasvcid',
-            cpe1_line1_vc2_brasip='cpe1_line1_vc2_brasip',
+#            cpe1_line1_vc2_brasip='cpe1_line1_vc2_brasip',
             cpe1_line1_vc2_cpevcid='cpe1_line1_vc2_cpevcid',
-            cpe1_line1_vc2_cpeip='cpe1_line1_vc2_cpeip',
+            cpe1_line1_vc2_cpeip='10.6.50.1/30',
             cpe1_line1_vc2_cpedescr='cpe1_line1_vc2_cpedescr',
-#            cpe1_line1_vc2_loopback='Loop2',
+            cpe1_line1_vc2_loopback='',
             cpe1_line1_vc2_bgp='no',
             cpe1_line1_vc2_type='voip',
             cpe1_line1_vc3_brasname='MICALENTER-10K',
             cpe1_line1_vc3_brasvcid='cpe1_line1_vc3_brasvcid',
-            cpe1_line1_vc3_brasip='cpe1_line1_vc3_brasip',
+#            cpe1_line1_vc3_brasip='cpe1_line1_vc3_brasip',
             cpe1_line1_vc3_cpevcid='cpe1_line1_vc3_cpevcid',
-            cpe1_line1_vc3_cpeip='cpe1_line1_vc3_cpeip',
+            cpe1_line1_vc3_cpeip='172.18.19.1/30',
             cpe1_line1_vc3_cpedescr='cpe1_line1_vc3_cpedescr',
             cpe1_line1_vc3_loopback='Loop2',
             cpe1_line1_vc3_bgp='yes',
@@ -170,8 +170,8 @@ class UtilsTest(TestCase):
         from pprint import pprint
         pprint(config)
         cisco = utils.get_cisco_config(config, 0)
-        start = 150
+        start = 0
         lines = cisco.splitlines()
-        for i in range(start, start + 45):
+        for i in range(start, start + 245):
             print lines[i]
         self.assertTrue('boot-start-marker' in cisco)

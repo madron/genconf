@@ -119,6 +119,15 @@ def get_custom_vc_config(config, cpe, line, vc, vc_index):
         vc['BrasIpLoop'] = '93.91.128.239'
     elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop7' ): 
         vc['BrasIpLoop'] = '93.91.128.229'
+    ip = IPNetwork(vc['cpeip']) 
+    vc['cpeipadd'] = ip.ip
+    vc['cpeipmask'] = ip.netmask
+    vc['cpeipprefixlen'] = ip.prefixlen
+    if (vc['cpeipprefixlen'] == 32):
+        vc['brasip'] = vc['BrasIpLoop']
+    else:
+        vc['brasip'] = (ip.network + 1)
+        vc['cpeipadd'] = (ip.network + 2)
     return vc
 
 
@@ -135,6 +144,10 @@ def get_custom_lan_config(config, cpe, lan, lan_index, lenlan):
     ip = IPNetwork(lan['ip'])
     lan['ipadd'] = ip.ip
     lan['ipmask'] = ip.netmask
+    if (IPAddress(ip).is_private() == 'True' and lan.vrf != ''):
+        lan['nat'] = 'yes'
+    else:
+        lan['nat'] = 'no'
     return lan
 
 

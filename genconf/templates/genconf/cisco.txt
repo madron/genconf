@@ -130,42 +130,22 @@ router bgp {{ common.bgpas }}
  no bgp default ipv4-unicast
  bgp log-neighbor-changes
 
-{% for vc in line.vcs %}
-{% if vc.bgp == 'yes' %}
+{% for line in cpe.lines %}
+ {% for vc in line.vcs %}
+  {% if vc.bgp == 'yes' %}
  address-family ipv4 {% if vc.vrf %}vrf {{ vc.vrf }} {% endif %} 
- neighbor  remote-as 31263
- neighbor 93.91.128.251 description Mynet-ISP-BACKUP-PEER
-{% endif %}
-
-{% endfor %}
-
- neighbor  remote-as 31263
- neighbor 93.91.128.251 description Mynet-ISP-BACKUP-PEER
- neighbor 172.28.10.1 remote-as 31263
- neighbor 172.28.10.1 description Mynet-ISP-MASTER-PEER
- neighbor 192.168.0.77 remote-as 65534
- neighbor 192.168.0.77 description Customer_IBGP
- neighbor 192.168.0.77 update-source Vlan1
- !
- address-family ipv4
-  neighbor 93.91.128.251 activate
-  neighbor 93.91.128.251 prefix-list default in
-  neighbor 93.91.128.251 prefix-list aggregate out
-  neighbor 93.91.128.251 route-map RM-Mynet-Backup-in in
-  neighbor 93.91.128.251 route-map RM-Mynet-Backup-out out
-  neighbor 172.28.10.1 activate
-  neighbor 172.28.10.1 prefix-list PL-ALDABRA-CONC-VPN-IN in
-  neighbor 172.28.10.1 prefix-list PL-ALDABRA-CONC-VPN-OUT out
-  neighbor 192.168.0.77 activate
-  neighbor 192.168.0.77 next-hop-self
-  no auto-summary
-  no synchronization
+  neighbor {{ vc.brasip }} remote-as 31263
+  neighbor {{ vc.brasip }} description Mynet-ISP-BACKUP-PEER
+  neighbor {{ vc.brasip }} activate
+  neighbor {{ vc.brasip }} prefix-list default in
+  neighbor {{ vc.brasip }} prefix-list aggregate out
+  neighbor {{ vc.brasip }} route-map RM-Mynet-Backup-in in
+  neighbor {{ vc.brasip }} route-map RM-Mynet-Backup-out out
   network 80.68.181.66 mask 255.255.255.255
-  network 93.91.137.109 mask 255.255.255.255
-  network 93.91.137.110 mask 255.255.255.255
-  network 93.91.137.111 mask 255.255.255.255
-  network 192.168.0.0
- exit-address-family
+  exit-address-family
+   {% endif %}
+ {% endfor %}
+{% endfor %}
 !
 ip local policy route-map viaHDSL
 ip forward-protocol nd
