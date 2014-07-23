@@ -11,10 +11,38 @@ ACCESS_TYPE_CHOICES = (
     ('hdsl_fr', 'Hdsl frame relay'),
     ('shdsl', 'Shdsl ATM'),
 )
+
+VC_TYPE_CHOICES = (
+    ('ipaccess', 'IP Access'),
+    ('voip', 'Voip Mynet'),
+    ('vpn', 'Vpn Mpls'),
+)
+
 ROUTER_TYPE_CHOICES = (
     ('c1841', 'Cisco 1841'),
     ('c1801', 'Cisco 1801'),
     ('c3550', 'Cisco 3550'),
+)
+
+BRAS_TYPE_CHOICES = (
+    ('MANTITAU-10K', 'Cisco 10K Mantova'),
+    ('BRESITAW-10K', 'Cisco 10K Brescia'),
+    ('MILAITCC-10K', 'Cisco 10K Milano Bersaglio'),
+    ('MICALENTER-10K', 'Cisco 10K MilCal Enter'),
+)
+
+BRASLOOP_TYPE_CHOICES = (
+    ('Loop2', 'Loopback2'),
+    ('Loop3', 'Loopback3'),
+    ('Loop4', 'Loopback4'),
+    ('Loop5', 'Loopback5'),
+    ('Loop6', 'Loopback6'),
+    ('Loop7', 'Loopback7'),
+)
+
+BOOL_TYPE_CHOICES = (
+    ('yes', 'Yes'),
+    ('no', 'No'),
 )
 
 
@@ -26,16 +54,18 @@ class LineForm(forms.Form):
 
 
 class VcForm(forms.Form):
-    brasname = forms.CharField(required=False)
+    brasname = forms.ChoiceField(choices=BRAS_TYPE_CHOICES)
     brasvcid = forms.CharField(required=False)
     brasip = forms.CharField(required=False)
     cpevcid = forms.CharField(required=False)
     cpeip = forms.CharField(required=False)
-    loopback_ip = forms.CharField(required=False)
+    loopback = forms.ChoiceField(choices=BRASLOOP_TYPE_CHOICES)
+    type = forms.ChoiceField(choices=VC_TYPE_CHOICES)
 
 
 class GenConfForm(forms.Form):
     project_name = forms.CharField(required=True)
+    bgpas = forms.CharField(required=False)
 
     cpe1_router_type = forms.ChoiceField(choices=ROUTER_TYPE_CHOICES)
 
@@ -56,7 +86,8 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc1_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc1_cpeip = forms.CharField(required=False)
     cpe1_line1_vc1_cpedescr = forms.CharField(required=False)
-    cpe1_line1_vc1_loopback_ip = forms.CharField(required=False)
+    cpe1_line1_vc1_loopback = forms.CharField(required=False)
+    cpe1_line1_vc1_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
 
     cpe1_line1_vc2_brasname = forms.CharField(required=False)
     cpe1_line1_vc2_brasvcid = forms.CharField(required=False)
@@ -64,6 +95,8 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc2_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc2_cpeip = forms.CharField(required=False)
     cpe1_line1_vc2_cpedescr = forms.CharField(required=False)
+    cpe1_line1_vc2_loopback = forms.CharField(required=False)
+    cpe1_line1_vc2_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
 
     cpe1_line1_vc3_brasname = forms.CharField(required=False)
     cpe1_line1_vc3_brasvcid = forms.CharField(required=False)
@@ -71,16 +104,18 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc3_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc3_cpeip = forms.CharField(required=False)
     cpe1_line1_vc3_cpedescr = forms.CharField(required=False)
+    cpe1_line1_vc3_loopback = forms.CharField(required=False)
+    cpe1_line1_vc3_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
 
-    cpe1_line1_lan1_interface = forms.CharField(required=False)
-    cpe1_line1_lan1_ip = forms.CharField(required=False)
-    cpe1_line1_lan1_vrf = forms.CharField(required=False)
-    cpe1_line1_lan2_interface = forms.CharField(required=False)
-    cpe1_line1_lan2_ip = forms.CharField(required=False)
-    cpe1_line1_lan2_vrf = forms.CharField(required=False)
-    cpe1_line1_lan3_interface = forms.CharField(required=False)
-    cpe1_line1_lan3_ip = forms.CharField(required=False)
-    cpe1_line1_lan3_vrf = forms.CharField(required=False)
+    cpe1_lan1_descr = forms.CharField(required=False)
+    cpe1_lan1_ip = forms.CharField(required=False)
+    cpe1_lan1_vrf = forms.CharField(required=False)
+    cpe1_lan2_descr = forms.CharField(required=False)
+    cpe1_lan2_ip = forms.CharField(required=False)
+    cpe1_lan2_vrf = forms.CharField(required=False)
+    cpe1_lan3_descr = forms.CharField(required=False)
+    cpe1_lan3_ip = forms.CharField(required=False)
+    cpe1_lan3_vrf = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()

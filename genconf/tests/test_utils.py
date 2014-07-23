@@ -121,6 +121,7 @@ class UtilsTest(TestCase):
     def test_get_cisco_config(self):
         cleaned_data = dict(
             project_name='project_name',
+            bgpas='65534',
             cpe1_router_type='c1841',
             cpe1_lan1_standby_ip='cpe1_lan1_standby_ip',
             cpe1_lan2_standby_ip='cpe1_lan2_standby_ip',
@@ -128,41 +129,49 @@ class UtilsTest(TestCase):
             cpe1_line1_id='cpe1_line1_id',
             cpe1_line1_access_type='adsl',
             cpe1_line1_cpeslotif='0/0',
-            cpe1_line1_vc1_brasname='cpe1_line1_vc1_brasname',
+            cpe1_line1_vc1_brasname='MANTITAU-10K',
             cpe1_line1_vc1_brasvcid='cpe1_line1_vc1_brasvcid',
             cpe1_line1_vc1_brasip='cpe1_line1_vc1_brasip',
             cpe1_line1_vc1_cpevcid='cpe1_line1_vc1_cpevcid',
             cpe1_line1_vc1_cpeip='cpe1_line1_vc1_cpeip',
             cpe1_line1_vc1_cpedescr='cpe1_line1_vc1_cpedescr',
-            cpe1_line1_vc1_loopback_ip='cpe1_line1_vc1_loopback_ip',
-            cpe1_line1_vc2_brasname='cpe1_line1_vc2_brasname',
+            cpe1_line1_vc1_loopback='Loop2',
+            cpe1_line1_vc1_bgp='yes',
+            cpe1_line1_vc1_type='ipaccess',
+            cpe1_line1_vc2_brasname='BRESITAW-10K',
             cpe1_line1_vc2_brasvcid='cpe1_line1_vc2_brasvcid',
             cpe1_line1_vc2_brasip='cpe1_line1_vc2_brasip',
             cpe1_line1_vc2_cpevcid='cpe1_line1_vc2_cpevcid',
             cpe1_line1_vc2_cpeip='cpe1_line1_vc2_cpeip',
             cpe1_line1_vc2_cpedescr='cpe1_line1_vc2_cpedescr',
-            cpe1_line1_vc3_brasname='cpe1_line1_vc3_brasname',
+#            cpe1_line1_vc2_loopback='Loop2',
+            cpe1_line1_vc2_bgp='no',
+            cpe1_line1_vc2_type='voip',
+            cpe1_line1_vc3_brasname='MICALENTER-10K',
             cpe1_line1_vc3_brasvcid='cpe1_line1_vc3_brasvcid',
             cpe1_line1_vc3_brasip='cpe1_line1_vc3_brasip',
             cpe1_line1_vc3_cpevcid='cpe1_line1_vc3_cpevcid',
             cpe1_line1_vc3_cpeip='cpe1_line1_vc3_cpeip',
             cpe1_line1_vc3_cpedescr='cpe1_line1_vc3_cpedescr',
-            cpe1_line1_lan1_interface='cpe1_line1_lan1_interface',
-            cpe1_line1_lan1_ip='cpe1_line1_lan1_ip',
-            cpe1_line1_lan1_vrf='cpe1_line1_lan1_vrf',
-            cpe1_line1_lan2_interface='cpe1_line1_lan2_interface',
-            cpe1_line1_lan2_ip='cpe1_line1_lan2_ip',
-            cpe1_line1_lan2_vrf='cpe1_line1_lan2_vrf',
-            cpe1_line1_lan3_interface='cpe1_line1_lan3_interface',
-            cpe1_line1_lan3_ip='cpe1_line1_lan3_ip',
-            cpe1_line1_lan3_vrf='cpe1_line1_lan3_vrf',
+            cpe1_line1_vc3_loopback='Loop2',
+            cpe1_line1_vc3_bgp='yes',
+            cpe1_line1_vc3_type='vpn',
+            cpe1_lan1_descr='cpe1_lan1_descr',
+            cpe1_lan1_ip='192.168.1.1/24',
+#            cpe1_lan1_vrf='cpe1_lan1_vrf',
+            cpe1_lan2_descr='cpe1_lan2_descr',
+            cpe1_lan2_ip='10.10.10.1/29',
+            cpe1_lan2_vrf='cpe1_lan2_vrf',
+            cpe1_lan3_descr='cpe1_lan3_descr',
+            cpe1_lan3_ip='1.2.3.4/28',
+            cpe1_lan3_vrf='cpe1_lan3_vrf',
         )
         config = utils.get_config(cleaned_data)
         from pprint import pprint
         pprint(config)
         cisco = utils.get_cisco_config(config, 0)
-        start = 40
+        start = 150
         lines = cisco.splitlines()
-        for i in range(start, start + 35):
+        for i in range(start, start + 45):
             print lines[i]
         self.assertTrue('boot-start-marker' in cisco)

@@ -1,5 +1,6 @@
 # import M2Crypto
 import string
+from netaddr import *
 from django.template import Context, Template
 from django.template.loader import get_template
 
@@ -68,7 +69,7 @@ def get_custom_cpe_config(config, cpe):
     for line_index, line in enumerate(cpe['lines']):
         line = get_custom_line_config(config, cpe, line, line_index)
     for lan_index, lan in enumerate(cpe['lans']):
-        lan = get_custom_lan_config(config, cpe, lan, lan_index)
+        lan = get_custom_lan_config(config, cpe, lan, lan_index, len(cpe['lans']))
     return config
 
 
@@ -78,14 +79,62 @@ def get_custom_line_config(config, cpe, line, line_index):
 
 
 def get_custom_vc_config(config, cpe, line, vc, vc_index):
+    vc['idx'] = vc_index
+    vc['ppppwd'] = random_password(length=16)
+    if (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop2' ): 
+        vc['BrasIpLoop'] = '93.91.128.254'
+    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop3' ): 
+        vc['BrasIpLoop'] = '93.91.128.245'
+    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop4' ): 
+        vc['BrasIpLoop'] = '93.91.128.244'
+    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop5' ): 
+        vc['BrasIpLoop'] = '93.91.128.243'
+    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop6' ): 
+        vc['BrasIpLoop'] = '93.91.128.242'
+    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop7' ): 
+        vc['BrasIpLoop'] = '93.91.128.233'
+    elif (vc['brasname'] == 'BRESITAW-10K' and vc['loopback'] == 'Loop2' ): 
+        vc['BrasIpLoop'] = '93.91.128.227'
+    elif (vc['brasname'] == 'BRESITAW-10K' and vc['loopback'] == 'Loop3' ): 
+        vc['BrasIpLoop'] = '93.91.128.228'
+    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop2' ): 
+        vc['BrasIpLoop'] = '93.91.128.224'
+    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop3' ): 
+        vc['BrasIpLoop'] = '93.91.128.225'
+    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop4' ): 
+        vc['BrasIpLoop'] = '93.91.128.223'
+    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop5' ): 
+        vc['BrasIpLoop'] = '93.91.128.222'
+    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop6' ): 
+        vc['BrasIpLoop'] = '93.91.128.221'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop2' ): 
+        vc['BrasIpLoop'] = '93.91.128.251'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop3' ): 
+        vc['BrasIpLoop'] = '93.91.128.250'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop4' ): 
+        vc['BrasIpLoop'] = '93.91.128.241'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop5' ): 
+        vc['BrasIpLoop'] = '93.91.128.240'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop6' ): 
+        vc['BrasIpLoop'] = '93.91.128.239'
+    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop7' ): 
+        vc['BrasIpLoop'] = '93.91.128.229'
     return vc
 
 
-def get_custom_lan_config(config, cpe, lan, lan_index):
-    if cpe['router_type'] == 'c1841':
-        lan['custom_field'] = 'Fx.%d0' % (lan_index + 1)
-    if cpe['router_type'] == 'c3550':
-        lan['custom_field'] = 'VLAN%d0' % (lan_index + 1)
+def get_custom_lan_config(config, cpe, lan, lan_index, lenlan):
+    lan['stbyindex'] = ((lan_index + 1) * 10 )
+    if (cpe['router_type'] == 'c1841' and lenlan < 3):
+        lan['ifidx'] = 'FastEthernet%d/0' % (lan_index)
+    elif (cpe['router_type'] == 'c1841' and lenlan > 2 and lan_index == 1):
+        lan['ifidx'] = 'FastEthernet%d/0' % (lan_index)
+    elif (cpe['router_type'] == 'c1841' and lenlan > 2):
+        lan['ifidx'] = 'FastEthernet0/0.%d' % (lan_index + 1)
+    elif cpe['router_type'] == 'c3550':
+        lan['ifidx'] = 'VLAN%d0' % (lan_index + 1)
+    ip = IPNetwork(lan['ip'])
+    lan['ipadd'] = ip.ip
+    lan['ipmask'] = ip.netmask
     return lan
 
 
