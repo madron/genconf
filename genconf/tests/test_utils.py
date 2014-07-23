@@ -157,7 +157,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc3_bgp='yes',
             cpe1_line1_vc3_type='vpn',
             cpe1_lan1_descr='cpe1_lan1_descr',
-            cpe1_lan1_ip='192.168.1.1/24',
+            cpe1_lan1_ip='80.68.190.1/29',
 #            cpe1_lan1_vrf='cpe1_lan1_vrf',
             cpe1_lan2_descr='cpe1_lan2_descr',
             cpe1_lan2_ip='10.10.10.1/29',
