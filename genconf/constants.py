@@ -7,7 +7,7 @@ ROUTER_TYPE_CHOICES = (
 ACCESS_TYPE_CHOICES = (
     ('adsl', 'Adsl'),
     ('eth', 'Ethernet'),
-    ('hdsl_fr', 'Hdsl frame relay'),
+    ('hdsl-fr', 'Hdsl frame relay'),
     ('shdsl', 'Shdsl ATM'),
 )
 
@@ -18,17 +18,17 @@ VC_TYPE_CHOICES = (
 )
 
 BRAS_TYPE_CHOICES = (
-    ('MANTITAU-10K', 'Cisco 10K Mantova'),
-    ('BRESITAW-10K', 'Cisco 10K Brescia'),
-    ('MILAITCC-10K', 'Cisco 10K Milano Bersaglio'),
-    ('MICALENTER-10K', 'Cisco 10K MilCal Enter'),
+    ('mantitau-10k', 'Cisco 10K Mantova'),
+    ('bresitaw-10k', 'Cisco 10K Brescia'),
+    ('milaitcc-10k', 'Cisco 10K Milano Bersaglio'),
+    ('micalenter-10k', 'Cisco 10K MilCal Enter'),
 )
 
 BRASLOOP_TYPE_CHOICES = (
-    ('Loop2', 'Loopback2'),
-    ('Loop3', 'Loopback3'),
-    ('Loop4', 'Loopback4'),
-    ('Loop5', 'Loopback5'),
-    ('Loop6', 'Loopback6'),
-    ('Loop7', 'Loopback7'),
+    ('loop2', 'Loopback2'),
+    ('loop3', 'Loopback3'),
+    ('loop4', 'Loopback4'),
+    ('loop5', 'Loopback5'),
+    ('loop6', 'Loopback6'),
+    ('loop7', 'Loopback7'),
 )

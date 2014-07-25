@@ -81,45 +81,45 @@ def get_custom_line_config(config, cpe, line, line_index):
 def get_custom_vc_config(config, cpe, line, vc, vc_index):
     vc['idx'] = vc_index
     vc['ppppwd'] = random_password(length=16)
-    if (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop2' ): 
+    if (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop2' ):
         vc['BrasIpLoop'] = '93.91.128.254'
-    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop3' ): 
+    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop3' ):
         vc['BrasIpLoop'] = '93.91.128.245'
-    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop4' ): 
+    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop4' ):
         vc['BrasIpLoop'] = '93.91.128.244'
-    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop5' ): 
+    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop5' ):
         vc['BrasIpLoop'] = '93.91.128.243'
-    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop6' ): 
+    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop6' ):
         vc['BrasIpLoop'] = '93.91.128.242'
-    elif (vc['brasname'] == 'MANTITAU-10K' and vc['loopback'] == 'Loop7' ): 
+    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop7' ):
         vc['BrasIpLoop'] = '93.91.128.233'
-    elif (vc['brasname'] == 'BRESITAW-10K' and vc['loopback'] == 'Loop2' ): 
+    elif (vc['brasname'] == 'bresitaw-10k' and vc['loopback'] == 'loop2' ):
         vc['BrasIpLoop'] = '93.91.128.227'
-    elif (vc['brasname'] == 'BRESITAW-10K' and vc['loopback'] == 'Loop3' ): 
+    elif (vc['brasname'] == 'bresitaw-10k' and vc['loopback'] == 'loop3' ):
         vc['BrasIpLoop'] = '93.91.128.228'
-    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop2' ): 
+    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop2' ):
         vc['BrasIpLoop'] = '93.91.128.224'
-    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop3' ): 
+    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop3' ):
         vc['BrasIpLoop'] = '93.91.128.225'
-    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop4' ): 
+    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop4' ):
         vc['BrasIpLoop'] = '93.91.128.223'
-    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop5' ): 
+    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop5' ):
         vc['BrasIpLoop'] = '93.91.128.222'
-    elif (vc['brasname'] == 'MILAITCC-10K' and vc['loopback'] == 'Loop6' ): 
+    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop6' ):
         vc['BrasIpLoop'] = '93.91.128.221'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop2' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop2' ):
         vc['BrasIpLoop'] = '93.91.128.251'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop3' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop3' ):
         vc['BrasIpLoop'] = '93.91.128.250'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop4' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop4' ):
         vc['BrasIpLoop'] = '93.91.128.241'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop5' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop5' ):
         vc['BrasIpLoop'] = '93.91.128.240'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop6' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop6' ):
         vc['BrasIpLoop'] = '93.91.128.239'
-    elif (vc['brasname'] == 'MICALENTER-10K' and vc['loopback'] == 'Loop7' ): 
+    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop7' ):
         vc['BrasIpLoop'] = '93.91.128.229'
-    ip = IPNetwork(vc['cpeip']) 
+    ip = IPNetwork(vc['cpeip'])
     vc['cpeipadd'] = ip.ip
     vc['cpeipmask'] = ip.netmask
     vc['cpeipprefixlen'] = ip.prefixlen
