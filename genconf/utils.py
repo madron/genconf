@@ -87,7 +87,7 @@ def get_custom_vc_config(config, cpe, line, vc, vc_index):
 
 
 def get_vc_subnet_parameters(vc):
-    subnet = IPNetwork(vc['cpeip'])
+    subnet = IPNetwork(vc['subnet'])
     subnet_mask = subnet.netmask.format()
     subnet_mask_bits = subnet.prefixlen
     if (subnet_mask_bits == 32):

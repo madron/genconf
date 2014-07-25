@@ -127,7 +127,7 @@ class UtilsTest(TestCase):
         config = dict()
         cpe = dict()
         line = dict()
-        vc = dict(cpeip='10.6.50.1/30')
+        vc = dict(subnet='10.6.50.1/30')
         vc_index = 0
         vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
         self.assertEqual(vc['bras_ip'], '10.6.50.1')
@@ -136,7 +136,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['subnet_mask_bits'], 30)
 
     def test_get_vc_subnet_parameters_30(self):
-        vc = dict(cpeip='10.6.50.1/30')
+        vc = dict(subnet='10.6.50.1/30')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['bras_ip'], '10.6.50.1')
         self.assertEqual(vc['ip'], '10.6.50.2')
@@ -144,7 +144,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['subnet_mask_bits'], 30)
 
     def test_get_vc_subnet_parameters_32(self):
-        vc = dict(cpeip='10.6.50.1/32', bras_id='mantitau10k', loopback='loop7')
+        vc = dict(subnet='10.6.50.1/32', bras_id='mantitau10k', loopback='loop7')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['bras_ip'], '93.91.128.233')
         self.assertEqual(vc['ip'], '10.6.50.1')
@@ -152,7 +152,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['subnet_mask_bits'], 32)
 
     def test_get_vc_subnet_parameters_32_default_loopback(self):
-        vc = dict(cpeip='10.6.50.1/32', bras_id='mantitau10k')
+        vc = dict(subnet='10.6.50.1/32', bras_id='mantitau10k')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['bras_ip'], '93.91.128.254')
         self.assertEqual(vc['ip'], '10.6.50.1')
@@ -173,7 +173,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc1_bras_id='mantitau10k',
             cpe1_line1_vc1_brasvcid='cpe1_line1_vc1_brasvcid',
             cpe1_line1_vc1_cpevcid='cpe1_line1_vc1_cpevcid',
-            cpe1_line1_vc1_cpeip='100.65.10.1/32',
+            cpe1_line1_vc1_subnet='100.65.10.1/32',
             cpe1_line1_vc1_cpedescr='cpe1_line1_vc1_cpedescr',
             cpe1_line1_vc1_loopback='loop2',
             cpe1_line1_vc1_bgp='yes',
@@ -181,7 +181,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc2_bras_id='bresitaw10k',
             cpe1_line1_vc2_brasvcid='cpe1_line1_vc2_brasvcid',
             cpe1_line1_vc2_cpevcid='cpe1_line1_vc2_cpevcid',
-            cpe1_line1_vc2_cpeip='10.6.50.1/30',
+            cpe1_line1_vc2_subnet='10.6.50.1/30',
             cpe1_line1_vc2_cpedescr='cpe1_line1_vc2_cpedescr',
             cpe1_line1_vc2_loopback='',
             cpe1_line1_vc2_bgp='no',
@@ -189,7 +189,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc3_bras_id='micalenter10k',
             cpe1_line1_vc3_brasvcid='cpe1_line1_vc3_brasvcid',
             cpe1_line1_vc3_cpevcid='cpe1_line1_vc3_cpevcid',
-            cpe1_line1_vc3_cpeip='172.18.19.1/30',
+            cpe1_line1_vc3_subnet='172.18.19.1/30',
             cpe1_line1_vc3_cpedescr='cpe1_line1_vc3_cpedescr',
             cpe1_line1_vc3_loopback='loop2',
             cpe1_line1_vc3_bgp='yes',
