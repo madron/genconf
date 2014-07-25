@@ -121,14 +121,37 @@ class UtilsTest(TestCase):
         config = dict()
         cpe = dict()
         line = dict()
-        vc = dict(cpeip='10.6.50.1/30', brasname='mantitau-10k', loopback='loop2')
+        vc = dict(cpeip='10.6.50.1/30')
         vc_index = 0
         vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
         self.assertEqual(vc['brasip'], '10.6.50.1')
         self.assertEqual(vc['cpeipadd'], '10.6.50.2')
         self.assertEqual(vc['cpeipmask'], '255.255.255.252')
         self.assertEqual(vc['cpeipprefixlen'], 30)
-        self.assertEqual(vc['BrasIpLoop'], '93.91.128.254')
+
+    def test_get_vc_subnet_parameters_30(self):
+        vc = dict(cpeip='10.6.50.1/30')
+        vc = utils.get_vc_subnet_parameters(vc)
+        self.assertEqual(vc['brasip'], '10.6.50.1')
+        self.assertEqual(vc['cpeipadd'], '10.6.50.2')
+        self.assertEqual(vc['cpeipmask'], '255.255.255.252')
+        self.assertEqual(vc['cpeipprefixlen'], 30)
+
+    def test_get_vc_subnet_parameters_32(self):
+        vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k', loopback='loop7')
+        vc = utils.get_vc_subnet_parameters(vc)
+        self.assertEqual(vc['brasip'], '93.91.128.233')
+        self.assertEqual(vc['cpeipadd'], '10.6.50.1')
+        self.assertEqual(vc['cpeipmask'], '255.255.255.255')
+        self.assertEqual(vc['cpeipprefixlen'], 32)
+
+    def test_get_vc_subnet_parameters_32_default_loopback(self):
+        vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k')
+        vc = utils.get_vc_subnet_parameters(vc)
+        self.assertEqual(vc['brasip'], '93.91.128.254')
+        self.assertEqual(vc['cpeipadd'], '10.6.50.1')
+        self.assertEqual(vc['cpeipmask'], '255.255.255.255')
+        self.assertEqual(vc['cpeipprefixlen'], 32)
 
     def test_get_cisco_config(self):
         cleaned_data = dict(
@@ -141,7 +164,7 @@ class UtilsTest(TestCase):
             cpe1_line1_id='cpe1_line1_id',
             cpe1_line1_access_type='adsl',
             cpe1_line1_cpeslotif='0/0',
-            cpe1_line1_vc1_brasname='MANTITAU-10K',
+            cpe1_line1_vc1_brasname='mantitau10k',
             cpe1_line1_vc1_brasvcid='cpe1_line1_vc1_brasvcid',
 #            cpe1_line1_vc1_brasip='cpe1_line1_vc1_brasip',
             cpe1_line1_vc1_cpevcid='cpe1_line1_vc1_cpevcid',
@@ -150,7 +173,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc1_loopback='loop2',
             cpe1_line1_vc1_bgp='yes',
             cpe1_line1_vc1_type='ipaccess',
-            cpe1_line1_vc2_brasname='bresitaw-10k',
+            cpe1_line1_vc2_brasname='bresitaw10k',
             cpe1_line1_vc2_brasvcid='cpe1_line1_vc2_brasvcid',
 #            cpe1_line1_vc2_brasip='cpe1_line1_vc2_brasip',
             cpe1_line1_vc2_cpevcid='cpe1_line1_vc2_cpevcid',
@@ -159,7 +182,7 @@ class UtilsTest(TestCase):
             cpe1_line1_vc2_loopback='',
             cpe1_line1_vc2_bgp='no',
             cpe1_line1_vc2_type='voip',
-            cpe1_line1_vc3_brasname='micalenter-10k',
+            cpe1_line1_vc3_brasname='micalenter10k',
             cpe1_line1_vc3_brasvcid='cpe1_line1_vc3_brasvcid',
 #            cpe1_line1_vc3_brasip='cpe1_line1_vc3_brasip',
             cpe1_line1_vc3_cpevcid='cpe1_line1_vc3_cpevcid',

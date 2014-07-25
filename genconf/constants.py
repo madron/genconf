@@ -32,3 +32,35 @@ BRASLOOP_TYPE_CHOICES = (
     ('loop6', 'Loopback6'),
     ('loop7', 'Loopback7'),
 )
+
+BRAS_DEFAULT_LOOPBACK = 'loop2'
+
+BRAS_LOOPBACK_IP = dict(
+    mantitau10k=dict(
+        loop2='93.91.128.254',
+        loop3='93.91.128.245',
+        loop4='93.91.128.244',
+        loop5='93.91.128.243',
+        loop6='93.91.128.242',
+        loop7='93.91.128.233',
+    ),
+    bresitaw10k=dict(
+        loop2='93.91.128.227',
+        loop3='93.91.128.228',
+    ),
+    milaitcc10k=dict(
+        loop2='93.91.128.224',
+        loop3='93.91.128.225',
+        loop4='93.91.128.223',
+        loop5='93.91.128.222',
+        loop6='93.91.128.221',
+    ),
+    micalenter10k=dict(
+        loop2='93.91.128.251',
+        loop3='93.91.128.250',
+        loop4='93.91.128.241',
+        loop5='93.91.128.240',
+        loop6='93.91.128.239',
+        loop7='93.91.128.229',
+    ),
+)

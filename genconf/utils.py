@@ -3,6 +3,7 @@ import string
 from netaddr import *
 from django.template import Context, Template
 from django.template.loader import get_template
+from . import constants
 
 
 def get_config(cleaned_data):
@@ -81,54 +82,28 @@ def get_custom_line_config(config, cpe, line, line_index):
 def get_custom_vc_config(config, cpe, line, vc, vc_index):
     vc['idx'] = vc_index
     vc['ppppwd'] = random_password(length=16)
-    if (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop2' ):
-        vc['BrasIpLoop'] = '93.91.128.254'
-    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop3' ):
-        vc['BrasIpLoop'] = '93.91.128.245'
-    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop4' ):
-        vc['BrasIpLoop'] = '93.91.128.244'
-    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop5' ):
-        vc['BrasIpLoop'] = '93.91.128.243'
-    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop6' ):
-        vc['BrasIpLoop'] = '93.91.128.242'
-    elif (vc['brasname'] == 'mantitau-10k' and vc['loopback'] == 'loop7' ):
-        vc['BrasIpLoop'] = '93.91.128.233'
-    elif (vc['brasname'] == 'bresitaw-10k' and vc['loopback'] == 'loop2' ):
-        vc['BrasIpLoop'] = '93.91.128.227'
-    elif (vc['brasname'] == 'bresitaw-10k' and vc['loopback'] == 'loop3' ):
-        vc['BrasIpLoop'] = '93.91.128.228'
-    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop2' ):
-        vc['BrasIpLoop'] = '93.91.128.224'
-    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop3' ):
-        vc['BrasIpLoop'] = '93.91.128.225'
-    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop4' ):
-        vc['BrasIpLoop'] = '93.91.128.223'
-    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop5' ):
-        vc['BrasIpLoop'] = '93.91.128.222'
-    elif (vc['brasname'] == 'milaitcc-10k' and vc['loopback'] == 'loop6' ):
-        vc['BrasIpLoop'] = '93.91.128.221'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop2' ):
-        vc['BrasIpLoop'] = '93.91.128.251'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop3' ):
-        vc['BrasIpLoop'] = '93.91.128.250'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop4' ):
-        vc['BrasIpLoop'] = '93.91.128.241'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop5' ):
-        vc['BrasIpLoop'] = '93.91.128.240'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop6' ):
-        vc['BrasIpLoop'] = '93.91.128.239'
-    elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop7' ):
-        vc['BrasIpLoop'] = '93.91.128.229'
-    subnet = IPNetwork(vc['cpeip'])
-    vc['cpeipadd'] = subnet.ip.format()
-    vc['cpeipmask'] = subnet.netmask.format()
-    vc['cpeipprefixlen'] = subnet.prefixlen
-    if (vc['cpeipprefixlen'] == 32):
-        vc['brasip'] = vc['BrasIpLoop']
-    else:
-        vc['brasip'] = (subnet.network + 1).format()
-        vc['cpeipadd'] = (subnet.network + 2).format()
+    vc.update(get_vc_subnet_parameters(vc))
     return vc
+
+
+def get_vc_subnet_parameters(vc):
+    subnet = IPNetwork(vc['cpeip'])
+    subnet_mask = subnet.netmask.format()
+    subnet_mask_bits = subnet.prefixlen
+    if (subnet_mask_bits == 32):
+        bras_id = vc['brasname']
+        loopback = vc.get('loopback', constants.BRAS_DEFAULT_LOOPBACK)
+        ip = (subnet.network).format()
+        bras_ip = constants.BRAS_LOOPBACK_IP[bras_id][loopback]
+    else:
+        ip = (subnet.network + 2).format()
+        bras_ip = (subnet.network + 1).format()
+    return dict(
+        brasip=bras_ip,
+        cpeipadd=ip,
+        cpeipmask=subnet_mask,
+        cpeipprefixlen=subnet_mask_bits,
+    )
 
 
 def get_custom_lan_config(config, cpe, lan, lan_index, lenlan):
