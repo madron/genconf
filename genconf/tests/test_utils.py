@@ -109,7 +109,7 @@ class UtilsTest(TestCase):
         self.assertEqual(lan['custom_field'], 'Fx.20')
 
 
-    def test_get_custom_vc_config_c3550(self):
+    def test_get_custom_lan_config_c3550(self):
         config = dict()
         cpe = dict(router_type='c3550')
         lan = dict()
@@ -117,6 +117,18 @@ class UtilsTest(TestCase):
         lan = utils.get_custom_lan_config(config, cpe, lan, lan_index)
         self.assertEqual(lan['custom_field'], 'VLAN20')
 
+    def test_get_custom_vc_config(self):
+        config = dict()
+        cpe = dict()
+        line = dict()
+        vc = dict(cpeip='10.6.50.1/30', brasname='mantitau-10k', loopback='loop2')
+        vc_index = 0
+        vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
+        self.assertEqual(vc['brasip'], '10.6.50.1')
+        self.assertEqual(vc['cpeipadd'], '10.6.50.2')
+        self.assertEqual(vc['cpeipmask'], '255.255.255.252')
+        self.assertEqual(vc['cpeipprefixlen'], 30)
+        self.assertEqual(vc['BrasIpLoop'], '93.91.128.254')
 
     def test_get_cisco_config(self):
         cleaned_data = dict(
