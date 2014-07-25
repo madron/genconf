@@ -92,9 +92,9 @@ interface Serial{{ line.cpeslotif }}
 
 
 {% endif %}
-{% for vc in line.vcs %} 
+{% for vc in line.vcs %}
 interface Dialer{{ vc.idx }}
- description 
+ description
  ip address negotiated
  ip virtual-reassembly
  encapsulation ppp
@@ -110,7 +110,7 @@ interface Dialer{{ vc.idx }}
 {% endfor %}
 
 !
-{% for lan in cpe.lans %} 
+{% for lan in cpe.lans %}
 interface {{ lan.ifidx }}
  description {{ lan.descr }}
 {% if lan.vrf %} ip vrf forwarding {{ lan.vrf }} {% endif %}
@@ -132,8 +132,8 @@ router bgp {{ common.bgpas }}
 
 {% for line in cpe.lines %}
  {% for vc in line.vcs %}
-  {% if vc.bgp == 'yes' %}
- address-family ipv4 {% if vc.vrf %}vrf {{ vc.vrf }} {% endif %} 
+  {% if vc.bgp %}
+ address-family ipv4 {% if vc.vrf %}vrf {{ vc.vrf }} {% endif %}
   neighbor {{ vc.brasip }} remote-as 31263
   neighbor {{ vc.brasip }} description Mynet-ISP-BACKUP-PEER
   neighbor {{ vc.brasip }} activate

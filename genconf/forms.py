@@ -7,12 +7,6 @@ from django.utils.translation import ugettext as _
 from . import constants
 
 
-BOOL_TYPE_CHOICES = (
-    ('yes', 'Yes'),
-    ('no', 'No'),
-)
-
-
 class LineForm(forms.Form):
     id = forms.CharField(required=False)
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
@@ -54,7 +48,7 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc1_cpeip = forms.CharField(required=False)
     cpe1_line1_vc1_cpedescr = forms.CharField(required=False)
     cpe1_line1_vc1_loopback = forms.CharField(required=False)
-    cpe1_line1_vc1_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
+    cpe1_line1_vc1_bgp = forms.BooleanField()
 
     cpe1_line1_vc2_brasname = forms.CharField(required=False)
     cpe1_line1_vc2_brasvcid = forms.CharField(required=False)
@@ -63,7 +57,7 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc2_cpeip = forms.CharField(required=False)
     cpe1_line1_vc2_cpedescr = forms.CharField(required=False)
     cpe1_line1_vc2_loopback = forms.CharField(required=False)
-    cpe1_line1_vc2_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
+    cpe1_line1_vc2_bgp = forms.BooleanField()
 
     cpe1_line1_vc3_brasname = forms.CharField(required=False)
     cpe1_line1_vc3_brasvcid = forms.CharField(required=False)
@@ -72,7 +66,7 @@ class GenConfForm(forms.Form):
     cpe1_line1_vc3_cpeip = forms.CharField(required=False)
     cpe1_line1_vc3_cpedescr = forms.CharField(required=False)
     cpe1_line1_vc3_loopback = forms.CharField(required=False)
-    cpe1_line1_vc3_bgp = forms.ChoiceField(choices=BOOL_TYPE_CHOICES)
+    cpe1_line1_vc3_bgp = forms.BooleanField()
 
     cpe1_lan1_descr = forms.CharField(required=False)
     cpe1_lan1_ip = forms.CharField(required=False)
