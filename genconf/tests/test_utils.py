@@ -133,7 +133,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['brasip'], '10.6.50.1')
         self.assertEqual(vc['ip'], '10.6.50.2')
         self.assertEqual(vc['subnet_mask'], '255.255.255.252')
-        self.assertEqual(vc['cpeipprefixlen'], 30)
+        self.assertEqual(vc['subnet_mask_bits'], 30)
 
     def test_get_vc_subnet_parameters_30(self):
         vc = dict(cpeip='10.6.50.1/30')
@@ -141,7 +141,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['brasip'], '10.6.50.1')
         self.assertEqual(vc['ip'], '10.6.50.2')
         self.assertEqual(vc['subnet_mask'], '255.255.255.252')
-        self.assertEqual(vc['cpeipprefixlen'], 30)
+        self.assertEqual(vc['subnet_mask_bits'], 30)
 
     def test_get_vc_subnet_parameters_32(self):
         vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k', loopback='loop7')
@@ -149,7 +149,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['brasip'], '93.91.128.233')
         self.assertEqual(vc['ip'], '10.6.50.1')
         self.assertEqual(vc['subnet_mask'], '255.255.255.255')
-        self.assertEqual(vc['cpeipprefixlen'], 32)
+        self.assertEqual(vc['subnet_mask_bits'], 32)
 
     def test_get_vc_subnet_parameters_32_default_loopback(self):
         vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k')
@@ -157,7 +157,7 @@ class UtilsTest(TestCase):
         self.assertEqual(vc['brasip'], '93.91.128.254')
         self.assertEqual(vc['ip'], '10.6.50.1')
         self.assertEqual(vc['subnet_mask'], '255.255.255.255')
-        self.assertEqual(vc['cpeipprefixlen'], 32)
+        self.assertEqual(vc['subnet_mask_bits'], 32)
 
     def test_get_cisco_config(self):
         cleaned_data = dict(

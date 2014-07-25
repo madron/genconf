@@ -102,7 +102,7 @@ def get_vc_subnet_parameters(vc):
         brasip=bras_ip,
         ip=ip,
         subnet_mask=subnet_mask,
-        cpeipprefixlen=subnet_mask_bits,
+        subnet_mask_bits=subnet_mask_bits,
     )
 
 
