@@ -1,4 +1,4 @@
-# import M2Crypto
+import random
 import string
 from netaddr import *
 from django.template import Context, Template
@@ -125,12 +125,8 @@ def get_custom_lan_config(config, cpe, lan, lan_index):
 
 
 def random_password(length=16):
-    return 'pippopippopippo1'
     chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
-    password = ''
-    for i in range(length):
-        password += chars[ord(M2Crypto.m2.rand_bytes(1)) % len(chars)]
-    return password
+    return ''.join(random.choice(chars) for _ in range(length))
 
 
 def get_cisco_config(config, cpe):

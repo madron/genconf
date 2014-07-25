@@ -123,6 +123,11 @@ class UtilsTest(TestCase):
         self.assertEqual(lan['ipmask'], '255.255.255.240')
         self.assertEqual(lan['nat'], False)
 
+    def test_random_password(self):
+        self.assertEqual(len(utils.random_password()), 16)
+        self.assertEqual(len(utils.random_password(length=16)), 16)
+        self.assertEqual(len(utils.random_password(length=12)), 12)
+
     def test_get_custom_vc_config(self):
         config = dict()
         cpe = dict()
