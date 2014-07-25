@@ -119,15 +119,15 @@ def get_custom_vc_config(config, cpe, line, vc, vc_index):
         vc['BrasIpLoop'] = '93.91.128.239'
     elif (vc['brasname'] == 'micalenter-10k' and vc['loopback'] == 'loop7' ):
         vc['BrasIpLoop'] = '93.91.128.229'
-    ip = IPNetwork(vc['cpeip'])
-    vc['cpeipadd'] = ip.ip
-    vc['cpeipmask'] = ip.netmask
-    vc['cpeipprefixlen'] = ip.prefixlen
+    subnet = IPNetwork(vc['cpeip'])
+    vc['cpeipadd'] = subnet.ip.format()
+    vc['cpeipmask'] = subnet.netmask.format()
+    vc['cpeipprefixlen'] = subnet.prefixlen
     if (vc['cpeipprefixlen'] == 32):
         vc['brasip'] = vc['BrasIpLoop']
     else:
-        vc['brasip'] = (ip.network + 1)
-        vc['cpeipadd'] = (ip.network + 2)
+        vc['brasip'] = (subnet.network + 1).format()
+        vc['cpeipadd'] = (subnet.network + 2).format()
     return vc
 
 
