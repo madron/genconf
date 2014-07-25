@@ -17,7 +17,7 @@ class LineForm(forms.Form):
 class VcForm(forms.Form):
     brasname = forms.ChoiceField(choices=constants.BRAS_TYPE_CHOICES)
     brasvcid = forms.CharField(required=False)
-    brasip = forms.CharField(required=False)
+    bras_ip = forms.CharField(required=False)
     cpevcid = forms.CharField(required=False)
     cpeip = forms.CharField(required=False)
     loopback = forms.ChoiceField(choices=constants.BRASLOOP_TYPE_CHOICES)
@@ -43,7 +43,7 @@ class GenConfForm(forms.Form):
 
     cpe1_line1_vc1_brasname = forms.CharField(required=False)
     cpe1_line1_vc1_brasvcid = forms.CharField(required=False)
-    cpe1_line1_vc1_brasip = forms.CharField(required=False)
+    cpe1_line1_vc1_bras_ip = forms.CharField(required=False)
     cpe1_line1_vc1_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc1_cpeip = forms.CharField(required=False)
     cpe1_line1_vc1_cpedescr = forms.CharField(required=False)
@@ -52,7 +52,7 @@ class GenConfForm(forms.Form):
 
     cpe1_line1_vc2_brasname = forms.CharField(required=False)
     cpe1_line1_vc2_brasvcid = forms.CharField(required=False)
-    cpe1_line1_vc2_brasip = forms.CharField(required=False)
+    cpe1_line1_vc2_bras_ip = forms.CharField(required=False)
     cpe1_line1_vc2_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc2_cpeip = forms.CharField(required=False)
     cpe1_line1_vc2_cpedescr = forms.CharField(required=False)
@@ -61,7 +61,7 @@ class GenConfForm(forms.Form):
 
     cpe1_line1_vc3_brasname = forms.CharField(required=False)
     cpe1_line1_vc3_brasvcid = forms.CharField(required=False)
-    cpe1_line1_vc3_brasip = forms.CharField(required=False)
+    cpe1_line1_vc3_bras_ip = forms.CharField(required=False)
     cpe1_line1_vc3_cpevcid = forms.CharField(required=False)
     cpe1_line1_vc3_cpeip = forms.CharField(required=False)
     cpe1_line1_vc3_cpedescr = forms.CharField(required=False)

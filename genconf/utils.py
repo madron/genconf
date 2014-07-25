@@ -99,7 +99,7 @@ def get_vc_subnet_parameters(vc):
         ip = (subnet.network + 2).format()
         bras_ip = (subnet.network + 1).format()
     return dict(
-        brasip=bras_ip,
+        bras_ip=bras_ip,
         ip=ip,
         subnet_mask=subnet_mask,
         subnet_mask_bits=subnet_mask_bits,

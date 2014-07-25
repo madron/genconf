@@ -134,13 +134,13 @@ router bgp {{ common.bgpas }}
  {% for vc in line.vcs %}
   {% if vc.bgp %}
  address-family ipv4 {% if vc.vrf %}vrf {{ vc.vrf }} {% endif %}
-  neighbor {{ vc.brasip }} remote-as 31263
-  neighbor {{ vc.brasip }} description Mynet-ISP-BACKUP-PEER
-  neighbor {{ vc.brasip }} activate
-  neighbor {{ vc.brasip }} prefix-list default in
-  neighbor {{ vc.brasip }} prefix-list aggregate out
-  neighbor {{ vc.brasip }} route-map RM-Mynet-Backup-in in
-  neighbor {{ vc.brasip }} route-map RM-Mynet-Backup-out out
+  neighbor {{ vc.bras_ip }} remote-as 31263
+  neighbor {{ vc.bras_ip }} description Mynet-ISP-BACKUP-PEER
+  neighbor {{ vc.bras_ip }} activate
+  neighbor {{ vc.bras_ip }} prefix-list default in
+  neighbor {{ vc.bras_ip }} prefix-list aggregate out
+  neighbor {{ vc.bras_ip }} route-map RM-Mynet-Backup-in in
+  neighbor {{ vc.bras_ip }} route-map RM-Mynet-Backup-out out
   network 80.68.181.66 mask 255.255.255.255
   exit-address-family
    {% endif %}
