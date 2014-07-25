@@ -1,16 +1,15 @@
 from netaddr import IPNetwork
 
 
-class LanConfig(dict):
-    def __init__(self, *args, **kwargs):
-        super(LanConfig, self).__init__(*args, **kwargs)
-        for name, value in self.iteritems():
-            self[name] = value
+class LanConfig(object):
+    def __init__(self, description='', subnet=None):
+        self.description = description
+        self.subnet = subnet
 
-    def __setitem__(self, name, value):
-        if hasattr(self, 'clean_%s' % name):
-            value = getattr(self, 'clean_%s' % name)(value)
-        super(LanConfig, self).__setitem__(name, value)
+    def set_subnet(self, value):
+        self._subnet = IPNetwork(value) if value else None
 
-    def clean_subnet(self, value):
-        return IPNetwork(value)
+    def get_subnet(self):
+        return self._subnet
+
+    subnet = property(get_subnet, set_subnet)
