@@ -1,6 +1,6 @@
 import random
 import string
-from netaddr import *
+from netaddr import IPNetwork, IPAddress
 from django.template import Context, Template
 from django.template.loader import get_template
 from . import constants
