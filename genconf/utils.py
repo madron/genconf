@@ -91,7 +91,7 @@ def get_vc_subnet_parameters(vc):
     subnet_mask = subnet.netmask.format()
     subnet_mask_bits = subnet.prefixlen
     if (subnet_mask_bits == 32):
-        bras_id = vc['brasname']
+        bras_id = vc['bras_id']
         loopback = vc.get('loopback', constants.BRAS_DEFAULT_LOOPBACK)
         ip = (subnet.network).format()
         bras_ip = constants.BRAS_LOOPBACK_IP[bras_id][loopback]
