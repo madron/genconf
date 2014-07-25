@@ -70,7 +70,7 @@ def get_custom_cpe_config(config, cpe):
     for line_index, line in enumerate(cpe['lines']):
         line = get_custom_line_config(config, cpe, line, line_index)
     for lan_index, lan in enumerate(cpe['lans']):
-        lan = get_custom_lan_config(config, cpe, lan, lan_index, len(cpe['lans']))
+        lan = get_custom_lan_config(config, cpe, lan, lan_index)
     return config
 
 
@@ -106,23 +106,21 @@ def get_vc_subnet_parameters(vc):
     )
 
 
-def get_custom_lan_config(config, cpe, lan, lan_index, lenlan):
+def get_custom_lan_config(config, cpe, lan, lan_index):
+    lans = len(cpe['lans'])
     lan['stbyindex'] = ((lan_index + 1) * 10 )
-    if (cpe['router_type'] == 'c1841' and lenlan < 3):
+    if (cpe['router_type'] == 'c1841' and lans < 3):
         lan['ifidx'] = 'FastEthernet%d/0' % (lan_index)
-    elif (cpe['router_type'] == 'c1841' and lenlan > 2 and lan_index == 1):
+    elif (cpe['router_type'] == 'c1841' and lans > 2 and lan_index == 1):
         lan['ifidx'] = 'FastEthernet%d/0' % (lan_index)
-    elif (cpe['router_type'] == 'c1841' and lenlan > 2):
+    elif (cpe['router_type'] == 'c1841' and lans > 2):
         lan['ifidx'] = 'FastEthernet0/0.%d' % (lan_index + 1)
     elif cpe['router_type'] == 'c3550':
         lan['ifidx'] = 'VLAN%d0' % (lan_index + 1)
     ip = IPNetwork(lan['ip'])
-    lan['ipadd'] = ip.ip
-    lan['ipmask'] = ip.netmask
-    if (IPAddress(ip).is_private() == 'True' and lan.vrf != ''):
-        lan['nat'] = 'yes'
-    else:
-        lan['nat'] = 'no'
+    lan['ipadd'] = ip.ip.format()
+    lan['ipmask'] = ip.netmask.format()
+    lan['nat'] = IPAddress(ip).is_private() and not lan['vrf']
     return lan
 
 

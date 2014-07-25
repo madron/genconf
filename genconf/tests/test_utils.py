@@ -14,10 +14,10 @@ CLEANED_DATA = dict(
     cpe1_line1_vc2_cpevcid='',
     cpe1_line1_lan1_interface='',
     cpe1_line1_lan1_ip='',
-    cpe1_line1_lan1_vrf='',
+    cpe1_line1_lan1_vrf=False,
     cpe1_line1_lan2_interface='',
     cpe1_line1_lan2_ip='',
-    cpe1_line1_lan2_vrf='',
+    cpe1_line1_lan2_vrf=False,
     cpe2_router_type='c3550',
     cpe2_lan2_ip='',
     cpe2_lan2_standby_ip='',
@@ -29,10 +29,10 @@ CLEANED_DATA = dict(
     cpe2_line2_vc2_cpevcid='',
     cpe2_line2_lan1_interface='',
     cpe2_line2_lan1_ip='',
-    cpe2_line2_lan1_vrf='',
+    cpe2_line2_lan1_vrf=False,
     cpe2_line2_lan2_interface='',
     cpe2_line2_lan2_ip='',
-    cpe2_line2_lan2_vrf='',
+    cpe2_line2_lan2_vrf=False,
 )
 
 
@@ -99,23 +99,29 @@ class UtilsTest(TestCase):
         self.assertEqual(config['cpes'][1]['lines'][1]['lans'][0], dict())
         self.assertEqual(config['cpes'][1]['lines'][1]['lans'][1]['ip'], '')
 
-
     def test_get_custom_lan_config_c1841(self):
         config = dict()
-        cpe = dict(router_type='c1841')
-        lan = dict()
+        cpe = dict(router_type='c1841', lans=[dict()])
+        lan = dict(ip='1.2.3.4/28')
         lan_index = 1
         lan = utils.get_custom_lan_config(config, cpe, lan, lan_index)
-        self.assertEqual(lan['custom_field'], 'Fx.20')
-
+        self.assertEqual(lan['ifidx'], 'FastEthernet1/0')
+        self.assertEqual(lan['stbyindex'], 20)
+        self.assertEqual(lan['ipadd'], '1.2.3.4')
+        self.assertEqual(lan['ipmask'], '255.255.255.240')
+        self.assertEqual(lan['nat'], False)
 
     def test_get_custom_lan_config_c3550(self):
         config = dict()
-        cpe = dict(router_type='c3550')
-        lan = dict()
-        lan_index = 1
+        cpe = dict(router_type='c3550', lans=[dict()])
+        lan = dict(ip='1.2.3.4/28')
+        lan_index = 0
         lan = utils.get_custom_lan_config(config, cpe, lan, lan_index)
-        self.assertEqual(lan['custom_field'], 'VLAN20')
+        self.assertEqual(lan['ifidx'], 'VLAN10')
+        self.assertEqual(lan['stbyindex'], 10)
+        self.assertEqual(lan['ipadd'], '1.2.3.4')
+        self.assertEqual(lan['ipmask'], '255.255.255.240')
+        self.assertEqual(lan['nat'], False)
 
     def test_get_custom_vc_config(self):
         config = dict()
@@ -166,7 +172,6 @@ class UtilsTest(TestCase):
             cpe1_line1_cpeslotif='0/0',
             cpe1_line1_vc1_brasname='mantitau10k',
             cpe1_line1_vc1_brasvcid='cpe1_line1_vc1_brasvcid',
-#            cpe1_line1_vc1_brasip='cpe1_line1_vc1_brasip',
             cpe1_line1_vc1_cpevcid='cpe1_line1_vc1_cpevcid',
             cpe1_line1_vc1_cpeip='100.65.10.1/32',
             cpe1_line1_vc1_cpedescr='cpe1_line1_vc1_cpedescr',
@@ -175,7 +180,6 @@ class UtilsTest(TestCase):
             cpe1_line1_vc1_type='ipaccess',
             cpe1_line1_vc2_brasname='bresitaw10k',
             cpe1_line1_vc2_brasvcid='cpe1_line1_vc2_brasvcid',
-#            cpe1_line1_vc2_brasip='cpe1_line1_vc2_brasip',
             cpe1_line1_vc2_cpevcid='cpe1_line1_vc2_cpevcid',
             cpe1_line1_vc2_cpeip='10.6.50.1/30',
             cpe1_line1_vc2_cpedescr='cpe1_line1_vc2_cpedescr',
@@ -184,7 +188,6 @@ class UtilsTest(TestCase):
             cpe1_line1_vc2_type='voip',
             cpe1_line1_vc3_brasname='micalenter10k',
             cpe1_line1_vc3_brasvcid='cpe1_line1_vc3_brasvcid',
-#            cpe1_line1_vc3_brasip='cpe1_line1_vc3_brasip',
             cpe1_line1_vc3_cpevcid='cpe1_line1_vc3_cpevcid',
             cpe1_line1_vc3_cpeip='172.18.19.1/30',
             cpe1_line1_vc3_cpedescr='cpe1_line1_vc3_cpedescr',
@@ -193,7 +196,6 @@ class UtilsTest(TestCase):
             cpe1_line1_vc3_type='vpn',
             cpe1_lan1_descr='cpe1_lan1_descr',
             cpe1_lan1_ip='80.68.190.1/29',
-#            cpe1_lan1_vrf='cpe1_lan1_vrf',
             cpe1_lan2_descr='cpe1_lan2_descr',
             cpe1_lan2_ip='10.10.10.1/29',
             cpe1_lan2_vrf='cpe1_lan2_vrf',
@@ -202,11 +204,11 @@ class UtilsTest(TestCase):
             cpe1_lan3_vrf='cpe1_lan3_vrf',
         )
         config = utils.get_config(cleaned_data)
-        from pprint import pprint
-        pprint(config)
         cisco = utils.get_cisco_config(config, 0)
-        start = 0
-        lines = cisco.splitlines()
-        for i in range(start, start + 245):
-            print lines[i]
+        # from pprint import pprint
+        # pprint(config)
+        # start = 0
+        # lines = cisco.splitlines()
+        # for i in range(start, start + 245):
+        #     print lines[i]
         self.assertTrue('boot-start-marker' in cisco)
