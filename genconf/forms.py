@@ -15,26 +15,26 @@ BOOL_TYPE_CHOICES = (
 
 class LineForm(forms.Form):
     id = forms.CharField(required=False)
-    access_type = forms.ChoiceField(choices=ACCESS_TYPE_CHOICES)
+    access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router_type = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
     cpeslotif = forms.CharField(required=False)
 
 
 class VcForm(forms.Form):
-    brasname = forms.ChoiceField(choices=BRAS_TYPE_CHOICES)
+    brasname = forms.ChoiceField(choices=constants.BRAS_TYPE_CHOICES)
     brasvcid = forms.CharField(required=False)
     brasip = forms.CharField(required=False)
     cpevcid = forms.CharField(required=False)
     cpeip = forms.CharField(required=False)
-    loopback = forms.ChoiceField(choices=BRASLOOP_TYPE_CHOICES)
-    type = forms.ChoiceField(choices=VC_TYPE_CHOICES)
+    loopback = forms.ChoiceField(choices=constants.BRASLOOP_TYPE_CHOICES)
+    type = forms.ChoiceField(choices=constants.VC_TYPE_CHOICES)
 
 
 class GenConfForm(forms.Form):
     project_name = forms.CharField(required=True)
     bgpas = forms.CharField(required=False)
 
-    cpe1_router_type = forms.ChoiceField(choices=ROUTER_TYPE_CHOICES)
+    cpe1_router_type = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
 
     cpe1_lan1_ip = forms.CharField(required=False)
     cpe1_lan1_standby_ip = forms.CharField(required=False)
@@ -44,7 +44,7 @@ class GenConfForm(forms.Form):
     cpe1_lan3_standby_ip = forms.CharField(required=False)
 
     cpe1_line1_id = forms.CharField(required=False)
-    cpe1_line1_access_type = forms.ChoiceField(choices=ACCESS_TYPE_CHOICES)
+    cpe1_line1_access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     cpe1_line1_cpeslotif = forms.CharField(required=False)
 
     cpe1_line1_vc1_brasname = forms.CharField(required=False)
