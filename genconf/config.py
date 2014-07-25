@@ -14,3 +14,10 @@ class LanConfig(object):
         return self._subnet
 
     subnet = property(get_subnet, set_subnet)
+
+    def set_calculated_fields(self):
+        # nat
+        if self.subnet:
+            self.nat = self.subnet.ip.is_private() and not self.vrf
+        else:
+            self.nat = False

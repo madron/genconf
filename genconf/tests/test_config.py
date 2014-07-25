@@ -33,3 +33,14 @@ class LanConfigTest(TestCase):
         self.assertEqual(lan.subnet, None)
         lan.subnet = ''
         self.assertEqual(lan.subnet, None)
+
+    def test_nat(self):
+        lan = config.LanConfig()
+        lan.set_calculated_fields()
+        self.assertEqual(lan.nat, False)
+        lan = config.LanConfig(subnet='192.168.20.45/24')
+        lan.set_calculated_fields()
+        self.assertEqual(lan.nat, True)
+        lan = config.LanConfig(subnet='192.168.20.45/24', vrf=True)
+        lan.set_calculated_fields()
+        self.assertEqual(lan.nat, False)
