@@ -131,7 +131,7 @@ class UtilsTest(TestCase):
         vc_index = 0
         vc = utils.get_custom_vc_config(config, cpe, line, vc, vc_index)
         self.assertEqual(vc['brasip'], '10.6.50.1')
-        self.assertEqual(vc['cpeipadd'], '10.6.50.2')
+        self.assertEqual(vc['ip'], '10.6.50.2')
         self.assertEqual(vc['cpeipmask'], '255.255.255.252')
         self.assertEqual(vc['cpeipprefixlen'], 30)
 
@@ -139,7 +139,7 @@ class UtilsTest(TestCase):
         vc = dict(cpeip='10.6.50.1/30')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['brasip'], '10.6.50.1')
-        self.assertEqual(vc['cpeipadd'], '10.6.50.2')
+        self.assertEqual(vc['ip'], '10.6.50.2')
         self.assertEqual(vc['cpeipmask'], '255.255.255.252')
         self.assertEqual(vc['cpeipprefixlen'], 30)
 
@@ -147,7 +147,7 @@ class UtilsTest(TestCase):
         vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k', loopback='loop7')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['brasip'], '93.91.128.233')
-        self.assertEqual(vc['cpeipadd'], '10.6.50.1')
+        self.assertEqual(vc['ip'], '10.6.50.1')
         self.assertEqual(vc['cpeipmask'], '255.255.255.255')
         self.assertEqual(vc['cpeipprefixlen'], 32)
 
@@ -155,7 +155,7 @@ class UtilsTest(TestCase):
         vc = dict(cpeip='10.6.50.1/32', brasname='mantitau10k')
         vc = utils.get_vc_subnet_parameters(vc)
         self.assertEqual(vc['brasip'], '93.91.128.254')
-        self.assertEqual(vc['cpeipadd'], '10.6.50.1')
+        self.assertEqual(vc['ip'], '10.6.50.1')
         self.assertEqual(vc['cpeipmask'], '255.255.255.255')
         self.assertEqual(vc['cpeipprefixlen'], 32)
 
