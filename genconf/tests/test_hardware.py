@@ -17,8 +17,11 @@ class PhysicalInterfaceTest(TestCase):
     def test_init_empty(self):
         pif = hardware.PhysicalInterface()
         self.assertEqual(pif.name, '')
-        self.assertEqual(pif.type, '')
-        self.assertEqual(pif.layers, ())
+        self.assertEqual(pif.type, 'ethernet')
+        self.assertEqual(pif.layers, [])
+        self.assertEqual(pif.mtu, 1500)
+        self.assertEqual(pif.speed, 'auto')
+        self.assertEqual(pif.subinterfaces, [])
 
     def test_is_layer(self):
         pif = hardware.PhysicalInterface()
