@@ -47,38 +47,35 @@ class Layer3InterfaceTest(TestCase):
 
 
 class SubInterfaceTest(TestCase):
-    def test_init(self):
+    def test_init_default(self):
         subif = routing.SubInterface()
-        self.assertEqual(subif.description, '')
-        self.assertEqual(subif.ipnetwork, None)
-        self.assertTrue(subif.vrf.is_global)
         self.assertEqual(subif.name, '')
-        self.assertEqual(subif.type, 'ethernet')
+        self.assertEqual(subif.layer_3_interface, None)
+        self.assertEqual(subif.description, '')
+        self.assertEqual(subif.notes, '')
 
 
 class SubInterfaceEthernetTest(TestCase):
-    def test_init(self):
+    def test_init_default(self):
         subif = routing.SubInterfaceEthernet()
-        self.assertEqual(subif.description, '')
-        self.assertEqual(subif.ipnetwork, None)
-        self.assertTrue(subif.vrf.is_global)
         self.assertEqual(subif.name, '')
-        self.assertEqual(subif.type, 'ethernet')
-        self.assertEqual(subif.encapsulation, '802.1q')
+        self.assertEqual(subif.layer_3_interface, None)
+        self.assertEqual(subif.description, '')
+        self.assertEqual(subif.notes, '')
+        self.assertEqual(subif.layer, 3)
         self.assertEqual(subif.vlan, 1)
-        self.assertEqual(subif.native, False)
 
 
 class SubInterfaceAtmTest(TestCase):
-    def test_init(self):
+    def test_init_default(self):
         subif = routing.SubInterfaceAtm()
-        self.assertEqual(subif.description, '')
-        self.assertEqual(subif.ipnetwork, None)
-        self.assertTrue(subif.vrf.is_global)
         self.assertEqual(subif.name, '')
-        self.assertEqual(subif.type, 'atm')
+        self.assertEqual(subif.layer_3_interface, None)
+        self.assertEqual(subif.description, '')
+        self.assertEqual(subif.notes, '')
         self.assertEqual(subif.link, 'point-to-point')
-        self.assertEqual(subif.pvc, '8/35')
+        self.assertEqual(subif.pvc_vp, '8')
+        self.assertEqual(subif.pvc_vc, '35')
         self.assertEqual(subif.pvc_encapsulation, 'pppoa')
         self.assertEqual(subif.pvc_mux, 'vc-mux')
         self.assertEqual(subif.pvc_dialer_pool_number, 1)

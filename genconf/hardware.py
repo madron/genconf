@@ -1,8 +1,11 @@
+from . import routing
+
+
 class Router(object):
     def __init__(self, name='', interfaces=(), vrfs=[]):
         self.name = name
         self.interfaces = interfaces
-        self.vrfs = vrfs or [Vrf()]
+        self.vrfs = vrfs or [routing.Vrf()]
 
 
 class PhysicalInterface(object):
@@ -10,21 +13,30 @@ class PhysicalInterface(object):
         self,
         name='',
         type='ethernet',
-        layers=[],
+        layer=2,
         mtu=1500,
+        subinterfaces=[],
     ):
+        """
+        layer expresses how this interface is used:
+        some interfaces can be configured as layer 2 or layer 3
+
+        layer 2 -> switching interface
+        layer 3 -> routing interface
+        """
         self.name = name
         self.type = type
-        self.layers = layers
+        self.layer = layer
         self.mtu = mtu
+        self.subinterfaces = subinterfaces
 
     @property
     def is_layer2(self):
-        return 2 in self.layers
+        return self.layer == 2
 
     @property
     def is_layer3(self):
-        return 3 in self.layers
+        return self.layer == 3
 
 
 class PhysicalInterfaceEthernet(PhysicalInterface):
@@ -33,6 +45,7 @@ class PhysicalInterfaceEthernet(PhysicalInterface):
         duplex='auto',
         speed='auto',
         dot1q_mode='access',
+        dot1q_encapsulation='802.1q',
         native_vlan=1,
         **kwargs
     ):
