@@ -8,8 +8,8 @@ class Route(object):
 
 
 class Vrf(object):
-    def __init__(self, name=None, default_gateway=None, static_routes=[], bgp=None):
-        self.name = name or None
+    def __init__(self, name='', default_gateway=None, static_routes=[], bgp=None):
+        self.name = name or ''
         self.default_gateway = default_gateway
         self.static_routes = static_routes
         self.bgp = bgp

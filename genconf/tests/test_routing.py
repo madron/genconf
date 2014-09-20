@@ -16,7 +16,7 @@ class RouteTest(TestCase):
 class VrfTest(TestCase):
     def test_init(self):
         vrf = routing.Vrf()
-        self.assertEqual(vrf.name, None)
+        self.assertEqual(vrf.name, '')
         self.assertEqual(vrf.default_gateway, None)
         self.assertEqual(vrf.static_routes, [])
 
