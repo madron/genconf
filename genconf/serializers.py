@@ -1,3 +1,5 @@
+from netaddr import IPNetwork, IPAddress
+
 BASE_CLASSES = (int, str, list, dict)
 
 
@@ -22,6 +24,8 @@ class DictSerializer(object):
                     value = [self.dump(x) for x in value]
                 except AttributeError:
                     pass
+            if isinstance(value, (IPNetwork, IPAddress)):
+                value = str(value)
             try:
                 data[key] = value.dump()
             except AttributeError:

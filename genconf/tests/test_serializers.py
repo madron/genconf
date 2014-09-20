@@ -1,3 +1,4 @@
+import netaddr
 from django.test import TestCase
 from .. import serializers
 
@@ -30,6 +31,22 @@ class LibrarySerializer(serializers.DictSerializer):
         ('Author', Author),
         ('Comic', Comic),
         ('Novel', Novel),
+    )
+
+
+class Netaddr(object):
+    def __init__(
+        self,
+        ipaddress=netaddr.IPAddress('192.168.1.1'),
+        ipnetwork=netaddr.IPNetwork('192.168.1.5/24')
+    ):
+        self.ipaddress = netaddr.IPAddress(ipaddress)
+        self.ipnetwork = netaddr.IPNetwork(ipnetwork)
+
+
+class NetaddrSerializer(serializers.DictSerializer):
+    _classes = (
+        ('Netaddr', Netaddr),
     )
 
 
@@ -134,3 +151,33 @@ class DictSerializerTest(TestCase):
         self.assertEqual(type(books), dict)
         self.assertEqual(type(books['spiderman']), Comic)
         self.assertEqual(type(books['nakedsun']), Novel)
+
+    def test_netaddr_dump(self):
+        net = Netaddr(
+            ipaddress='192.168.100.100',
+            ipnetwork='10.10.10.10/16',
+        )
+        self.assertEqual(type(net), Netaddr)
+        self.assertEqual(type(net.ipaddress), netaddr.IPAddress)
+        self.assertEqual(type(net.ipnetwork), netaddr.IPNetwork)
+        net = NetaddrSerializer().dump(net)
+        self.assertEqual(
+            net,
+            dict(
+                _class='Netaddr',
+                ipaddress='192.168.100.100',
+                ipnetwork='10.10.10.10/16',
+            )
+        )
+
+    def test_netaddr_load(self):
+        net = dict(_class='Netaddr',
+            ipaddress='192.168.100.100',
+            ipnetwork='10.10.10.10/16',
+        )
+        net = NetaddrSerializer().load(net)
+        self.assertEqual(type(net), Netaddr)
+        self.assertEqual(type(net.ipaddress), netaddr.IPAddress)
+        self.assertEqual(type(net.ipnetwork), netaddr.IPNetwork)
+        self.assertEqual(net.ipaddress, netaddr.IPAddress('192.168.100.100'))
+        self.assertEqual(net.ipnetwork, netaddr.IPNetwork('10.10.10.10/16'))
