@@ -80,23 +80,17 @@ class JsonTest(TestCase):
                 ),
                 hardware.PhysicalInterfaceEthernet(
                     name='Fa1',
-                    layer=2,
                     dot1q_mode='access',
-                    dot1q_encapsulation='802.1q',
                     native_vlan=10,
                 ),
                 hardware.PhysicalInterfaceEthernet(
                     name='Fa2',
-                    layer=2,
                     dot1q_mode='access',
-                    dot1q_encapsulation='802.1q',
                     native_vlan=20,
                 ),
                 hardware.PhysicalInterfaceEthernet(
                     name='Fa3',
-                    layer=2,
                     dot1q_mode='access',
-                    dot1q_encapsulation='802.1q',
                     native_vlan=30,
                     description='To voip switch'
                 ),
