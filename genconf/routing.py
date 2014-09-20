@@ -80,6 +80,17 @@ class Layer3Interface(object):
         self.vrf = vrf or Vrf()
 
 
+class Vlan(object):
+    def __init__(self, tag=1, layer_3_interface=None, description='', notes=''):
+        self.tag = tag
+        self.layer_3_interface = layer_3_interface
+        self.description = description
+        self.notes = notes
+
+    def get_parent(self):
+        raise Exception('To be implemented')
+
+
 class SubInterface(object):
     def __init__(self, name='', layer_3_interface=None, description='', notes=''):
         """

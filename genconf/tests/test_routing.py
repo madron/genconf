@@ -46,6 +46,15 @@ class Layer3InterfaceTest(TestCase):
         self.assertTrue(l3.vrf.is_global)
 
 
+class VlanTest(TestCase):
+    def test_init_default(self):
+        vlan = routing.Vlan()
+        self.assertEqual(vlan.tag, 1)
+        self.assertEqual(vlan.layer_3_interface, None)
+        self.assertEqual(vlan.description, '')
+        self.assertEqual(vlan.notes, '')
+
+
 class SubInterfaceTest(TestCase):
     def test_init_default(self):
         subif = routing.SubInterface()
