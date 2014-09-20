@@ -2,16 +2,17 @@ from . import routing
 
 
 class Router(object):
-    def __init__(self, name='', interfaces=(), vrfs=[]):
+    def __init__(self, name='', vrfs=[], interfaces=()):
         self.name = name
-        self.interfaces = interfaces
         self.vrfs = vrfs or [routing.Vrf()]
+        self.interfaces = interfaces
 
 
 class PhysicalInterface(object):
     def __init__(
         self,
         name='',
+        description='',
         type='ethernet',
         layer=2,
         mtu=1500,
@@ -25,6 +26,7 @@ class PhysicalInterface(object):
         layer 3 -> routing interface
         """
         self.name = name
+        self.description = description
         self.type = type
         self.layer = layer
         self.mtu = mtu

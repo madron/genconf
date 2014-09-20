@@ -43,7 +43,7 @@ class Layer3InterfaceTest(TestCase):
         l3 = routing.Layer3Interface()
         self.assertEqual(l3.description, '')
         self.assertEqual(l3.ipnetwork, None)
-        self.assertTrue(l3.vrf.is_global)
+        self.assertEqual(l3.vrf_name, '')
 
 
 class VlanTest(TestCase):

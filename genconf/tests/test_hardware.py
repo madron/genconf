@@ -7,12 +7,14 @@ class PhysicalInterfaceTest(TestCase):
     def test_init(self):
         pif = hardware.PhysicalInterface(name='Fa0/1', type='atm', layer=3)
         self.assertEqual(pif.name, 'Fa0/1')
+        self.assertEqual(pif.description, '')
         self.assertEqual(pif.type, 'atm')
         self.assertEqual(pif.layer, 3)
 
     def test_init_default(self):
         pif = hardware.PhysicalInterface()
         self.assertEqual(pif.name, '')
+        self.assertEqual(pif.description, '')
         self.assertEqual(pif.type, 'ethernet')
         self.assertEqual(pif.layer, 2)
 
@@ -43,6 +45,7 @@ class PhysicalInterfaceEthernetTest(TestCase):
             native_vlan=9
         )
         self.assertEqual(pif.name, 'FastEthernet0/1')
+        self.assertEqual(pif.description, '')
         self.assertEqual(pif.type, 'ethernet')
         self.assertEqual(pif.layer, 3)
         self.assertEqual(pif.mtu, 1460)
@@ -53,6 +56,7 @@ class PhysicalInterfaceEthernetTest(TestCase):
     def test_init_empty(self):
         pif = hardware.PhysicalInterfaceEthernet()
         self.assertEqual(pif.name, '')
+        self.assertEqual(pif.description, '')
         self.assertEqual(pif.type, 'ethernet')
         self.assertEqual(pif.layer, 2)
         self.assertEqual(pif.mtu, 1500)

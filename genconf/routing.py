@@ -73,11 +73,11 @@ class Layer3Interface(object):
         self,
         description='',
         ipnetwork=None,
-        vrf=None,
+        vrf_name='',
     ):
         self.description = description
         self.ipnetwork = ipnetwork
-        self.vrf = vrf or Vrf()
+        self.vrf_name = vrf_name
 
 
 class Vlan(object):
