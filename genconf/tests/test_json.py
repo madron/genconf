@@ -24,7 +24,8 @@ class JsonTest(TestCase):
                             vlan=99,
                             layer_3_interface=routing.Layer3Interface(
                                 ipnetwork=IPNetwork('7.7.7.7/30')
-                            )
+                            ),
+                            notes='Upgrade bandwidth as soon as possible'
                         ),
                         routing.SubInterfaceEthernet(
                             name='Fa0.1',
