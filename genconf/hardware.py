@@ -2,9 +2,10 @@ from . import routing
 
 
 class Router(object):
-    def __init__(self, name='', vrfs=[], interfaces=()):
+    def __init__(self, name='', vrfs=[], vlans=[], interfaces=()):
         self.name = name
         self.vrfs = vrfs or [routing.Vrf()]
+        self.vlans = vlans or [routing.Vlan(tag=1)]
         self.interfaces = interfaces
 
 

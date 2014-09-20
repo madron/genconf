@@ -13,6 +13,30 @@ class JsonTest(TestCase):
                 routing.Vrf(),
                 routing.Vrf(name='voip'),
             ],
+            vlans=[
+                routing.Vlan(
+                    tag=10,
+                    layer_3_interface=routing.Layer3Interface(
+                        ipnetwork=IPNetwork('192.168.1.1/24'),
+                    ),
+                    description='lan',
+                ),
+                routing.Vlan(
+                    tag=20,
+                    layer_3_interface=routing.Layer3Interface(
+                        ipnetwork=IPNetwork('192.168.2.1/24'),
+                    ),
+                    description='dmz',
+                ),
+                routing.Vlan(
+                    tag=30,
+                    layer_3_interface=routing.Layer3Interface(
+                        ipnetwork=IPNetwork('10.10.10.1/24'),
+                        vrf_name='voip'
+                    ),
+                    description='voip',
+                ),
+            ],
             interfaces=[
                 hardware.PhysicalInterfaceEthernet(
                     name='Fa0',
