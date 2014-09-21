@@ -9,9 +9,15 @@ class Author(object):
         self.books = books
 
 
+class Edition(object):
+    def __init__(self, year=None):
+        self.year = year
+
+
 class Book(object):
-    def __init__(self, title=''):
+    def __init__(self, title='', edition=None):
         self.title = title
+        self.edition = edition
 
 
 class Comic(Book):
@@ -29,6 +35,7 @@ class Novel(Book):
 class LibrarySerializer(serializers.DictSerializer):
     _classes = (
         ('Author', Author),
+        ('Edition', Edition),
         ('Comic', Comic),
         ('Novel', Novel),
     )
@@ -46,8 +53,16 @@ class Netaddr(object):
 
 class NetaddrSerializer(serializers.DictSerializer):
     _classes = (
-        ('Netaddr', Netaddr),
+        ('netaddr', Netaddr),
+        ('ipaddress', netaddr.IPAddress),
+        ('ipnetwork', netaddr.IPNetwork),
     )
+
+    def dump_ipaddress(self, obj):
+        return str(obj)
+
+    def dump_ipnetwork(self, obj):
+        return str(obj)
 
 
 class DictSerializerTest(TestCase):
@@ -81,7 +96,7 @@ class DictSerializerTest(TestCase):
 
     def test_books_dump(self):
         books = [
-            Novel(title='The Naked Sun', pages=187),
+            Novel(title='The Naked Sun', pages=187, edition=Edition(year=1957)),
             Comic(title='No way', color=False),
         ]
         author = Author(name='Isaac Asimov', year=1920, books=books)
@@ -89,9 +104,17 @@ class DictSerializerTest(TestCase):
         self.assertEqual(type(books), list)
         self.assertEqual(len(books), 2)
         book = books[0]
-        self.assertEqual(book, dict(_class='Novel', title='The Naked Sun', pages=187))
+        self.assertEqual(len(book), 4)
+        self.assertEqual(book['_class'], 'Novel')
+        self.assertEqual(book['title'], 'The Naked Sun')
+        self.assertEqual(book['pages'], 187)
+        self.assertEqual(book['edition'], dict(_class='Edition', year=1957))
         book = books[1]
-        self.assertEqual(book, dict(_class='Comic', title='No way', color=False))
+        self.assertEqual(len(book), 4)
+        self.assertEqual(book['_class'], 'Comic')
+        self.assertEqual(book['title'], 'No way')
+        self.assertEqual(book['color'], False)
+        self.assertEqual(book['edition'], None)
 
 
     def test_books_load(self):
@@ -100,7 +123,7 @@ class DictSerializerTest(TestCase):
             name='Isaac Asimov',
             year=1920,
             books=[
-                dict(_class='Novel', title='The Naked Sun', pages=187),
+                dict(_class='Novel', title='The Naked Sun', pages=187, edition=dict(_class='Edition', year=1957)),
                 dict(_class='Comic', title='No way', color=False),
             ],
         )
@@ -109,10 +132,13 @@ class DictSerializerTest(TestCase):
         self.assertEqual(type(book), Novel)
         self.assertEqual(book.title, 'The Naked Sun')
         self.assertEqual(book.pages, 187)
+        self.assertEqual(type(book.edition), Edition)
+        self.assertEqual(book.edition.year, 1957)
         book = author.books[1]
         self.assertEqual(type(book), Comic)
         self.assertEqual(book.title, 'No way')
         self.assertEqual(book.color, False)
+        self.assertEqual(book.edition, None)
 
     def test_book_list_dump(self):
         books = [
@@ -120,8 +146,8 @@ class DictSerializerTest(TestCase):
             Novel(title='The Naked Sun', pages=187),
         ]
         data = LibrarySerializer().dump(books)
-        self.assertEqual(data[0], dict(_class='Comic', title='Spiderman', color=True))
-        self.assertEqual(data[1], dict(_class='Novel', title='The Naked Sun', pages=187))
+        self.assertEqual(data[0], dict(_class='Comic', title='Spiderman', color=True, edition=None))
+        self.assertEqual(data[1], dict(_class='Novel', title='The Naked Sun', pages=187, edition=None))
 
     def test_book_list_load(self):
         books = [
@@ -139,8 +165,8 @@ class DictSerializerTest(TestCase):
             nakedsun=Novel(title='The Naked Sun', pages=187),
         )
         data = LibrarySerializer().dump(books)
-        self.assertEqual(data['spiderman'], dict(_class='Comic', title='Spiderman', color=True))
-        self.assertEqual(data['nakedsun'], dict(_class='Novel', title='The Naked Sun', pages=187))
+        self.assertEqual(data['spiderman'], dict(_class='Comic', title='Spiderman', color=True, edition=None))
+        self.assertEqual(data['nakedsun'], dict(_class='Novel', title='The Naked Sun', pages=187, edition=None))
 
     def test_book_dict_load(self):
         books = dict(
@@ -164,14 +190,14 @@ class DictSerializerTest(TestCase):
         self.assertEqual(
             net,
             dict(
-                _class='Netaddr',
+                _class='netaddr',
                 ipaddress='192.168.100.100',
                 ipnetwork='10.10.10.10/16',
             )
         )
 
     def test_netaddr_load(self):
-        net = dict(_class='Netaddr',
+        net = dict(_class='netaddr',
             ipaddress='192.168.100.100',
             ipnetwork='10.10.10.10/16',
         )
