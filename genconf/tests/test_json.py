@@ -2,12 +2,12 @@ from django.test import TestCase
 from netaddr import IPNetwork
 from .. import hardware
 from .. import routing
-from .. import serializers
+from .. import utils
 
 
 class JsonTest(TestCase):
     def test_dump_router(self):
-        router = hardware.Router(
+        r1 = hardware.Router(
             name='Cisco-1801',
             vrfs=[
                 routing.Vrf(),
@@ -96,3 +96,6 @@ class JsonTest(TestCase):
                 ),
             ],
         )
+        json = utils.router_dump(r1)
+        r2 = utils.router_load(json)
+        self.assertEqual(r1, r2)

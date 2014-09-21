@@ -1,7 +1,8 @@
 from . import routing
+from .equal import EqualByAttribute
 
 
-class Router(object):
+class Router(EqualByAttribute):
     def __init__(self, name='', vrfs=[], vlans=[], interfaces=()):
         self.name = name
         self.vrfs = vrfs or [routing.Vrf()]
@@ -9,7 +10,7 @@ class Router(object):
         self.interfaces = interfaces
 
 
-class PhysicalInterface(object):
+class PhysicalInterface(EqualByAttribute):
     def __init__(
         self,
         name='',

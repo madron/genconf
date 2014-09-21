@@ -45,6 +45,12 @@ class Layer3InterfaceTest(TestCase):
         self.assertEqual(l3.ipnetwork, None)
         self.assertEqual(l3.vrf_name, '')
 
+    def test_equal(self):
+        self.assertEqual(routing.Layer3Interface(), routing.Layer3Interface())
+        if1 = routing.Layer3Interface(ipnetwork='192.168.1.1/24')
+        if2 = routing.Layer3Interface(ipnetwork=IPNetwork('192.168.1.1/24'))
+        self.assertEqual(if1, if2)
+
 
 class VlanTest(TestCase):
     def test_init_default(self):

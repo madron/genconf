@@ -1,4 +1,8 @@
-class Route(object):
+import netaddr
+from .equal import EqualByAttribute
+
+
+class Route(EqualByAttribute):
     def __init__(self, name='', network=None, next_hop=None, metric=1, tag=None):
         self.name = name
         self.network = network
@@ -7,7 +11,7 @@ class Route(object):
         self.tag = tag
 
 
-class Vrf(object):
+class Vrf(EqualByAttribute):
     def __init__(self, name='', default_gateway=None, static_routes=[], bgp=None):
         self.name = name or ''
         self.default_gateway = default_gateway
@@ -19,7 +23,7 @@ class Vrf(object):
         return not self.name
 
 
-class BgpNeighbour(object):
+class BgpNeighbour(EqualByAttribute):
     def __init__(self):
         self.ip = ip
         self.autonomous_system = autonomous_system
@@ -31,7 +35,7 @@ class BgpNeighbour(object):
         self.ebgp_multihop = 1
 
 
-class Bgp(object):
+class Bgp(EqualByAttribute):
     def __init__(self):
         return
         # autonomous_system,
@@ -46,7 +50,7 @@ class Bgp(object):
         # maximum_path = 1
 
 
-class Layer2Interface(object):
+class Layer2Interface(EqualByAttribute):
     def __init__(
         self,
         description='',
@@ -68,7 +72,7 @@ class Layer2Interface(object):
         self.broadcast_level_percentage=broadcast_level_percentage
 
 
-class Layer3Interface(object):
+class Layer3Interface(EqualByAttribute):
     def __init__(
         self,
         description='',
@@ -76,11 +80,14 @@ class Layer3Interface(object):
         vrf_name='',
     ):
         self.description = description
-        self.ipnetwork = ipnetwork
+        if ipnetwork:
+            self.ipnetwork = netaddr.IPNetwork(ipnetwork)
+        else:
+            self.ipnetwork = ipnetwork
         self.vrf_name = vrf_name
 
 
-class Vlan(object):
+class Vlan(EqualByAttribute):
     def __init__(self, tag=1, layer_3_interface=None, description='', notes=''):
         self.tag = tag
         self.layer_3_interface = layer_3_interface
@@ -91,7 +98,7 @@ class Vlan(object):
         raise Exception('To be implemented')
 
 
-class SubInterface(object):
+class SubInterface(EqualByAttribute):
     def __init__(self, name='', layer_3_interface=None, description='', notes=''):
         """
         layer_3_interface must be None if used as layer 2 in SubInterfaceEthernet
