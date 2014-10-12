@@ -17,6 +17,7 @@ class ProjectFormTest(TestCase):
         self.assertEqual(form.errors, {})
 
     def test_configuration_ko(self):
-        self.data['configuration'] = '{]'
+        self.data['configuration'] = '{"notes": "Comma not allowed after last field",}'
         form = self.form(self.data)
-        self.assertEqual(form.errors['configuration'], ['Invalid configuration.'])
+        self.assertEqual(form.errors['configuration'],
+            ['Expecting property name enclosed in double quotes: line 1 column 48 (char 47)'])

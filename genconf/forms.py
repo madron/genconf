@@ -15,6 +15,6 @@ class ProjectForm(forms.ModelForm):
             return ''
         try:
             utils.router_load(configuration)
-        except ValueError:
-            raise forms.ValidationError('Invalid configuration.')
+        except ValueError, exception:
+            raise forms.ValidationError(str(exception))
         return configuration
