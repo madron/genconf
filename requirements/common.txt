@@ -1,0 +1,2 @@
+django>=1.7
+netaddr>=0.7.12
