@@ -27,10 +27,17 @@ class ProjectAdminTest(TestCase):
         obj = factories.ProjectFactory()
         url = reverse('admin:genconf_project_change', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response,
+            reverse('admin:genconf_project_configuration', args=(obj.pk,)))
 
     def test_delete(self):
         obj = factories.ProjectFactory()
         url = reverse('admin:genconf_project_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_configuration(self):
+        obj = factories.ProjectFactory()
+        url = reverse('admin:genconf_project_configuration', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, 'Cisco-1801')
