@@ -1,0 +1,16 @@
+interface {{ interface.name }}
+    duplex {{ interface.duplex }}
+    speed {{ interface.speed }}
+    ! dot1q_mode='access',
+    ! dot1q_encapsulation='802.1q',
+    ! native_vlan=1,
+    no ip address
+exit
+{% for subinterface in interface.subinterfaces %}
+interface {{ subinterface.name }} {% if subinterface.layer == 2 %}
+    no ip address
+{% else %}
+    ip address {{ subinterface.layer_3_interface.ipnetwork.network }} {{ subinterface.layer_3_interface.ipnetwork.netmask }}{% if subinterface.layer_3_interface.vrf_name %}
+    ! vrf {{ subinterface.layer_3_interface.vrf_name }}{% endif %}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,26 @@
+version 12.4
+no service pad
+service timestamps debug datetime localtime show-timezone
+service timestamps log datetime localtime show-timezone
+service password-encryption
+!
+hostname FIX_HOSTNAME
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 4096
+enable secret FIX_SECRET
+!
+no aaa new-model
+clock timezone GMT+1 1
+clock summer-time CDT recurring
+ip cef
+!
+no ip domain lookup
+ip name-server FIX_NAME_SERVER1
+ip name-server FIX_NAME_SERVER2
+multilink bundle-name authenticated
+
+no ip http server
+no ip http secure-server

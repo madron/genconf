@@ -1,0 +1,3 @@
+vlan {{ vlan.tag }}{% if vlan.description %}
+    name {{ vlan.description }}{% endif %}
+exit
