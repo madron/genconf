@@ -40,4 +40,4 @@ class ProjectAdminTest(TestCase):
         obj = factories.ProjectFactory()
         url = reverse('admin:genconf_project_configuration', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertContains(response, 'Cisco-1801')
+        self.assertContains(response, 'no aaa new-model')
