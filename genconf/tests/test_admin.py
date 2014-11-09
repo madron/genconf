@@ -27,6 +27,7 @@ class ProjectAdminTest(TestCase):
         obj = factories.ProjectFactory()
         url = reverse('admin:genconf_project_change', args=(obj.pk,))
         response = self.client.get(url)
+        self.assertContains(response, 'value="Project name"')
         self.assertContains(response,
             reverse('admin:genconf_project_configuration', args=(obj.pk,)))
 

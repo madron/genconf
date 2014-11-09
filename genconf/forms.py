@@ -18,3 +18,15 @@ class ProjectForm(forms.ModelForm):
         except ValueError, exception:
             raise forms.ValidationError(str(exception))
         return configuration
+
+
+class ProjectForm1(ProjectForm):
+    class Meta:
+        model = models.Project
+        fields = ['name']
+
+
+class ProjectForm2(ProjectForm):
+    class Meta:
+        model = models.Project
+        fields = ['configuration']
