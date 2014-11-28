@@ -2,7 +2,6 @@
 {
     "fields": {
         "configuration": "",
-        "type": "twocpe",
         "name": "Test project"
     },
     "model": "genconf.project",
