@@ -1,3 +1,4 @@
+from unittest import skip
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from . import factories
@@ -42,3 +43,11 @@ class ProjectAdminTest(TestCase):
         url = reverse('admin:genconf_project_configuration', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response, 'no aaa new-model')
+
+    @skip('To be fixed')
+    def test_add_step2(self):
+        url = reverse('admin:genconf_project_add')
+        data = dict()
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+
