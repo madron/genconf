@@ -1,6 +1,7 @@
 import netaddr
 from django.test import TestCase
-from .. import serializers
+from .. import DictSerializer
+
 
 class Author(object):
     def __init__(self, name='', year=None, books=[]):
@@ -32,7 +33,7 @@ class Novel(Book):
         self.pages = pages
 
 
-class LibrarySerializer(serializers.DictSerializer):
+class LibrarySerializer(DictSerializer):
     _classes = (
         ('Author', Author),
         ('Edition', Edition),
@@ -51,7 +52,7 @@ class Netaddr(object):
         self.ipnetwork = netaddr.IPNetwork(ipnetwork)
 
 
-class NetaddrSerializer(serializers.DictSerializer):
+class NetaddrSerializer(DictSerializer):
     _classes = (
         ('netaddr', Netaddr),
         ('ipaddress', netaddr.IPAddress),
