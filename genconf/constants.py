@@ -1,3 +1,29 @@
+INTERFACE_TYPE_CHOICES = (
+    ('ethernet', 'Ethernet'),
+    ('atm', 'Atm'),
+)
+
+DOT1Q_MODE_CHOICES = (
+    ('access', 'access'),
+    ('trunk', 'trunk'),
+)
+
+DOT1Q_ENCAPSULATION_CHOICES = (
+    ('802.1q', '802.1q'),
+)
+
+ATM_LINK_CHOICES = (
+    ('point-to-point', 'point-to-point'),
+)
+
+ATM_PVC_ENCAPSULATION_CHOICES = (
+    ('pppoa', 'pppoa'),
+)
+
+ATM_PVC_MUX_CHOICES = (
+    ('vc-mux', 'vc-mux'),
+)
+
 ROUTER_TYPE_CHOICES = (
     ('c1841', 'Cisco 1841'),
     ('c1801', 'Cisco 1801'),
