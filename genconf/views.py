@@ -3,7 +3,6 @@ from django.views.generic import DetailView
 from adminwizard.views import AdminWizardView
 from . import forms
 from . import models
-from . import utils
 
 
 class ConfigurationView(DetailView):
@@ -13,7 +12,7 @@ class ConfigurationView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ConfigurationView, self).get_context_data(**kwargs)
-        context['router'] = utils.router_load(kwargs['object'].configuration)
+        # context['router'] = utils.router_load(kwargs['object'].configuration)
         return context
 
 
