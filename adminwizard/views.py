@@ -8,6 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class AdminWizardView(object):
+    template_name = 'adminwizard/change_form.html'
+
     def dispatch(self, request, *args, **kwargs):
         admin = kwargs['admin']
         object_id = kwargs['object_id']

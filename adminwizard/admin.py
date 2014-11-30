@@ -5,8 +5,6 @@ from . import views
 
 
 class AdminWizard(admin.ModelAdmin):
-    change_form_template = 'adminwizard/change_form.html'
-
     @csrf_protect_m
     @transaction.atomic
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
