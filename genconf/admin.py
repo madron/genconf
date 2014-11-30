@@ -34,10 +34,18 @@ class ProjectAdmin(admin.ModelAdmin):
     ]
 
 
+class VlanInline(admin.TabularInline):
+    model = models.Vlan
+    readonly_fields = ('notes',)
+
+
 @admin.register(models.Router)
 class RouterAdmin(admin.ModelAdmin):
     readonly_fields = ('project',)
     change_form_template = 'genconf/router/change_form.html'
+    inlines = [
+        VlanInline,
+    ]
 
     def has_add_permission(self, request):
         return False
@@ -66,3 +74,19 @@ class RouteAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+class Layer3InterfaceInline(admin.StackedInline):
+    model = models.Layer3Interface
+
+
+@admin.register(models.Vlan)
+class VlanAdmin(admin.ModelAdmin):
+    readonly_fields = ('router',)
+    # inlines = [
+    #     Layer3InterfaceInline,
+    # ]
+
+    def has_add_permission(self, request):
+        return False
+
