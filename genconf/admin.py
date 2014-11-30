@@ -50,3 +50,11 @@ class RouterAdmin(admin.ModelAdmin):
                 name='%s_%s_configuration' % info),
         )
         return urls + super(RouterAdmin, self).get_urls()
+
+
+@admin.register(models.Vrf)
+class VrfAdmin(admin.ModelAdmin):
+    readonly_fields = ('router',)
+
+    def has_add_permission(self, request):
+        return False
