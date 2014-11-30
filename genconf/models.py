@@ -3,12 +3,9 @@ from django.core import urlresolvers
 from django.db import models
 from yapsy.PluginManager import PluginManager
 from . import constants
+from .plugin import manager
 
 
-PLUGINS_DIR = join(dirname(abspath(__file__)), 'plugins')
-manager = PluginManager()
-manager.setPluginPlaces([PLUGINS_DIR])
-manager.collectPlugins()
 PROJECT_TYPE_CHOICES = [(plugin.name, plugin.description) for plugin in manager.getAllPlugins()]
 
 
