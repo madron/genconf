@@ -1,10 +1,54 @@
 [
 {
+    "model": "genconf.project",
+    "pk": 1,
     "fields": {
         "configuration": "",
         "name": "Test project"
-    },
-    "model": "genconf.project",
-    "pk": 1
+    }
+},
+{
+    "model": "genconf.router",
+    "pk": 1,
+    "fields": {
+        "project": 1,
+        "name": "c1801"
+    }
+},
+{
+    "model": "genconf.vrf",
+    "pk": 1,
+    "fields": {
+        "router": 1,
+        "name": ""
+    }
+},
+{
+    "model": "genconf.vlan",
+    "pk": 1,
+    "fields": {
+        "router": 1,
+        "notes": "",
+        "tag": 1,
+        "description": "Lan"
+    }
+},
+{
+    "model": "genconf.physicalinterface",
+    "pk": 1,
+    "fields": {
+        "router": 1,
+        "name": "Fa0",
+        "native_vlan": 1
+    }
+},
+{
+    "model": "genconf.physicalinterface",
+    "pk": 2,
+    "fields": {
+        "router": 1,
+        "name": "Atm0",
+        "native_vlan": 1
+    }
 }
 ]
