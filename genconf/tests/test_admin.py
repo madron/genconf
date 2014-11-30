@@ -77,7 +77,7 @@ class ProjectAdminTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class VlanrAdminTest(TestCase):
+class RouterAdminTest(TestCase):
     def setUp(self):
         factories.UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
@@ -98,20 +98,20 @@ class VlanrAdminTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_detail(self):
-        obj = factories.VlanFactory()
+        obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response,
             reverse('admin:genconf_router_configuration', args=(obj.pk,)))
 
     def test_delete(self):
-        obj = factories.VlanFactory()
+        obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_configuration(self):
-        obj = factories.VlanFactory()
+        obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_configuration', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response, 'no aaa new-model')
@@ -212,5 +212,38 @@ class VlanAdminTest(TestCase):
     def test_delete(self):
         obj = factories.VlanFactory()
         url = reverse('admin:genconf_vlan_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
+class PhysicalInterfaceAdminTest(TestCase):
+    def setUp(self):
+        factories.UserFactory()
+        self.assertTrue(self.client.login(username='test', password='pass'))
+        self.list = reverse('admin:genconf_physicalinterface_changelist')
+
+    def test_list(self):
+        response = self.client.get(self.list)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        data = dict(q='text')
+        response = self.client.get(self.list, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add(self):
+        url = reverse('admin:genconf_physicalinterface_add')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_detail(self):
+        obj = factories.PhysicalInterfaceFactory()
+        url = reverse('admin:genconf_physicalinterface_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete(self):
+        obj = factories.PhysicalInterfaceFactory()
+        url = reverse('admin:genconf_physicalinterface_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

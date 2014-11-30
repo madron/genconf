@@ -90,3 +90,19 @@ class VlanAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+
+class SubInterfaceInline(admin.TabularInline):
+    model = models.SubInterface
+    fields = ('name', 'type', 'layer_3_interface', 'description', 'notes')
+    readonly_fields = ('layer_3_interface', 'notes')
+
+
+@admin.register(models.PhysicalInterface)
+class PhysicalInterfaceAdmin(admin.ModelAdmin):
+    readonly_fields = ('router',)
+    inlines = [
+        SubInterfaceInline,
+    ]
+
+    def has_add_permission(self, request):
+        return False
