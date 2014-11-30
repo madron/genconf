@@ -58,3 +58,11 @@ class VrfAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(models.Route)
+class RouteAdmin(admin.ModelAdmin):
+    readonly_fields = ('vrf',)
+
+    def has_add_permission(self, request):
+        return False

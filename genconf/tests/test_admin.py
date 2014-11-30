@@ -138,13 +138,46 @@ class VrfAdminTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_detail(self):
-        obj = factories.VrfFactory()
+        obj = factories.RouteFactory()
         url = reverse('admin:genconf_vrf_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_delete(self):
-        obj = factories.VrfFactory()
+        obj = factories.RouteFactory()
         url = reverse('admin:genconf_vrf_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
+class RouteAdminTest(TestCase):
+    def setUp(self):
+        factories.UserFactory()
+        self.assertTrue(self.client.login(username='test', password='pass'))
+        self.list = reverse('admin:genconf_route_changelist')
+
+    def test_list(self):
+        response = self.client.get(self.list)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        data = dict(q='text')
+        response = self.client.get(self.list, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add(self):
+        url = reverse('admin:genconf_route_add')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_detail(self):
+        obj = factories.RouteFactory()
+        url = reverse('admin:genconf_route_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete(self):
+        obj = factories.RouteFactory()
+        url = reverse('admin:genconf_route_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
