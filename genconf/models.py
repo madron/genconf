@@ -28,9 +28,8 @@ class Router(models.Model):
         return self.name
 
     def get_url(self):
-        app_label = self._meta.app_label
-        model_name = self._meta.model_name
-        url_name = 'admin:%s_%s_change' % (app_label, model_name)
+        info = (self._meta.app_label, self._meta.model_name)
+        url_name = 'admin:%s_%s_change' % info
         return urlresolvers.reverse(url_name, args=(self.pk,))
 
 
@@ -88,6 +87,11 @@ class Vlan(models.Model):
             return '%d (%s)' % (self.tag, self.description)
         return str(self.tag)
 
+    def get_url(self):
+        info = (self._meta.app_label, self._meta.model_name)
+        url_name = 'admin:%s_%s_change' % info
+        return urlresolvers.reverse(url_name, args=(self.pk,))
+
 
 class PhysicalInterface(models.Model):
     router = models.ForeignKey(Router)
@@ -128,6 +132,11 @@ class PhysicalInterface(models.Model):
     def is_layer3(self):
         return self.layer == 3
 
+    def get_url(self):
+        info = (self._meta.app_label, self._meta.model_name)
+        url_name = 'admin:%s_%s_change' % info
+        return urlresolvers.reverse(url_name, args=(self.pk,))
+
 
 class SubInterface(models.Model):
     physical_interface = models.ForeignKey(PhysicalInterface)
@@ -164,3 +173,8 @@ class SubInterface(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_url(self):
+        info = (self._meta.app_label, self._meta.model_name)
+        url_name = 'admin:%s_%s_change' % info
+        return urlresolvers.reverse(url_name, args=(self.pk,))

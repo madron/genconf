@@ -46,6 +46,10 @@ class VlanModelTest(TestCase):
         vlan = factories.VlanFactory(tag=2, description='Wan')
         self.assertEqual(str(vlan), '2 (Wan)')
 
+    def test_get_url(self):
+        vlan = factories.VlanFactory.create(id=1)
+        self.assertEqual(vlan.get_url(), '/genconf/vlan/1/')
+
 
 class PhysicalInterfaceModelTest(TestCase):
     def test_str(self):
@@ -62,8 +66,16 @@ class PhysicalInterfaceModelTest(TestCase):
         self.assertFalse(interface.is_layer2)
         self.assertTrue(interface.is_layer3)
 
+    def test_get_url(self):
+        router = factories.PhysicalInterfaceFactory.create(id=1)
+        self.assertEqual(router.get_url(), '/genconf/physicalinterface/1/')
+
 
 class SubInterfaceModelTest(TestCase):
     def test_str(self):
         interface = factories.SubInterfaceFactory(name='Fa1.4')
         self.assertEqual(str(interface), 'Fa1.4')
+
+    def test_get_url(self):
+        interface = factories.SubInterfaceFactory.create(id=1)
+        self.assertEqual(interface.get_url(), '/genconf/subinterface/1/')
