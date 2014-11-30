@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
         "configuration": "",
+        "type": "twocpe",
         "name": "Test project"
     }
 },

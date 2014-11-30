@@ -1,10 +1,21 @@
+from os.path import abspath, dirname, join
 from django.core import urlresolvers
 from django.db import models
+from yapsy.PluginManager import PluginManager
 from . import constants
+
+
+PLUGINS_DIR = join(dirname(abspath(__file__)), 'plugins')
+manager = PluginManager()
+manager.setPluginPlaces([PLUGINS_DIR])
+manager.collectPlugins()
+PROJECT_TYPE_CHOICES = [(plugin.name, plugin.description) for plugin in manager.getAllPlugins()]
 
 
 class Project(models.Model):
     name = models.CharField(max_length=200, db_index=True)
+    type = models.CharField(max_length=50, db_index=True,
+        choices=PROJECT_TYPE_CHOICES)
     configuration = models.TextField(blank=True)
 
     def __str__(self):
@@ -103,8 +114,8 @@ class PhysicalInterface(models.Model):
         choices=((2, 2), (3, 3)),
         help_text="""Expresses how this interface is used
         (some interfaces can be configured as layer 2 or layer 3).
-        layer 2 -> switching interface
-        layer 3 -> routing interface
+        Layer 2 -> switching interface.
+        Layer 3 -> routing interface.
         """
     )
     mtu = models.IntegerField(default=1500)

@@ -17,5 +17,14 @@ class ConfigurationView(DetailView):
 
 
 class ProjectWizardView(AdminWizardView, SessionWizardView):
-    form_list = [forms.ProjectForm1, forms.ProjectForm2]
-    template_name = 'adminwizard/change_form.html'
+    form_list = [
+        ('type', forms.ProjectForm1),
+        ('placeholder', forms.ProjectForm2),
+    ]
+
+    def process_step(self, form):
+        """
+        This method is used to postprocess the form data. By default, it
+        returns the raw `form.data` dictionary.
+        """
+        return self.get_form_step_data(form)
