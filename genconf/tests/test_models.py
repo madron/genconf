@@ -14,6 +14,10 @@ class RouterModelTest(TestCase):
         router = factories.RouterFactory(name='C1801')
         self.assertEqual(str(router), 'C1801')
 
+    def test_get_url(self):
+        router = factories.RouterFactory.create(id=1)
+        self.assertEqual(router.get_url(), '/genconf/router/1/')
+
 
 class VrfModelTest(TestCase):
     def test_str(self):

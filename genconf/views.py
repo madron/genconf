@@ -12,7 +12,7 @@ class ConfigurationView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ConfigurationView, self).get_context_data(**kwargs)
-        # context['router'] = utils.router_load(kwargs['object'].configuration)
+        context['router'] = kwargs['object']
         return context
 
 

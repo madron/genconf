@@ -1,3 +1,4 @@
+from django.core import urlresolvers
 from django.db import models
 from . import constants
 
@@ -10,6 +11,11 @@ class Project(models.Model):
         return self.name
 
 
+class ProjectWizard(Project):
+    class Meta:
+        proxy = True
+
+
 class Router(models.Model):
     project = models.ForeignKey(Project)
     name = models.CharField(max_length=200)
@@ -20,6 +26,12 @@ class Router(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_url(self):
+        app_label = self._meta.app_label
+        model_name = self._meta.model_name
+        url_name = 'admin:%s_%s_change' % (app_label, model_name)
+        return urlresolvers.reverse(url_name, args=(self.pk,))
 
 
 class Vrf(models.Model):
