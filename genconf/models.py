@@ -73,7 +73,7 @@ class Layer3Interface(models.Model):
 
 class Vlan(models.Model):
     router = models.ForeignKey(Router)
-    tag = models.IntegerField(default=1)
+    tag = models.IntegerField()
     layer_3_interface = models.OneToOneField(Layer3Interface, blank=True, null=True)
     description = models.CharField(max_length=200, blank=True)
     notes = models.TextField(blank=True)
