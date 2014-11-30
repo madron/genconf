@@ -76,16 +76,9 @@ class RouteAdmin(admin.ModelAdmin):
         return False
 
 
-class Layer3InterfaceInline(admin.StackedInline):
-    model = models.Layer3Interface
-
-
 @admin.register(models.Vlan)
 class VlanAdmin(admin.ModelAdmin):
     readonly_fields = ('router',)
-    # inlines = [
-    #     Layer3InterfaceInline,
-    # ]
 
     def has_add_permission(self, request):
         return False
