@@ -106,3 +106,11 @@ class PhysicalInterfaceAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(models.SubInterface)
+class SubInterfaceAdmin(admin.ModelAdmin):
+    readonly_fields = ('physical_interface',)
+
+    def has_add_permission(self, request):
+        return False
