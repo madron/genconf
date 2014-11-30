@@ -18,4 +18,4 @@ class ConfigurationView(DetailView):
 
 class ProjectWizardView(AdminWizardView, SessionWizardView):
     form_list = [forms.ProjectForm1, forms.ProjectForm2]
-    template_name = 'genconf/project/change_form.html'
+    template_name = 'adminwizard/change_form.html'
