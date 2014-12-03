@@ -7,8 +7,12 @@ class Wan1Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
 
 
-class TwoCpe(IPlugin):
-    forms = [Wan1Form]
+class Wan2Form(forms.Form):
+    access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
 
-    def print_name(self):
-        print "This is TwoCpe plugin"
+
+class TwoCpe(IPlugin):
+    form_list = [
+        ('wan1', Wan1Form),
+        ('wan2', Wan2Form),
+    ]
