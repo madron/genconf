@@ -1,12 +1,13 @@
 from unittest import skip
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from . import factories
+from .factories import UserFactory
+from .. import factories
 
 
 class ProjectAdminWizardTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_projectwizard_changelist')
 
@@ -25,7 +26,7 @@ class ProjectAdminWizardTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_detail(self):
-        obj = factories.ProjectFactory()
+        obj = factories.ProjectFactory(name='Project name')
         url = reverse('admin:genconf_projectwizard_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response, 'value="Project name"')
@@ -46,7 +47,7 @@ class ProjectAdminWizardTest(TestCase):
 
 class ProjectAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_project_changelist')
 
@@ -65,7 +66,7 @@ class ProjectAdminTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_detail(self):
-        obj = factories.ProjectFactory()
+        obj = factories.ProjectFactory(name='Project name')
         url = reverse('admin:genconf_project_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response, 'value="Project name"')
@@ -79,7 +80,7 @@ class ProjectAdminTest(TestCase):
 
 class RouterAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_router_changelist')
 
@@ -119,7 +120,7 @@ class RouterAdminTest(TestCase):
 
 class VrfAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_vrf_changelist')
 
@@ -152,7 +153,7 @@ class VrfAdminTest(TestCase):
 
 class RouteAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_route_changelist')
 
@@ -185,7 +186,7 @@ class RouteAdminTest(TestCase):
 
 class VlanAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_vlan_changelist')
 
@@ -218,7 +219,7 @@ class VlanAdminTest(TestCase):
 
 class PhysicalInterfaceAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_physicalinterface_changelist')
 
@@ -251,7 +252,7 @@ class PhysicalInterfaceAdminTest(TestCase):
 
 class SubInterfaceAdminTest(TestCase):
     def setUp(self):
-        factories.UserFactory()
+        UserFactory()
         self.assertTrue(self.client.login(username='test', password='pass'))
         self.list = reverse('admin:genconf_subinterface_changelist')
 

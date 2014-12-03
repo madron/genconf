@@ -1,5 +1,5 @@
 from django.test import TestCase
-from . import factories
+from .. import factories
 from .. import models
 
 
