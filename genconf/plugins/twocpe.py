@@ -16,3 +16,9 @@ class TwoCpe(IPlugin):
         ('wan1', Wan1Form),
         ('wan2', Wan2Form),
     ]
+
+    def get_objects(self, project, data):
+        pass
+
+    def save(self, project, data):
+        pass

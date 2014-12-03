@@ -30,6 +30,7 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
         plugin_object = manager.getPluginByName(plugin_type).plugin_object
         form_list = list(self.form_list.iteritems())[0:1]
         self.form_list = OrderedDict(form_list + plugin_object.form_list)
+        self.plugin_object = plugin_object
 
     def get_form_initial(self, step):
         if step == 'start':
@@ -65,4 +66,5 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
         project = form.save(commit=False)
         project.configuration = json.dumps(data, indent=4)
         project.save()
+        self.plugin_object.save(project, data)
         return project
