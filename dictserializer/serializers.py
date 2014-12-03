@@ -20,8 +20,6 @@ class DictSerializer(object):
         return obj
 
     def load(self, obj):
-        # print '------------'
-        # print obj
         if isinstance(obj, list):
             return [self.load(x) for x in obj]
         if isinstance(obj, dict):
