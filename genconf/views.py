@@ -1,3 +1,4 @@
+import json
 from collections import OrderedDict
 from django.contrib.formtools.wizard.storage import get_storage
 from django.contrib.formtools.wizard.views import SessionWizardView, StepsHelper
@@ -20,7 +21,7 @@ class ConfigurationView(DetailView):
 
 class ProjectWizardView(AdminWizardView, SessionWizardView):
     form_list = [
-        ('type', forms.ProjectForm1),
+        ('start', forms.ProjectForm1),
         ('placeholder', forms.ProjectForm2),
     ]
 
@@ -34,11 +35,20 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
         self.prefix = self.get_prefix(*args, **kwargs)
         self.storage = get_storage(self.storage_name, self.prefix, request,
             getattr(self, 'file_storage', None))
-        data = self.storage.get_step_data('type')
+        data = self.storage.get_step_data('start')
         if data:
-            plugin_type = data['type-type']
+            plugin_type = data['start-type']
             self.update_form_list(plugin_type)
-        elif 'type-type' in request.POST:
-            plugin_type = request.POST['type-type']
+        elif 'start-type' in request.POST:
+            plugin_type = request.POST['start-type']
             self.update_form_list(plugin_type)
         return super(ProjectWizardView, self).dispatch(request, *args, **kwargs)
+
+    def save(self, form):
+        data = dict()
+        for step in self.form_list.keys():
+            data[step] = self.get_cleaned_data_for_step(step)
+        project = form.save(commit=False)
+        project.configuration = json.dumps(data, indent=4)
+        project.save()
+        return project
