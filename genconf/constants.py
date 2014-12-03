@@ -32,8 +32,8 @@ ROUTER_TYPE_CHOICES = (
 
 ACCESS_TYPE_CHOICES = (
     ('adsl', 'Adsl'),
-    ('eth', 'Ethernet'),
-    ('hdslfr', 'Hdsl frame relay'),
+    ('ethernet', 'Ethernet'),
+    ('hdsl-fr', 'Hdsl frame relay'),
     ('shdsl', 'Shdsl ATM'),
 )
 

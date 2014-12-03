@@ -31,7 +31,20 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
         form_list = list(self.form_list.iteritems())[0:1]
         self.form_list = OrderedDict(form_list + plugin_object.form_list)
 
+    def get_form_initial(self, step):
+        if step == 'start':
+            return super(ProjectWizardView, self).get_form_initial(step)
+        return self.initial_dict.get(step, {})
+
     def dispatch(self, request, *args, **kwargs):
+        # initial_dict
+        if not self.initial_dict:
+            object_id = kwargs.get('object_id')
+            if object_id:
+                project = models.Project.objects.get(pk=object_id)
+                if project.configuration:
+                    self.initial_dict = json.loads(project.configuration)
+        # form_list
         self.prefix = self.get_prefix(*args, **kwargs)
         self.storage = get_storage(self.storage_name, self.prefix, request,
             getattr(self, 'file_storage', None))
@@ -45,9 +58,10 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
         return super(ProjectWizardView, self).dispatch(request, *args, **kwargs)
 
     def save(self, form):
-        data = dict()
+        data = OrderedDict()
         for step in self.form_list.keys():
-            data[step] = self.get_cleaned_data_for_step(step)
+            if not step == 'start':
+                data[step] = self.get_cleaned_data_for_step(step)
         project = form.save(commit=False)
         project.configuration = json.dumps(data, indent=4)
         project.save()
