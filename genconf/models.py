@@ -27,6 +27,8 @@ class ProjectWizard(Project):
 class Router(models.Model):
     project = models.ForeignKey(Project)
     name = models.CharField(max_length=200)
+    model = models.CharField(max_length=50,
+        choices=constants.ROUTER_TYPE_CHOICES)
 
     class Meta:
         unique_together = (('project', 'name'),)

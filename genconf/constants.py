@@ -1,3 +1,6 @@
+from . import hardware
+
+
 INTERFACE_TYPE_CHOICES = (
     ('ethernet', 'Ethernet'),
     ('atm', 'Atm'),
@@ -24,11 +27,7 @@ ATM_PVC_MUX_CHOICES = (
     ('vc-mux', 'vc-mux'),
 )
 
-ROUTER_TYPE_CHOICES = (
-    ('c1841', 'Cisco 1841'),
-    ('c1801', 'Cisco 1801'),
-    ('c3550', 'Cisco 3550'),
-)
+ROUTER_TYPE_CHOICES = [(code, ' '.join((r['brand'], r['model']))) for code, r in hardware.ROUTER_TYPE.iteritems()]
 
 ACCESS_TYPE_CHOICES = (
     ('adsl', 'Adsl'),
