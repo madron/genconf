@@ -27,6 +27,11 @@ class TwoCpe(IPlugin):
             search_fields=['name']
         )
         save_instances(
+            objects.get('vrf', []),
+            fixed_fields=['router'],
+            search_fields=['name']
+        )
+        save_instances(
             objects.get('vlan', []),
             fixed_fields=['router'],
             search_fields=['tag']
