@@ -206,16 +206,19 @@ class SaveObjectsTest(TestCase):
         project = factories.ProjectFactory.create(name='Test')
         router = factories.RouterFactory.build(project=project)
         vrf = factories.VrfFactory.build(router=router)
+        route = factories.RouteFactory.build(vrf=vrf)
         vlan = factories.VlanFactory.build(router=router, tag=20)
         objects = dict(
             router=[router],
             vrf=[vrf],
+            route=[route],
             vlan=[vlan],
         )
         save_objects(objects)
         self.assertEqual(models.Project.objects.count(), 1)
         self.assertEqual(models.Router.objects.count(), 1)
         self.assertEqual(models.Vrf.objects.count(), 1)
+        self.assertEqual(models.Route.objects.count(), 1)
         self.assertEqual(models.Vlan.objects.count(), 1)
 
     def test_new(self):

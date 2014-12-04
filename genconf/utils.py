@@ -70,6 +70,11 @@ def save_objects(objects):
         search_fields=['name']
     )
     save_instances(
+        objects.get('route', []),
+        fixed_fields=['vrf'],
+        search_fields=['network', 'next_hop']
+    )
+    save_instances(
         objects.get('vlan', []),
         fixed_fields=['router'],
         search_fields=['tag']
