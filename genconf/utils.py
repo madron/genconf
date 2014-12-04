@@ -1,3 +1,6 @@
+from genconf import models
+
+
 def save_instances(instances, fixed_fields=(), search_fields=()):
     if not instances:
         return
@@ -53,3 +56,26 @@ def save_instances(instances, fixed_fields=(), search_fields=()):
         old_objects = old_objects.exclude(pk__in=used_pks)
         if old_objects.count() > 0:
             old_objects.delete()
+
+
+def save_objects(objects):
+    save_instances(
+        objects.get('router', []),
+        fixed_fields=['project'],
+        search_fields=['name']
+    )
+    save_instances(
+        objects.get('vrf', []),
+        fixed_fields=['router'],
+        search_fields=['name']
+    )
+    save_instances(
+        objects.get('vlan', []),
+        fixed_fields=['router'],
+        search_fields=['tag']
+    )
+    save_instances(
+        objects.get('physicalinterface', []),
+        fixed_fields=['router'],
+        search_fields=['name']
+    )

@@ -18,30 +18,6 @@ class TwoCpe(IPlugin):
         ('wan2', Wan2Form),
     ]
 
-    def save_objects(self, objects):
-        from genconf import models
-        from genconf.utils import save_instances
-        save_instances(
-            objects.get('router', []),
-            fixed_fields=['project'],
-            search_fields=['name']
-        )
-        save_instances(
-            objects.get('vrf', []),
-            fixed_fields=['router'],
-            search_fields=['name']
-        )
-        save_instances(
-            objects.get('vlan', []),
-            fixed_fields=['router'],
-            search_fields=['tag']
-        )
-        save_instances(
-            objects.get('physicalinterface', []),
-            fixed_fields=['router'],
-            search_fields=['name']
-        )
-
     def get_objects(self, project, data):
         from genconf import factories
         from genconf import hardware
@@ -78,5 +54,6 @@ class TwoCpe(IPlugin):
         return objects
 
     def save(self, project, data):
+        from genconf.utils import save_objects
         objects = self.get_objects(project, data)
-        self.save_objects(objects)
+        save_objects(objects)
