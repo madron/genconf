@@ -36,7 +36,14 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class VlanInline(admin.TabularInline):
     model = models.Vlan
-    readonly_fields = ('notes',)
+    fields = ('__str__', 'layer3interface', 'notes')
+    readonly_fields = fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, object):
+        return False
 
 
 @admin.register(models.Router)
@@ -86,8 +93,15 @@ class VlanAdmin(admin.ModelAdmin):
 
 class SubInterfaceInline(admin.TabularInline):
     model = models.SubInterface
-    fields = ('name', 'type', 'layer_3_interface', 'description', 'notes')
-    readonly_fields = ('layer_3_interface', 'notes')
+    fields = ('name', 'type', 'layer3interface', 'description', 'notes')
+    readonly_fields = fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, object):
+        return False
+
 
 
 @admin.register(models.PhysicalInterface)

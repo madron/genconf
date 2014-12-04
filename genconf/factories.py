@@ -34,19 +34,12 @@ class RouteFactory(factory.django.DjangoModelFactory):
     name = ''
 
 
-class Layer3InterfaceFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Layer3Interface
-
-    vrf = factory.SubFactory(VrfFactory)
-
-
 class VlanFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = models.Vlan
     FACTORY_DJANGO_GET_OR_CREATE = ('router', 'tag')
 
     router = factory.SubFactory(RouterFactory)
     tag = 1
-    layer_3_interface = factory.SubFactory(Layer3InterfaceFactory)
     description = ''
     notes = ''
 
@@ -71,3 +64,11 @@ class SubInterfaceFactory(factory.django.DjangoModelFactory):
     type = 'ethernet'
     layer = 2
     vlan = factory.SubFactory(VlanFactory)
+
+
+class Layer3InterfaceFactory(factory.django.DjangoModelFactory):
+    FACTORY_FOR = models.Layer3Interface
+
+    vrf = factory.SubFactory(VrfFactory)
+    vlan = factory.SubFactory(VlanFactory)
+    subinterface = factory.SubFactory(SubInterfaceFactory)

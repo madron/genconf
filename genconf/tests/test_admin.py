@@ -139,13 +139,13 @@ class VrfAdminTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_detail(self):
-        obj = factories.VlanFactory()
+        obj = factories.VrfFactory()
         url = reverse('admin:genconf_vrf_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_delete(self):
-        obj = factories.VlanFactory()
+        obj = factories.VrfFactory()
         url = reverse('admin:genconf_vrf_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

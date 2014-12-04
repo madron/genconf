@@ -248,6 +248,7 @@ class SaveObjectsTest(TestCase):
         router = factories.RouterFactory.build(id=1, project=project)
         factories.VlanFactory.create(router=router, tag=20)
         objects = dict(
+            router=[router],
             vlan=[
                 factories.VlanFactory.build(router=router, tag=1),
                 factories.VlanFactory.build(router=router, tag=2),
