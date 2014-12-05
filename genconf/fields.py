@@ -16,3 +16,17 @@ class IPAddressField(CharField):
             return netaddr.IPAddress(value)
         except netaddr.AddrFormatError:
             raise ValidationError(self.error_messages['invalid'], code='invalid')
+
+
+class IPNetworkField(CharField):
+    default_error_messages = dict(invalid=_('Enter a valid ip network (e.g.: 192.168.1.1/24).'))
+
+    def clean(self, value):
+        value = super(IPNetworkField, self).clean(value)
+        value = value.strip()
+        if value in self.empty_values:
+            return None
+        try:
+            return netaddr.IPNetwork(value)
+        except netaddr.AddrFormatError:
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
