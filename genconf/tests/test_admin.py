@@ -63,7 +63,7 @@ class ProjectAdminTest(TestCase):
     def test_add(self):
         url = reverse('admin:genconf_project_add')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_detail(self):
         obj = factories.ProjectFactory(name='Project name')
@@ -109,7 +109,7 @@ class RouterAdminTest(TestCase):
         obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_configuration(self):
         obj = factories.RouterFactory()
@@ -148,7 +148,7 @@ class VrfAdminTest(TestCase):
         obj = factories.VrfFactory()
         url = reverse('admin:genconf_vrf_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
 
 class RouteAdminTest(TestCase):
@@ -181,7 +181,7 @@ class RouteAdminTest(TestCase):
         obj = factories.RouteFactory()
         url = reverse('admin:genconf_route_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
 
 class VlanAdminTest(TestCase):
@@ -214,7 +214,7 @@ class VlanAdminTest(TestCase):
         obj = factories.VlanFactory()
         url = reverse('admin:genconf_vlan_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
 
 class PhysicalInterfaceAdminTest(TestCase):
@@ -247,7 +247,7 @@ class PhysicalInterfaceAdminTest(TestCase):
         obj = factories.PhysicalInterfaceFactory()
         url = reverse('admin:genconf_physicalinterface_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
 
 class SubInterfaceAdminTest(TestCase):
@@ -280,4 +280,4 @@ class SubInterfaceAdminTest(TestCase):
         obj = factories.SubInterfaceFactory()
         url = reverse('admin:genconf_subinterface_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)

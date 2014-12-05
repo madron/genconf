@@ -7,6 +7,41 @@ from . import models
 from . import views
 
 
+class ReadOnlyTabularInline(admin.TabularInline):
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, object):
+        return False
+
+    def get_readonly_fields(self, request, obj=None):
+        if self.fields:
+            return self.fields
+        fields = []
+        for field in self.model._meta.get_all_field_names():
+            if (not field == 'id'):
+                fields.append(field)
+        return fields
+
+
+class ReadOnlyModelAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_readonly_fields(self, request, obj=None):
+        if self.declared_fieldsets:
+            fields = flatten_fieldsets(self.declared_fieldsets)
+        else:
+            fields = list(set(
+                [field.name for field in self.opts.local_fields if not field.name == 'id'] +
+                [field.name for field in self.opts.local_many_to_many]
+            ))
+        return fields
+
+
 @admin.register(models.ProjectWizard)
 class ProjectAdminWizard(AdminWizard):
     form = forms.ProjectForm
@@ -16,46 +51,38 @@ class ProjectAdminWizard(AdminWizard):
     wizard_view = views.ProjectWizardView
 
 
-class RouterInline(admin.TabularInline):
+class RouterInline(ReadOnlyTabularInline):
     model = models.Router
-    fields = ('name', 'change')
-    readonly_fields = ('change',)
+    fields = ('url',)
     # show_change_link will work with django 1.8
     show_change_link = True
 
-    def change(self, obj):
+    def url(self, obj):
         return '<a href="%s">%s</a>' % (obj.get_url(), obj)
 
 
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
+    readonly_fields = ('type',)
     inlines = [
         RouterInline,
     ]
 
-
-class VlanInline(admin.TabularInline):
-    model = models.Vlan
-    fields = ('__str__', 'layer3interface', 'notes')
-    readonly_fields = fields
-
     def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, request, object):
-        return False
+
+class VlanInline(ReadOnlyTabularInline):
+    model = models.Vlan
+    fields = ('__str__', 'layer3interface', 'notes')
 
 
 @admin.register(models.Router)
-class RouterAdmin(admin.ModelAdmin):
-    readonly_fields = ('project',)
+class RouterAdmin(ReadOnlyModelAdmin):
     change_form_template = 'genconf/router/change_form.html'
     inlines = [
         VlanInline,
     ]
-
-    def has_add_permission(self, request):
-        return False
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -68,56 +95,32 @@ class RouterAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Vrf)
-class VrfAdmin(admin.ModelAdmin):
-    readonly_fields = ('router',)
-
-    def has_add_permission(self, request):
-        return False
+class VrfAdmin(ReadOnlyModelAdmin):
+    pass
 
 
 @admin.register(models.Route)
-class RouteAdmin(admin.ModelAdmin):
-    readonly_fields = ('vrf',)
-
-    def has_add_permission(self, request):
-        return False
+class RouteAdmin(ReadOnlyModelAdmin):
+    pass
 
 
 @admin.register(models.Vlan)
-class VlanAdmin(admin.ModelAdmin):
-    readonly_fields = ('router',)
-
-    def has_add_permission(self, request):
-        return False
+class VlanAdmin(ReadOnlyModelAdmin):
+    pass
 
 
-class SubInterfaceInline(admin.TabularInline):
+class SubInterfaceInline(ReadOnlyTabularInline):
     model = models.SubInterface
     fields = ('name', 'type', 'layer3interface', 'description', 'notes')
-    readonly_fields = fields
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, object):
-        return False
-
 
 
 @admin.register(models.PhysicalInterface)
-class PhysicalInterfaceAdmin(admin.ModelAdmin):
-    readonly_fields = ('router',)
+class PhysicalInterfaceAdmin(ReadOnlyModelAdmin):
     inlines = [
         SubInterfaceInline,
     ]
 
-    def has_add_permission(self, request):
-        return False
-
 
 @admin.register(models.SubInterface)
-class SubInterfaceAdmin(admin.ModelAdmin):
-    readonly_fields = ('physical_interface',)
-
-    def has_add_permission(self, request):
-        return False
+class SubInterfaceAdmin(ReadOnlyModelAdmin):
+    pass
