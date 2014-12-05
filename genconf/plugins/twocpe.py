@@ -1,15 +1,19 @@
 from django import forms
 from yapsy.IPlugin import IPlugin
 from genconf import constants
+from genconf import fields
 
 
 class Wan1Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
+    network = fields.IPNetworkField()
+
 
 class Wan2Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
+    network = fields.IPNetworkField()
 
 
 class TwoCpe(IPlugin):

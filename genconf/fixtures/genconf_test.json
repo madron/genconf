@@ -1,55 +1,253 @@
 [
 {
-    "model": "genconf.project",
-    "pk": 1,
     "fields": {
-        "configuration": "",
+        "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"network\": \"10.10.10.1/30\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"network\": \"172.16.1.1/32\", \n        \"access_type\": \"adsl\"\n    }\n}",
         "type": "twocpe",
-        "name": "Test project"
-    }
+        "name": "Test"
+    },
+    "model": "genconf.project",
+    "pk": 1
 },
 {
-    "model": "genconf.router",
-    "pk": 1,
     "fields": {
         "project": 1,
-        "name": "c1801"
-    }
+        "model": "c1841",
+        "name": "wan1"
+    },
+    "model": "genconf.router",
+    "pk": 1
 },
 {
-    "model": "genconf.vrf",
-    "pk": 1,
     "fields": {
-        "router": 1,
-        "name": ""
-    }
+        "project": 1,
+        "model": "c1801",
+        "name": "wan2"
+    },
+    "model": "genconf.router",
+    "pk": 2
 },
 {
-    "model": "genconf.vlan",
-    "pk": 1,
     "fields": {
         "router": 1,
         "notes": "",
         "tag": 1,
-        "description": "Lan"
-    }
+        "description": ""
+    },
+    "model": "genconf.vlan",
+    "pk": 1
 },
 {
-    "model": "genconf.physicalinterface",
-    "pk": 1,
     "fields": {
-        "router": 1,
-        "name": "Fa0",
-        "native_vlan": 1
-    }
+        "router": 2,
+        "notes": "",
+        "tag": 1,
+        "description": ""
+    },
+    "model": "genconf.vlan",
+    "pk": 2
 },
 {
-    "model": "genconf.physicalinterface",
-    "pk": 2,
     "fields": {
+        "native_vlan": 1,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/0",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
         "router": 1,
-        "name": "Atm0",
-        "native_vlan": 1
-    }
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 1
+},
+{
+    "fields": {
+        "native_vlan": 1,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/1",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 1,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 2
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "atm0",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "atm",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 3
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 4
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe1",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 5
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe2",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 6
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe3",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 7
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe4",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 8
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe5",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 9
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe6",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 10
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe7",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 11
+},
+{
+    "fields": {
+        "native_vlan": 2,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "2",
+        "name": "fe8",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 2,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 12
 }
 ]

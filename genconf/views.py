@@ -6,6 +6,7 @@ from django.views.generic import DetailView
 from adminwizard.views import AdminWizardView
 from . import forms
 from . import models
+from . import serializers
 
 
 class ConfigurationView(DetailView):
@@ -64,7 +65,7 @@ class ProjectWizardView(AdminWizardView, SessionWizardView):
             if not step == 'start':
                 data[step] = self.get_cleaned_data_for_step(step)
         project = form.save(commit=False)
-        project.configuration = json.dumps(data, indent=4)
+        project.configuration = json.dumps(data, indent=4, cls=serializers.ProjectEncoder)
         project.save()
         self.plugin_object.save(project, data)
         return project
