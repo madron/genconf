@@ -16,10 +16,16 @@ class Wan2Form(forms.Form):
     network = fields.IPNetworkField()
 
 
+class FallbackForm(forms.Form):
+    network = fields.IPNetworkField()
+    password = forms.CharField()
+
+
 class TwoCpe(IPlugin):
     form_list = [
         ('wan1', Wan1Form),
         ('wan2', Wan2Form),
+        ('fallback', FallbackForm),
     ]
 
     def get_objects(self, project, data):
