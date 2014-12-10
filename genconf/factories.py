@@ -78,5 +78,5 @@ class PhysicalLinkFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = models.PhysicalLink
 
     project = factory.SubFactory(ProjectFactory)
-    endpoint_1 = factory.SubFactory(PhysicalInterfaceFactory)
-    endpoint_2 = factory.SubFactory(PhysicalInterfaceFactory)
+    router_interface_1 = factory.SubFactory(PhysicalInterfaceFactory)
+    router_interface_2 = factory.SubFactory(PhysicalInterfaceFactory)

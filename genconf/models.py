@@ -205,26 +205,10 @@ class Layer3Interface(models.Model):
 
 class PhysicalLink(models.Model):
     project = models.ForeignKey(Project, db_index=True)
-    # Endpoint 1
-    endpoint_1_type = models.ForeignKey(ContentType,
-        related_name='%(app_label)s_%(class)s_endpoint_1_pk',
-        limit_choices_to=dict(
-            app_label='genconf',
-            model__in=('physicalinterface',),
-        ),
-    )
-    endpoint_1_id = models.PositiveIntegerField()
-    endpoint_1 = GenericForeignKey('endpoint_1_type', 'endpoint_1_id')
-    # Endpoint 2
-    endpoint_2_type = models.ForeignKey(ContentType,
-        related_name='%(app_label)s_%(class)s_endpoint_2_pk',
-        limit_choices_to=dict(
-            app_label='genconf',
-            model__in=('physicalinterface',),
-        ),
-    )
-    endpoint_2_id = models.PositiveIntegerField()
-    endpoint_2 = GenericForeignKey('endpoint_2_type', 'endpoint_2_id')
+    router_interface_1 = models.ForeignKey(PhysicalInterface,
+        related_name='%(app_label)s_%(class)s_router_interface_1_pk')
+    router_interface_2 = models.ForeignKey(PhysicalInterface,
+        related_name='%(app_label)s_%(class)s_router_interface_2_pk')
 
     def __str__(self):
-        return '%s <-> %s' % (self.endpoint_1, self.endpoint_2)
+        return '%s <-> %s' % (self.router_interface_1, self.router_interface_2)
