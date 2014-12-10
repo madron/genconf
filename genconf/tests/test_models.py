@@ -52,9 +52,13 @@ class VlanModelTest(TestCase):
 
 
 class PhysicalInterfaceModelTest(TestCase):
-    def test_str(self):
+    def test_str_no_router_name(self):
         interface = factories.PhysicalInterfaceFactory(name='Fa0')
         self.assertEqual(str(interface), 'Fa0')
+
+    def test_str(self):
+        interface = factories.PhysicalInterfaceFactory(router__name='Main', name='Fa0')
+        self.assertEqual(str(interface), 'Main Fa0')
 
     def test_layer2(self):
         interface = factories.PhysicalInterfaceFactory(layer=2)

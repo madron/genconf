@@ -61,11 +61,17 @@ class RouterInline(ReadOnlyTabularInline):
         return '<a href="%s">%s</a>' % (obj.get_url(), obj)
 
 
+class PhysicalLinkInline(ReadOnlyTabularInline):
+    model = models.PhysicalLink
+    fields = ('endpoint_1', 'endpoint_2')
+
+
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('type',)
     inlines = [
         RouterInline,
+        PhysicalLinkInline,
     ]
 
     def has_add_permission(self, request):
@@ -123,4 +129,9 @@ class PhysicalInterfaceAdmin(ReadOnlyModelAdmin):
 
 @admin.register(models.SubInterface)
 class SubInterfaceAdmin(ReadOnlyModelAdmin):
+    pass
+
+
+@admin.register(models.PhysicalLink)
+class PhysicalLinkAdmin(ReadOnlyModelAdmin):
     pass

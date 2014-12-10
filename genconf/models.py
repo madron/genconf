@@ -1,4 +1,6 @@
 from os.path import abspath, dirname, join
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
 from django.db import models
 from yapsy.PluginManager import PluginManager
@@ -122,7 +124,7 @@ class PhysicalInterface(models.Model):
         index_together = (('router', 'name'),)
 
     def __str__(self):
-        return self.name
+        return ('%s %s' % (self.router, self.name)).strip()
 
     @property
     def is_layer2(self):
@@ -190,3 +192,30 @@ class Layer3Interface(models.Model):
 
     def __str__(self):
         return self.description
+
+
+class PhysicalLink(models.Model):
+    project = models.ForeignKey(Project, db_index=True)
+    # Endpoint 1
+    endpoint_1_type = models.ForeignKey(ContentType,
+        related_name='%(app_label)s_%(class)s_endpoint_1_pk',
+        limit_choices_to=dict(
+            app_label='genconf',
+            model__in=('physicalinterface',),
+        ),
+    )
+    endpoint_1_id = models.PositiveIntegerField()
+    endpoint_1 = GenericForeignKey('endpoint_1_type', 'endpoint_1_id')
+    # Endpoint 2
+    endpoint_2_type = models.ForeignKey(ContentType,
+        related_name='%(app_label)s_%(class)s_endpoint_2_pk',
+        limit_choices_to=dict(
+            app_label='genconf',
+            model__in=('physicalinterface',),
+        ),
+    )
+    endpoint_2_id = models.PositiveIntegerField()
+    endpoint_2 = GenericForeignKey('endpoint_2_type', 'endpoint_2_id')
+
+    def __str__(self):
+        return '%s <-> %s' % (self.endpoint_1, self.endpoint_2)
