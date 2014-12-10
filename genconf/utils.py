@@ -84,6 +84,11 @@ def save_objects(objects):
         fixed_fields=['router'],
         search_fields=['name']
     )
+    save_instances(
+        objects.get('physicallink', []),
+        fixed_fields=['project'],
+        search_fields=['router__name', 'name']
+    )
 
 
 def get_physical_interfaces(objects, router, type=None, layer=None):

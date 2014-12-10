@@ -65,6 +65,12 @@ class GetObjectsTest(TestCase):
         self.assertEqual(interface.name, 'fe8')
         self.assertEqual(interface.type, 'ethernet')
         self.assertEqual(interface.layer, 2)
+        ### Links
+        link = objects['physicallink'][0]
+        self.assertEqual(link.router_interface_1.router.name, 'wan1')
+        self.assertEqual(link.router_interface_1.name, 'fe0/0')
+        self.assertEqual(link.router_interface_2.router.name, 'wan2')
+        self.assertEqual(link.router_interface_2.name, 'fe0')
 
 
 class SaveTest(TestCase):
@@ -81,4 +87,7 @@ class SaveTest(TestCase):
         self.plugin_object.save(project, data)
         self.assertEqual(models.Project.objects.count(), 1)
         self.assertEqual(models.Router.objects.count(), 2)
+        self.assertEqual(models.Vlan.objects.count(), 2)
+        self.assertEqual(models.PhysicalInterface.objects.count(), 12)
+        self.assertEqual(models.PhysicalLink.objects.count(), 1)
 

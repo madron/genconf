@@ -31,10 +31,12 @@ class TwoCpe(IPlugin):
     def get_objects(self, project, data):
         from genconf import factories
         from genconf import hardware
+        from genconf.utils import get_physical_interfaces
         objects = dict(
             router=[],
             vlan=[],
             physicalinterface=[],
+            physicallink=[],
         )
         for name, wan in [('wan1', data['wan1']), ('wan2', data['wan2'])]:
             # Router
@@ -61,6 +63,17 @@ class TwoCpe(IPlugin):
                     native_vlan=vlan,
                 )
                 objects['physicalinterface'].append(pif)
+        # Fallback link
+        router = objects['router'][0]
+        interface_1 = get_physical_interfaces(objects, router, type='ethernet', layer=3)[0]
+        router = objects['router'][1]
+        interface_2 = get_physical_interfaces(objects, router, type='ethernet', layer=3)[0]
+        link = factories.PhysicalLinkFactory.build(
+            project=project,
+            router_interface_1=interface_1,
+            router_interface_2=interface_2,
+        )
+        objects['physicallink'].append(link)
         return objects
 
     def save(self, project, data):
