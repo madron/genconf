@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .. import factories
 from .. import models
-from ..utils import save_instances, save_objects
+from ..utils import (get_physical_interfaces, save_instances, save_objects)
 
 
 class SaveInstancesTest(TestCase):
@@ -313,3 +313,53 @@ class SaveObjectsTest(TestCase):
         self.assertEqual(router.name, 'wan2')
         self.assertEqual(router.project, project)
         self.assertEqual(router.project.id, 1)
+
+
+class GetPhysicalInterfacesTest(TestCase):
+    def setUp(self):
+        router = factories.RouterFactory.build()
+        vlan = factories.VlanFactory.build(router=router)
+        objects = dict(
+            router=[router],
+            physicalinterface=[
+                factories.PhysicalInterfaceFactory.build(router=router, name='atm0', type='atm', layer=3, native_vlan=vlan),
+                factories.PhysicalInterfaceFactory.build(router=router, name='fe0', type='ethernet', layer=3, native_vlan=vlan),
+                factories.PhysicalInterfaceFactory.build(router=router, name='fe1', type='ethernet', layer=2, native_vlan=vlan),
+            ]
+        )
+        self.router = router
+        self.objects = objects
+
+    def test_all(self):
+        interfaces = get_physical_interfaces(self.objects, self.router)
+        self.assertEqual(len(interfaces), 3)
+        self.assertEqual(interfaces[0].name, 'atm0')
+        self.assertEqual(interfaces[1].name, 'fe0')
+        self.assertEqual(interfaces[2].name, 'fe1')
+
+    def test_atm(self):
+        interfaces = get_physical_interfaces(self.objects, self.router, type='atm')
+        self.assertEqual(len(interfaces), 1)
+        self.assertEqual(interfaces[0].name, 'atm0')
+
+    def test_ethernet(self):
+        interfaces = get_physical_interfaces(self.objects, self.router, type='ethernet')
+        self.assertEqual(len(interfaces), 2)
+        self.assertEqual(interfaces[0].name, 'fe0')
+        self.assertEqual(interfaces[1].name, 'fe1')
+
+    def test_layer3(self):
+        interfaces = get_physical_interfaces(self.objects, self.router, layer=3)
+        self.assertEqual(len(interfaces), 2)
+        self.assertEqual(interfaces[0].name, 'atm0')
+        self.assertEqual(interfaces[1].name, 'fe0')
+
+    def test_ethernet_layer2(self):
+        interfaces = get_physical_interfaces(self.objects, self.router, type='ethernet', layer=2)
+        self.assertEqual(len(interfaces), 1)
+        self.assertEqual(interfaces[0].name, 'fe1')
+
+    def test_ethernet_layer3(self):
+        interfaces = get_physical_interfaces(self.objects, self.router, type='ethernet', layer=3)
+        self.assertEqual(len(interfaces), 1)
+        self.assertEqual(interfaces[0].name, 'fe0')

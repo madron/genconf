@@ -84,3 +84,12 @@ def save_objects(objects):
         fixed_fields=['router'],
         search_fields=['name']
     )
+
+
+def get_physical_interfaces(objects, router, type=None, layer=None):
+    interfaces = [i for i in objects['physicalinterface'] if i.router == router]
+    if type:
+        interfaces = [i for i in interfaces if i.type == type]
+    if layer:
+        interfaces = [i for i in interfaces if i.layer == layer]
+    return interfaces
