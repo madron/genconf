@@ -5,6 +5,7 @@ from django.core import urlresolvers
 from django.db import models
 from yapsy.PluginManager import PluginManager
 from . import constants
+from . import hardware
 from .plugin import manager
 
 
@@ -43,6 +44,14 @@ class Router(models.Model):
         info = (self._meta.app_label, self._meta.model_name)
         url_name = 'admin:%s_%s_change' % info
         return urlresolvers.reverse(url_name, args=(self.pk,))
+
+    def get_interface_names(self, type=None, layer=None):
+        interfaces = hardware.ROUTER_TYPE.get(self.model, dict(interfaces=[]))['interfaces']
+        if type:
+            interfaces = [i for i in interfaces if i['type'] == type]
+        if layer:
+            interfaces = [i for i in interfaces if i['layer'] == layer]
+        return [i['name'] for i in interfaces]
 
 
 class Vrf(models.Model):

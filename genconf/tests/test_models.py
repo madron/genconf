@@ -18,6 +18,73 @@ class RouterModelTest(TestCase):
         router = factories.RouterFactory.create(id=1)
         self.assertEqual(router.get_url(), '/genconf/router/1/')
 
+    def test_get_interface_names_c1801(self):
+        router = factories.RouterFactory(model='c1801')
+        names = router.get_interface_names()
+        self.assertEqual(len(names), 10)
+        self.assertEqual(names[0], 'atm0')
+        self.assertEqual(names[1], 'fe0')
+        self.assertEqual(names[2], 'fe1')
+        self.assertEqual(names[9], 'fe8')
+
+    def test_get_interface_names_c1801_atm(self):
+        router = factories.RouterFactory(model='c1801')
+        names = router.get_interface_names(type='atm')
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'atm0')
+
+    def test_get_interface_names_c1801_ethernet(self):
+        router = factories.RouterFactory(model='c1801')
+        names = router.get_interface_names(type='ethernet')
+        self.assertEqual(len(names), 9)
+        self.assertEqual(names[0], 'fe0')
+        self.assertEqual(names[1], 'fe1')
+        self.assertEqual(names[8], 'fe8')
+
+    def test_get_interface_names_c1801_ethernet_layer2(self):
+        router = factories.RouterFactory(model='c1801')
+        names = router.get_interface_names(type='ethernet', layer=2)
+        self.assertEqual(len(names), 8)
+        self.assertEqual(names[0], 'fe1')
+        self.assertEqual(names[7], 'fe8')
+
+    def test_get_interface_names_c1801_ethernet_layer3(self):
+        router = factories.RouterFactory(model='c1801')
+        names = router.get_interface_names(type='ethernet', layer=3)
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names[0], 'fe0')
+
+    def test_get_interface_names_c1841(self):
+        router = factories.RouterFactory(model='c1841')
+        names = router.get_interface_names()
+        self.assertEqual(len(names), 2)
+        self.assertEqual(names[0], 'fe0/0')
+        self.assertEqual(names[1], 'fe0/1')
+
+    def test_get_interface_names_c1841_atm(self):
+        router = factories.RouterFactory(model='c1841')
+        names = router.get_interface_names(type='atm')
+        self.assertEqual(len(names), 0)
+
+    def test_get_interface_names_c1841_ethernet(self):
+        router = factories.RouterFactory(model='c1841')
+        names = router.get_interface_names(type='ethernet')
+        self.assertEqual(len(names), 2)
+        self.assertEqual(names[0], 'fe0/0')
+        self.assertEqual(names[1], 'fe0/1')
+
+    def test_get_interface_names_c1841_ethernet_layer2(self):
+        router = factories.RouterFactory(model='c1841')
+        names = router.get_interface_names(type='ethernet', layer=2)
+        self.assertEqual(len(names), 0)
+
+    def test_get_interface_names_c1841_ethernet_layer3(self):
+        router = factories.RouterFactory(model='c1841')
+        names = router.get_interface_names(type='ethernet', layer=3)
+        self.assertEqual(len(names), 2)
+        self.assertEqual(names[0], 'fe0/0')
+        self.assertEqual(names[1], 'fe0/1')
+
 
 class VrfModelTest(TestCase):
     def test_str(self):
