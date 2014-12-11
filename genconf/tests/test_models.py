@@ -1,7 +1,6 @@
 import netaddr
 from django.test import TestCase
 from .. import factories
-from .. import models
 
 
 class ProjectModelTest(TestCase):

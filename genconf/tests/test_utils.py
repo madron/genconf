@@ -22,10 +22,8 @@ class SaveInstancesTest(TestCase):
         self.assertEqual(models.Project.objects.count(), 0)
         save_instances(instances, search_fields=['name'])
         self.assertEqual(models.Project.objects.count(), 2)
-        # 1
-        project = models.Project.objects.get(name='Project 1')
-        # 2
-        project = models.Project.objects.get(name='Project 2')
+        models.Project.objects.get(name='Project 1')
+        models.Project.objects.get(name='Project 2')
 
     def test_simple_1_existing(self):
         models.Project.objects.create(id=5, name='Old project 9')

@@ -1,10 +1,8 @@
 import netaddr
-from unittest import skip
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from .factories import UserFactory
 from .. import factories
-from .. import models
 
 
 class ProjectAdminWizardTest(TestCase):
