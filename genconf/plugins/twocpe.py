@@ -94,7 +94,7 @@ class TwoCpe(IPlugin):
             name='%s.%d' % (interface_2.name, vlan.tag),
             physical_interface=interface_2, layer=3, vlan=vlan)
         router['subinterface'].append(subinterface)
-        ipnetwork = netaddr.IPNetwork(fallback_network.network + 1)
+        ipnetwork = netaddr.IPNetwork(fallback_network.network + 2)
         ipnetwork.prefixlen = fallback_network.prefixlen
         router['layer3interface'].append(factories.Layer3InterfaceFactory.build(
             vlan=None, subinterface=subinterface, ipnetwork=ipnetwork,

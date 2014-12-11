@@ -147,6 +147,31 @@ class GetProjectTest(TestCase):
         self.assertEqual(link.router_interface_2.name, 'fe0')
 
 
+    def test_get_project_fallback(self):
+        data = dict(
+            wan1=dict(access_type='ethernet', router='c1841'),
+            wan2=dict(access_type='adsl', router='c1801'),
+            fallback=dict(network=netaddr.IPNetwork('192.168.1.1/24')),
+        )
+        project = self.plugin_object.get_project(self.project_instance, data)
+        # wan1
+        router = project['router']['wan1']
+        interface = router['layer3interface'][0]
+        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan1')
+        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0/0')
+        self.assertEqual(interface.subinterface.name, 'fe0/0.1')
+        self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.1.0/24'))
+        self.assertEqual(interface.ipnetwork.ip, netaddr.IPAddress('192.168.1.1'))
+        # wan2
+        router = project['router']['wan2']
+        interface = router['layer3interface'][0]
+        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan2')
+        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0')
+        self.assertEqual(interface.subinterface.name, 'fe0.1')
+        self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.1.0/24'))
+        self.assertEqual(interface.ipnetwork.ip, netaddr.IPAddress('192.168.1.2'))
+
+
 class SaveTest(TestCase):
     def setUp(self):
         from ..plugin import manager

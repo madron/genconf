@@ -322,7 +322,7 @@
         "description": "Fallback link",
         "vlan": null,
         "vrf": 2,
-        "ipnetwork": "192.168.1.1/24",
+        "ipnetwork": "192.168.1.2/24",
         "subinterface": 2
     },
     "model": "genconf.layer3interface",
