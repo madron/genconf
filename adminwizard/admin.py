@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.contrib import admin
 from django.contrib.admin.options import csrf_protect_m
-from . import views
 
 
 class AdminWizard(admin.ModelAdmin):
