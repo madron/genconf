@@ -1,7 +1,7 @@
 import json
 from collections import OrderedDict
 from django.contrib.formtools.wizard.storage import get_storage
-from django.contrib.formtools.wizard.views import SessionWizardView, StepsHelper
+from django.contrib.formtools.wizard.views import SessionWizardView
 from django.views.generic import DetailView
 from adminwizard.views import AdminWizardView
 from . import forms

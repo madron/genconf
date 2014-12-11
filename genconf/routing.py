@@ -1,6 +1,3 @@
-import netaddr
-
-
 class BgpNeighbour(object):
     def __init__(self):
         self.ip = ip

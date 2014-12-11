@@ -1,5 +1,4 @@
 from operator import attrgetter
-from genconf import models
 
 
 def save_instances(instances, fixed_fields=(), search_fields=()):

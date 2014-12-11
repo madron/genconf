@@ -1,10 +1,6 @@
-from os.path import abspath, dirname, join
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
 from django.db import models
 from netaddr import IPNetwork
-from yapsy.PluginManager import PluginManager
 from . import constants
 from . import hardware
 from .plugin import manager

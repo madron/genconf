@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
-from django.utils.translation import ugettext as _
 from adminwizard.admin import AdminWizard
 from . import forms
 from . import models
