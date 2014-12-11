@@ -28,55 +28,65 @@ class TwoCpe(IPlugin):
         ('fallback', FallbackForm),
     ]
 
-    def get_objects(self, project, data):
+    def get_project(self, project_instance, data):
         from genconf import factories
         from genconf import hardware
         from genconf.utils import get_physical_interfaces
-        objects = dict(
-            router=[],
-            vlan=[],
-            physicalinterface=[],
+        project = dict(
+            router=dict(
+            ),
             physicallink=[],
         )
+        router = dict()
         for name, wan in [('wan1', data['wan1']), ('wan2', data['wan2'])]:
             # Router
-            router = factories.RouterFactory.build(
-                project=project,
+            router_instance = factories.RouterFactory.build(
+                project=project_instance,
                 name=name,
                 model=wan['router']
             )
-            objects['router'].append(router)
             # Vlan
-            vlan = factories.VlanFactory.build(
-                router=router,
-                tag=1,
+            default_vlan = factories.VlanFactory.build(router=router_instance, tag=1)
+            router = dict(
+                router_instance=router_instance,
+                vlan=dict(default_vlan=default_vlan),
+                physicalinterface=[],
+                subinterface=[],
             )
-            objects['vlan'].append(vlan)
             # PhysicalInterface
-            router_type = hardware.ROUTER_TYPE[router.model]
+            router_type = hardware.ROUTER_TYPE[router_instance.model]
             for interface in router_type['interfaces']:
                 pif = factories.PhysicalInterfaceFactory.build(
-                    router=router,
+                    router=router_instance,
                     name=interface['name'],
                     type=interface['type'],
                     layer=interface['layer'],
-                    native_vlan=vlan,
+                    native_vlan=default_vlan,
                 )
-                objects['physicalinterface'].append(pif)
-        # Fallback link
-        router = objects['router'][0]
-        interface_1 = get_physical_interfaces(objects, router, type='ethernet', layer=3)[0]
-        router = objects['router'][1]
-        interface_2 = get_physical_interfaces(objects, router, type='ethernet', layer=3)[0]
-        link = factories.PhysicalLinkFactory.build(
-            project=project,
-            router_interface_1=interface_1,
-            router_interface_2=interface_2,
-        )
-        objects['physicallink'].append(link)
-        return objects
+                router['physicalinterface'].append(pif)
+            project['router'][name] = router
+        ### Fallback
+        # wan1
+        router = project['router']['wan1']
+        interface_1 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
+        subinterface = factories.SubInterfaceFactory.build(
+            physical_interface=interface_1, layer=3, vlan=router['vlan']['default_vlan'])
+        router['subinterface'].append(subinterface)
+        # wan2
+        router = project['router']['wan2']
+        interface_2 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
+        subinterface = factories.SubInterfaceFactory.build(
+            physical_interface=interface_2, layer=3, vlan=router['vlan']['default_vlan'])
+        router['subinterface'].append(subinterface)
+        # PhysicalLink
+        project['physicallink'].append(factories.PhysicalLinkFactory.build(
+                project=project_instance,
+                router_interface_1=interface_1,
+                router_interface_2=interface_2,
+        ))
+        return project
 
-    def save(self, project, data):
-        from genconf.utils import save_objects
-        objects = self.get_objects(project, data)
-        save_objects(objects)
+    def save(self, project_instance, data):
+        from genconf.utils import save_project
+        project = self.get_project(project_instance, data)
+        save_project(project)

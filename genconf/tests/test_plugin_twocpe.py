@@ -1,72 +1,119 @@
+import netaddr
 from django.test import TestCase
 from .. import factories
 from .. import models
 from ..plugins import twocpe
 
 
-class GetObjectsTest(TestCase):
+class GetProjectTest(TestCase):
     def setUp(self):
         from ..plugin import manager
         self.plugin_object = manager.getPluginByName('twocpe').plugin_object
-        self.project = factories.ProjectFactory(name='Test')
+        self.project_instance = factories.ProjectFactory(name='Test')
 
-    def test_get_objects(self):
+    def test_get_project(self):
         data = dict(
             wan1=dict(access_type='ethernet', router='c1841'),
             wan2=dict(access_type='adsl', router='c1801'),
+            fallback=dict(network=netaddr.IPNetwork('192.168.100.1/30')),
         )
-        objects = self.plugin_object.get_objects(self.project, data)
+        project = self.plugin_object.get_project(self.project_instance, data)
+        # Expected structure
+        # project = {
+        #     'physicallink': [],
+        #     'router': {
+        #         'wan1': {
+        #             'physicalinterface': [
+        #                 <PhysicalInterface: wan1 fe0/0>,
+        #                 <PhysicalInterface: wan1 fe0/1>,
+        #             ],
+        #             'router': <Router: wan1>,
+        #             'subinterface': [],
+        #             'vlan': {'default_vlan': <Vlan: 1>},
+        #         },
+        #         'wan2': {
+        #             'physicalinterface': [
+        #                 <PhysicalInterface: wan2 atm0>,
+        #                 <PhysicalInterface: wan2 fe0>,
+        #                 <PhysicalInterface: wan2 fe1>,
+        #             ],
+        #             'router': <Router: wan2>,
+        #             'subinterface': [],
+        #             'vlan': {'default_vlan': <Vlan: 1>},
+        #         },
+        #     },
+        # }
+
         #
         # Router wan1
         #
-        router = objects['router'][0]
-        self.assertEqual(router.project, self.project)
-        self.assertEqual(router.name, 'wan1')
-        self.assertEqual(router.model, 'c1841')
+        router = project['router']['wan1']
+        router_instance = router['router_instance']
+        self.assertEqual(router_instance.project, self.project_instance)
+        self.assertEqual(router_instance.name, 'wan1')
+        self.assertEqual(router_instance.model, 'c1841')
         # Vlan
-        vlan = objects['vlan'][0]
+        self.assertEqual(len(router['vlan']), 1)
+        vlan = router['vlan']['default_vlan']
         self.assertEqual(vlan.tag, 1)
-        self.assertEqual(vlan.router, router)
+        self.assertEqual(vlan.router, router_instance)
         # PhysicalInterface
-        interface = objects['physicalinterface'][0]
-        self.assertEqual(interface.router, router)
+        self.assertEqual(len(router['physicalinterface']), 2)
+        interface = router['physicalinterface'][0]
+        self.assertEqual(interface.router, router_instance)
         self.assertEqual(interface.name, 'fe0/0')
         self.assertEqual(interface.type, 'ethernet')
         self.assertEqual(interface.layer, 3)
-        interface = objects['physicalinterface'][1]
-        self.assertEqual(interface.router, router)
+        interface = router['physicalinterface'][1]
+        self.assertEqual(interface.router, router_instance)
         self.assertEqual(interface.name, 'fe0/1')
         self.assertEqual(interface.type, 'ethernet')
         self.assertEqual(interface.layer, 3)
+        # SubInterface
+        self.assertEqual(len(router['subinterface']), 1)
+        interface = router['subinterface'][0]
+        self.assertEqual(interface.physical_interface.router.name, 'wan1')
+        self.assertEqual(interface.physical_interface.name, 'fe0/0')
         #
         # Router wan2
         #
-        router = objects['router'][1]
-        self.assertEqual(router.project, self.project)
-        self.assertEqual(router.name, 'wan2')
-        self.assertEqual(router.model, 'c1801')
+        router = project['router']['wan2']
+        router_instance = router['router_instance']
+        self.assertEqual(router_instance.project, self.project_instance)
+        self.assertEqual(router_instance.name, 'wan2')
+        self.assertEqual(router_instance.model, 'c1801')
         # Vlan
-        vlan = objects['vlan'][1]
+        self.assertEqual(len(router['vlan']), 1)
+        vlan = router['vlan']['default_vlan']
         self.assertEqual(vlan.tag, 1)
-        self.assertEqual(vlan.router, router)
+        self.assertEqual(vlan.router, router_instance)
         # PhisicalInterface
-        interface = objects['physicalinterface'][2]
-        self.assertEqual(interface.router, router)
+        self.assertEqual(len(router['physicalinterface']), 10)
+        interface = router['physicalinterface'][0]
+        self.assertEqual(interface.router, router_instance)
         self.assertEqual(interface.name, 'atm0')
         self.assertEqual(interface.type, 'atm')
         self.assertEqual(interface.layer, 3)
-        interface = objects['physicalinterface'][3]
-        self.assertEqual(interface.router, router)
+        interface = router['physicalinterface'][1]
+        self.assertEqual(interface.router, router_instance)
         self.assertEqual(interface.name, 'fe0')
         self.assertEqual(interface.type, 'ethernet')
         self.assertEqual(interface.layer, 3)
-        interface = objects['physicalinterface'][11]
-        self.assertEqual(interface.router, router)
+        interface = router['physicalinterface'][9]
+        self.assertEqual(interface.router, router_instance)
         self.assertEqual(interface.name, 'fe8')
         self.assertEqual(interface.type, 'ethernet')
         self.assertEqual(interface.layer, 2)
-        ### Links
-        link = objects['physicallink'][0]
+        # SubInterface
+        self.assertEqual(len(router['subinterface']), 1)
+        interface = router['subinterface'][0]
+        self.assertEqual(interface.physical_interface.router.name, 'wan2')
+        self.assertEqual(interface.physical_interface.name, 'fe0')
+        #
+        # Links
+        #
+        self.assertEqual(len(project['physicallink']), 1)
+        link = project['physicallink'][0]
         self.assertEqual(link.router_interface_1.router.name, 'wan1')
         self.assertEqual(link.router_interface_1.name, 'fe0/0')
         self.assertEqual(link.router_interface_2.router.name, 'wan2')
@@ -89,5 +136,5 @@ class SaveTest(TestCase):
         self.assertEqual(models.Router.objects.count(), 2)
         self.assertEqual(models.Vlan.objects.count(), 2)
         self.assertEqual(models.PhysicalInterface.objects.count(), 12)
+        self.assertEqual(models.SubInterface.objects.count(), 2)
         self.assertEqual(models.PhysicalLink.objects.count(), 1)
-
