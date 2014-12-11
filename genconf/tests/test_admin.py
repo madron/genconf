@@ -315,3 +315,36 @@ class PhysicalLinkAdminTest(TestCase):
         url = reverse('admin:genconf_physicallink_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
+
+
+class Layer3InterfaceAdminTest(TestCase):
+    def setUp(self):
+        UserFactory()
+        self.assertTrue(self.client.login(username='test', password='pass'))
+        self.list = reverse('admin:genconf_layer3interface_changelist')
+
+    def test_list(self):
+        response = self.client.get(self.list)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        data = dict(q='text')
+        response = self.client.get(self.list, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add(self):
+        url = reverse('admin:genconf_layer3interface_add')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_detail(self):
+        obj = factories.Layer3InterfaceFactory()
+        url = reverse('admin:genconf_layer3interface_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete(self):
+        obj = factories.Layer3InterfaceFactory()
+        url = reverse('admin:genconf_layer3interface_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)

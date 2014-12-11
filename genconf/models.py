@@ -200,7 +200,7 @@ class Layer3Interface(models.Model):
         verbose_name = 'layer 3 interface'
 
     def __str__(self):
-        return self.description
+        return str(self.ipnetwork)
 
 
 class PhysicalLink(models.Model):

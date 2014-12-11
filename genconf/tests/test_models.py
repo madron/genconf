@@ -1,3 +1,4 @@
+import netaddr
 from django.test import TestCase
 from .. import factories
 from .. import models
@@ -100,8 +101,9 @@ class RouteModelTest(TestCase):
 
 class Layer3InterfaceModelTest(TestCase):
     def test_str(self):
-        interface = factories.Layer3InterfaceFactory(description='test')
-        self.assertEqual(str(interface), 'test')
+        interface = factories.Layer3InterfaceFactory(
+            ipnetwork=netaddr.IPNetwork('192.168.1.1/24'))
+        self.assertEqual(str(interface), '192.168.1.1/24')
 
 
 class VlanModelTest(TestCase):

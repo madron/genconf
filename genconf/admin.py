@@ -134,3 +134,8 @@ class SubInterfaceAdmin(ReadOnlyModelAdmin):
 @admin.register(models.PhysicalLink)
 class PhysicalLinkAdmin(ReadOnlyModelAdmin):
     pass
+
+
+@admin.register(models.Layer3Interface)
+class Layer3InterfaceAdmin(ReadOnlyModelAdmin):
+    pass

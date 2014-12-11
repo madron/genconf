@@ -68,25 +68,29 @@ def save_project(project):
     vlan_list = []
     physicalinterface_list = []
     subinterface_list = []
+    layer3interface_list = []
     for router_key in router_keys:
         router = project['router'][router_key]
         router_list.append(router['router_instance'])
-        vrf_list += router.get('vrf', [])
+        vrfs = router.get('vrf', dict()).values()
+        vrf_list += sorted(vrfs, key=attrgetter('name'))
         route_list += router.get('route', [])
         vlans = router.get('vlan', dict()).values()
         vlan_list += sorted(vlans, key=attrgetter('tag'))
         physicalinterface_list += router.get('physicalinterface', [])
         subinterface_list += router.get('subinterface', [])
+        layer3interface_list += router.get('layer3interface', [])
     save_instances(router_list, fixed_fields=['project'], search_fields=['name'])
     save_instances(vrf_list, fixed_fields=['router'], search_fields=['name'])
     save_instances(route_list, fixed_fields=['vrf'], search_fields=['network', 'next_hop'])
     save_instances(vlan_list, fixed_fields=['router'], search_fields=['tag'])
     save_instances(physicalinterface_list, fixed_fields=['router'], search_fields=['name'])
     save_instances(subinterface_list, fixed_fields=['physical_interface'], search_fields=['name'])
+    save_instances(layer3interface_list, fixed_fields=['subinterface'], search_fields=['ipnetwork'])
     save_instances(
         project.get('physicallink', []),
         fixed_fields=['project'],
-        search_fields=['router__name', 'name']
+        search_fields=['router_interface_1', 'router_interface_2']
     )
 
 

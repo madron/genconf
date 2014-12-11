@@ -212,9 +212,9 @@ class SaveProjectTest(TestCase):
             router=dict(
                 wan1=dict(
                     router_instance=router,
-                    vrf=[vrf],
-                    route=[route],
+                    vrf=dict(default=vrf),
                     vlan=dict(vlan_20=vlan),
+                    route=[route],
                 )
             )
         )

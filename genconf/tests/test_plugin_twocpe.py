@@ -15,34 +15,33 @@ class GetProjectTest(TestCase):
         data = dict(
             wan1=dict(access_type='ethernet', router='c1841'),
             wan2=dict(access_type='adsl', router='c1801'),
-            fallback=dict(network=netaddr.IPNetwork('192.168.100.1/30')),
+            fallback=dict(network=netaddr.IPNetwork('192.168.100.7/30')),
         )
         project = self.plugin_object.get_project(self.project_instance, data)
         # Expected structure
-        # project = {
-        #     'physicallink': [],
-        #     'router': {
-        #         'wan1': {
-        #             'physicalinterface': [
-        #                 <PhysicalInterface: wan1 fe0/0>,
-        #                 <PhysicalInterface: wan1 fe0/1>,
-        #             ],
-        #             'router': <Router: wan1>,
-        #             'subinterface': [],
-        #             'vlan': {'default_vlan': <Vlan: 1>},
-        #         },
-        #         'wan2': {
-        #             'physicalinterface': [
-        #                 <PhysicalInterface: wan2 atm0>,
-        #                 <PhysicalInterface: wan2 fe0>,
-        #                 <PhysicalInterface: wan2 fe1>,
-        #             ],
-        #             'router': <Router: wan2>,
-        #             'subinterface': [],
-        #             'vlan': {'default_vlan': <Vlan: 1>},
-        #         },
-        #     },
-        # }
+        # {'physicallink': [<PhysicalLink: wan1 fe0/0 <-> wan2 fe0>],
+        #  'router': {'wan1': {'layer3interface': [<Layer3Interface: Fallback link>],
+        #                      'physicalinterface': [<PhysicalInterface: wan1 fe0/0>,
+        #                                            <PhysicalInterface: wan1 fe0/1>],
+        #                      'router_instance': <Router: wan1>,
+        #                      'subinterface': [<SubInterface: fe0/0.1>],
+        #                      'vlan': {'default_vlan': <Vlan: 1>},
+        #                      'vrf': {'default_vrf': <Vrf: <default>>}},
+        #             'wan2': {'layer3interface': [<Layer3Interface: Fallback link>],
+        #                      'physicalinterface': [<PhysicalInterface: wan2 atm0>,
+        #                                            <PhysicalInterface: wan2 fe0>,
+        #                                            <PhysicalInterface: wan2 fe1>,
+        #                                            <PhysicalInterface: wan2 fe2>,
+        #                                            <PhysicalInterface: wan2 fe3>,
+        #                                            <PhysicalInterface: wan2 fe4>,
+        #                                            <PhysicalInterface: wan2 fe5>,
+        #                                            <PhysicalInterface: wan2 fe6>,
+        #                                            <PhysicalInterface: wan2 fe7>,
+        #                                            <PhysicalInterface: wan2 fe8>],
+        #                      'router_instance': <Router: wan2>,
+        #                      'subinterface': [<SubInterface: fe0.1>],
+        #                      'vlan': {'default_vlan': <Vlan: 1>},
+        #                      'vrf': {'default_vrf': <Vrf: <default>>}}}}
 
         #
         # Router wan1
@@ -52,6 +51,10 @@ class GetProjectTest(TestCase):
         self.assertEqual(router_instance.project, self.project_instance)
         self.assertEqual(router_instance.name, 'wan1')
         self.assertEqual(router_instance.model, 'c1841')
+        # Vrf
+        self.assertEqual(len(router['vrf']), 1)
+        vrf = router['vrf']['default_vrf']
+        self.assertEqual(vrf.name, '')
         # Vlan
         self.assertEqual(len(router['vlan']), 1)
         vlan = router['vlan']['default_vlan']
@@ -74,6 +77,16 @@ class GetProjectTest(TestCase):
         interface = router['subinterface'][0]
         self.assertEqual(interface.physical_interface.router.name, 'wan1')
         self.assertEqual(interface.physical_interface.name, 'fe0/0')
+        self.assertEqual(interface.name, 'fe0/0.1')
+        # Layer3Interface
+        self.assertEqual(len(router['layer3interface']), 1)
+        interface = router['layer3interface'][0]
+        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan1')
+        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0/0')
+        self.assertEqual(interface.subinterface.name, 'fe0/0.1')
+        self.assertEqual(interface.vlan, None)
+        self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.100.5/30'))
+        self.assertEqual(interface.description, 'Fallback link')
         #
         # Router wan2
         #
@@ -82,6 +95,10 @@ class GetProjectTest(TestCase):
         self.assertEqual(router_instance.project, self.project_instance)
         self.assertEqual(router_instance.name, 'wan2')
         self.assertEqual(router_instance.model, 'c1801')
+        # Vrf
+        self.assertEqual(len(router['vrf']), 1)
+        vrf = router['vrf']['default_vrf']
+        self.assertEqual(vrf.name, '')
         # Vlan
         self.assertEqual(len(router['vlan']), 1)
         vlan = router['vlan']['default_vlan']
@@ -109,6 +126,16 @@ class GetProjectTest(TestCase):
         interface = router['subinterface'][0]
         self.assertEqual(interface.physical_interface.router.name, 'wan2')
         self.assertEqual(interface.physical_interface.name, 'fe0')
+        self.assertEqual(interface.name, 'fe0.1')
+        # Layer3Interface
+        self.assertEqual(len(router['layer3interface']), 1)
+        interface = router['layer3interface'][0]
+        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan2')
+        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0')
+        self.assertEqual(interface.subinterface.name, 'fe0.1')
+        self.assertEqual(interface.vlan, None)
+        self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.100.6/30'))
+        self.assertEqual(interface.description, 'Fallback link')
         #
         # Links
         #
@@ -130,6 +157,7 @@ class SaveTest(TestCase):
         data = dict(
             wan1=dict(access_type='ethernet', router='c1841'),
             wan2=dict(access_type='adsl', router='c1801'),
+            fallback=dict(network=netaddr.IPNetwork('192.168.100.4/30')),
         )
         self.plugin_object.save(project, data)
         self.assertEqual(models.Project.objects.count(), 1)
@@ -137,4 +165,5 @@ class SaveTest(TestCase):
         self.assertEqual(models.Vlan.objects.count(), 2)
         self.assertEqual(models.PhysicalInterface.objects.count(), 12)
         self.assertEqual(models.SubInterface.objects.count(), 2)
+        self.assertEqual(models.Layer3Interface.objects.count(), 2)
         self.assertEqual(models.PhysicalLink.objects.count(), 1)

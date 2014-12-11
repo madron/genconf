@@ -1,7 +1,7 @@
 [
 {
     "fields": {
-        "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"network\": \"10.10.10.1/30\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"network\": \"172.16.1.1/32\", \n        \"access_type\": \"adsl\"\n    }, \n    \"fallback\": {\n        \"password\": \"secret\", \n        \"network\": \"192.168.1.1/24\"\n    }\n}",
+        "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"access_type\": \"adsl\"\n    }, \n    \"fallback\": {\n        \"password\": \"secret\", \n        \"network\": \"192.168.1.1/24\"\n    }\n}",
         "type": "twocpe",
         "name": "Test"
     },
@@ -24,6 +24,24 @@
         "name": "wan2"
     },
     "model": "genconf.router",
+    "pk": 2
+},
+{
+    "fields": {
+        "router": 1,
+        "name": "",
+        "default_gateway": ""
+    },
+    "model": "genconf.vrf",
+    "pk": 1
+},
+{
+    "fields": {
+        "router": 2,
+        "name": "",
+        "default_gateway": ""
+    },
+    "model": "genconf.vrf",
     "pk": 2
 },
 {
@@ -249,5 +267,74 @@
     },
     "model": "genconf.physicalinterface",
     "pk": 12
+},
+{
+    "fields": {
+        "pvc_vp": 8,
+        "layer": "3",
+        "pvc_mux": "vc-mux",
+        "description": "",
+        "notes": "",
+        "vlan": 1,
+        "pvc_encapsulation": "pppoa",
+        "pvc_vc": 35,
+        "link": "point-to-point",
+        "physical_interface": 1,
+        "pvc_dialer_pool_number": 1,
+        "type": "ethernet",
+        "name": "fe0/0.1"
+    },
+    "model": "genconf.subinterface",
+    "pk": 1
+},
+{
+    "fields": {
+        "pvc_vp": 8,
+        "layer": "3",
+        "pvc_mux": "vc-mux",
+        "description": "",
+        "notes": "",
+        "vlan": 2,
+        "pvc_encapsulation": "pppoa",
+        "pvc_vc": 35,
+        "link": "point-to-point",
+        "physical_interface": 4,
+        "pvc_dialer_pool_number": 1,
+        "type": "ethernet",
+        "name": "fe0.1"
+    },
+    "model": "genconf.subinterface",
+    "pk": 2
+},
+{
+    "fields": {
+        "description": "Fallback link",
+        "vlan": null,
+        "vrf": 1,
+        "ipnetwork": "192.168.1.1/24",
+        "subinterface": 1
+    },
+    "model": "genconf.layer3interface",
+    "pk": 1
+},
+{
+    "fields": {
+        "description": "Fallback link",
+        "vlan": null,
+        "vrf": 2,
+        "ipnetwork": "192.168.1.1/24",
+        "subinterface": 2
+    },
+    "model": "genconf.layer3interface",
+    "pk": 2
+},
+{
+    "fields": {
+        "project": 1,
+        "router_interface_1": 1,
+        "router_interface_2": 4
+    },
+    "model": "genconf.physicallink",
+    "pk": 1
 }
 ]
