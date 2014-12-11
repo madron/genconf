@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.contrib.admin.utils import flatten_fieldsets
 from adminwizard.admin import AdminWizard
 from . import forms
 from . import models
