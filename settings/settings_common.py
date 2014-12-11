@@ -34,8 +34,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'adminwizard',
     'genconf',
-    'bootstrap',
-    'crispy_forms',
     'django.contrib.formtools',
     'django.contrib.admin',
     'django.contrib.auth',
