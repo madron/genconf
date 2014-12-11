@@ -3,18 +3,13 @@
 
 
 !--- Vrf
-{% for vrf in router.vrfs %}{% if vrf.name %}{% include "genconf/configuration/vrf.txt" %}
+{% for vrf in router.vrf_set.all %}{% if vrf.name %}{% include "genconf/configuration/vrf.txt" %}
 {% endif %}{% endfor %}
 
-
 !--- Vlan
-{% for vlan in router.vlans %}{% include "genconf/configuration/vlan.txt" %}
+{% for vlan in router.vlan_set.all %}{% include "genconf/configuration/vlan.txt" %}
 {% endfor %}
-
 
 !--- Interfaces
-{% for interface in router.interfaces %}{% include "genconf/configuration/interface.txt" %}
-{% endfor %}
-
-
+{% for interface in router.physicalinterface_set.all %}{% include "genconf/configuration/interface.txt" %}{% endfor %}
 </pre>

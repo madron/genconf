@@ -1,20 +1,13 @@
 interface {{ interface.name }}
+    {% if interface.layer == '2' %}switchport mode {{ interface.dot1q_mode }}{% else %}no ip address{% endif %}
     duplex {{ interface.duplex }}
     speed {{ interface.speed }}
     ! dot1q_mode='access',
     ! dot1q_encapsulation='802.1q',
     ! native_vlan=1,
-    no ip address
-    {% if subinterface.layer == 2 %}
-    switchport mode {{ interface.dot1q_mode }}
-    {% else %}
-    {% endif %}
 exit
-{% for subinterface in interface.subinterfaces %}
-interface {{ subinterface.name }} {% if subinterface.layer == 2 %}
-    no ip address
-{% else %}
-    ip address {{ subinterface.layer_3_interface.ipnetwork.network }} {{ subinterface.layer_3_interface.ipnetwork.netmask }}{% if subinterface.layer_3_interface.vrf_name %}
-    ! vrf {{ subinterface.layer_3_interface.vrf_name }}{% endif %}
-{% endif %}
-{% endfor %}
+{% for subinterface in interface.subinterface_set.all %}{% if interface.layer == '3' %}
+interface {{ subinterface.name }}{% if subinterface.layer3interface.vrf.name %}
+    vrf {{ subinterface.layer3interface.vrf.name }}{% endif %}
+    ip address {{ subinterface.layer3interface.get_ipnetwork.ip }} {{ subinterface.layer3interface.get_ipnetwork.netmask }}
+{% endif %}{% endfor %}

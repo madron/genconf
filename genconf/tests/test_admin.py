@@ -1,3 +1,4 @@
+import netaddr
 from unittest import skip
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -106,10 +107,31 @@ class RouterAdminTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_configuration(self):
-        obj = factories.RouterFactory()
-        url = reverse('admin:genconf_router_configuration', args=(obj.pk,))
+        router = factories.RouterFactory(name='wan1')
+        vrf = factories.VrfFactory(router=router)
+        vrf_voip = factories.VrfFactory(router=router, name='voip')
+        vlan_1 = factories.VlanFactory(router=router, tag=1)
+        vlan_2 = factories.VlanFactory(router=router, tag=2, description='Voip')
+        fe0 = factories.PhysicalInterfaceFactory(router=router, name='fe0', layer=3)
+        fe1 = factories.PhysicalInterfaceFactory(router=router, name='fe1', layer=2)
+        subif = factories.SubInterfaceFactory(physical_interface=fe0, name='fe0.1', vlan=vlan_1)
+        ipnetwork=netaddr.IPNetwork('172.18.1.1/16')
+        factories.Layer3InterfaceFactory(subinterface=subif, vrf=vrf, ipnetwork=netaddr.IPNetwork('172.18.1.1/16'))
+        subif = factories.SubInterfaceFactory(physical_interface=fe0, name='fe0.2', vlan=vlan_2)
+        factories.Layer3InterfaceFactory(subinterface=subif, vrf=vrf_voip, ipnetwork=netaddr.IPNetwork('192.168.5.1/24'))
+        subif = factories.SubInterfaceFactory(physical_interface=fe1, name='fe1.2', vlan=vlan_2)
+        url = reverse('admin:genconf_router_configuration', args=(router.pk,))
         response = self.client.get(url)
         self.assertContains(response, 'no aaa new-model')
+        # Vrf
+        self.assertContains(response, 'ip vrf voip')
+        # Vlan
+        self.assertContains(response, 'vlan 2')
+        self.assertContains(response, '    name Voip')
+        # Interfaces
+        self.assertContains(response, 'interface fe0.2')
+        self.assertContains(response, 'vrf voip')
+        self.assertContains(response, 'ip address 192.168.5.1 255.255.255.0')
 
 
 class VrfAdminTest(TestCase):

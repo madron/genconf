@@ -11,13 +11,8 @@ from . import serializers
 
 class ConfigurationView(DetailView):
     http_method_names = ['get']
-    model = models.Project
+    model = models.Router
     template_name = 'genconf/configuration/configuration.txt'
-
-    def get_context_data(self, **kwargs):
-        context = super(ConfigurationView, self).get_context_data(**kwargs)
-        context['router'] = kwargs['object']
-        return context
 
 
 class ProjectWizardView(AdminWizardView, SessionWizardView):

@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
 from django.db import models
+from netaddr import IPNetwork
 from yapsy.PluginManager import PluginManager
 from . import constants
 from . import hardware
@@ -201,6 +202,9 @@ class Layer3Interface(models.Model):
 
     def __str__(self):
         return str(self.ipnetwork)
+
+    def get_ipnetwork(self):
+        return IPNetwork(self.ipnetwork)
 
 
 class PhysicalLink(models.Model):
