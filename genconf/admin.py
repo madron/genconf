@@ -63,6 +63,7 @@ class RouterInline(ReadOnlyTabularInline):
 
 class PhysicalLinkInline(ReadOnlyTabularInline):
     model = models.PhysicalLink
+    fields = ('router_interface_1', 'router_interface_2')
 
 
 @admin.register(models.Project)
