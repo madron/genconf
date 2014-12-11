@@ -38,13 +38,6 @@ class ProjectAdminWizardTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    @skip('To be fixed')
-    def test_add_step2(self):
-        url = reverse('admin:genconf_projectwizard_add')
-        data = dict()
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-
 
 class ProjectAdminTest(TestCase):
     def setUp(self):
