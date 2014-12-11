@@ -1,9 +1,13 @@
+from django.contrib.admin.exceptions import DisallowedModelAdminToField
 from django.contrib.admin.options import TO_FIELD_VAR, IS_POPUP_VAR
 from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.contrib.admin.utils import unquote
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
+from django.http.response import Http404
 from django.utils.encoding import force_text
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -125,7 +129,6 @@ class AdminWizardView(object):
 
     def get_bound_form(self):
         cleaned_data = self.get_all_cleaned_data()
-        obj = self.admin_context['modeladmin']
         form_class = self.admin_context['modeladmin'].form
         return form_class(cleaned_data, instance=self.admin_context['original'])
 
