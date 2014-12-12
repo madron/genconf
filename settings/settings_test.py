@@ -11,7 +11,7 @@ NOSE_ARGS = [
     '--nocapture',
     '--cover-branches',
     '--cover-erase',
-    '--cover-package=genconf,dictserializer',
+    '--cover-package=genconf,dictserializer,netutils',
     '--cover-inclusive',
     '--cover-html-dir=coverage',
 ]
