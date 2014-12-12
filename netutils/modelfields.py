@@ -18,6 +18,6 @@ class NetIPAddressField(GenericIPAddressField):
         return None
 
     def formfield(self, **kwargs):
-        defaults = dict(form_class=formfields.IPAddressField)
+        defaults = dict(form_class=formfields.NetIPAddressField)
         defaults.update(kwargs)
         return super(NetIPAddressField, self).formfield(**defaults)

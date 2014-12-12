@@ -19,5 +19,5 @@ class NetIPAddressFieldTest(TestCase):
 
     def test_formfield(self):
         f = modelfields.NetIPAddressField().formfield()
-        self.assertIsInstance(f, formfields.IPAddressField)
+        self.assertIsInstance(f, formfields.NetIPAddressField)
         self.assertEqual(f.clean('127.0.0.1'), IPAddress('127.0.0.1'))

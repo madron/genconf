@@ -6,12 +6,12 @@ from .. import formfields
 
 class IPAddressFieldTest(TestCase):
     def test_empty(self):
-        f = formfields.IPAddressField(required=False)
+        f = formfields.NetIPAddressField(required=False)
         self.assertEqual(f.clean(''), None)
         self.assertEqual(f.clean(' '), None)
 
     def test_ipv4_ok(self):
-        f = formfields.IPAddressField()
+        f = formfields.NetIPAddressField()
         self.assertEqual(f.clean('8.8.8.8'), IPAddress('8.8.8.8'))
         self.assertEqual(f.clean('151.1.1.1'), IPAddress('151.1.1.1'))
         self.assertEqual(f.clean('172.16.1.1'), IPAddress('172.16.1.1'))
@@ -20,16 +20,16 @@ class IPAddressFieldTest(TestCase):
         self.assertEqual(f.clean(' 192.168.1.1 '), IPAddress('192.168.1.1'))
 
     def test_ipv4_ko(self):
-        f = formfields.IPAddressField()
+        f = formfields.NetIPAddressField()
         self.assertRaises(ValidationError, f.clean, '192.168.1.1.1')
         self.assertRaises(ValidationError, f.clean, '192.168.1.300')
 
     def test_ipv6_ok(self):
-        f = formfields.IPAddressField()
+        f = formfields.NetIPAddressField()
         self.assertEqual(f.clean('fe80::'), IPAddress('fe80::'))
 
     def test_ipv6_ko(self):
-        f = formfields.IPAddressField()
+        f = formfields.NetIPAddressField()
         self.assertRaises(ValidationError, f.clean, 'ge80::')
 
 
