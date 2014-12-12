@@ -2,7 +2,7 @@ import netaddr
 from django import forms
 from yapsy.IPlugin import IPlugin
 from genconf import constants
-from genconf import fields
+from netutils import form_fields as fields
 
 
 class Wan1Form(forms.Form):

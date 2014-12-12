@@ -5,6 +5,13 @@ from .. import models
 from ..plugins import twocpe
 
 
+class FormTest(TestCase):
+    def test_fallback(self):
+        data = dict(network='192.168.1.1/24', password='secret')
+        form = twocpe.FallbackForm(data)
+        self.assertEqual(form.errors, dict())
+
+
 class GetProjectTest(TestCase):
     def setUp(self):
         from ..plugin import manager

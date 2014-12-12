@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from netaddr import IPAddress, IPNetwork
-from .. import fields
+from .. import form_fields as fields
 
 
 class IPAddressFieldTest(TestCase):
