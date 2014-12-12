@@ -8,6 +8,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     # '--with-coverage',
     # '--cover-html',
+    '--nocapture',
     '--cover-branches',
     '--cover-erase',
     '--cover-package=genconf,dictserializer',
