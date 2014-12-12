@@ -2,23 +2,23 @@ import netaddr
 from django import forms
 from yapsy.IPlugin import IPlugin
 from genconf import constants
-from netutils import form_fields as fields
+from netutils import formfields
 
 
 class Wan1Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
-    # network = fields.IPNetworkField()
+    # network = formfields.IPNetworkField()
 
 
 class Wan2Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
-    # network = fields.IPNetworkField()
+    # network = formfields.IPNetworkField()
 
 
 class FallbackForm(forms.Form):
-    network = fields.IPNetworkField()
+    network = formfields.IPNetworkField()
     password = forms.CharField()
 
 
