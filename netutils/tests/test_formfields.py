@@ -35,12 +35,12 @@ class IPAddressFieldTest(TestCase):
 
 class IPNetworkFieldTest(TestCase):
     def test_empty(self):
-        f = formfields.IPNetworkField(required=False)
+        f = formfields.NetIPNetworkField(required=False)
         self.assertEqual(f.clean(''), None)
         self.assertEqual(f.clean(' '), None)
 
     def test_ipv4_ok(self):
-        f = formfields.IPNetworkField()
+        f = formfields.NetIPNetworkField()
         self.assertEqual(f.clean('8.8.8.8'), IPNetwork('8.8.8.8/32'))
         self.assertEqual(f.clean('8.8.8.8/32'), IPNetwork('8.8.8.8/32'))
         self.assertEqual(f.clean('151.1.1.1/16'), IPNetwork('151.1.1.1/16'))
@@ -50,6 +50,6 @@ class IPNetworkFieldTest(TestCase):
         self.assertEqual(f.clean(' 192.168.1.1/30 '), IPNetwork('192.168.1.1/30'))
 
     def test_ipv4_ko(self):
-        f = formfields.IPNetworkField()
+        f = formfields.NetIPNetworkField()
         self.assertRaises(ValidationError, f.clean, '192.168.1.1/33')
         self.assertRaises(ValidationError, f.clean, '192.168.1.300/24')

@@ -8,17 +8,17 @@ from netutils import formfields
 class Wan1Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
-    # network = formfields.IPNetworkField()
+    # network = formfields.NetIPNetworkField()
 
 
 class Wan2Form(forms.Form):
     access_type = forms.ChoiceField(choices=constants.ACCESS_TYPE_CHOICES)
     router = forms.ChoiceField(choices=constants.ROUTER_TYPE_CHOICES)
-    # network = formfields.IPNetworkField()
+    # network = formfields.NetIPNetworkField()
 
 
 class FallbackForm(forms.Form):
-    network = formfields.IPNetworkField()
+    network = formfields.NetIPNetworkField()
     password = forms.CharField()
 
 

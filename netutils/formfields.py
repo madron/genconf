@@ -23,11 +23,11 @@ class NetIPAddressField(CharField):
             raise ValidationError(self.error_messages['invalid'], code='invalid')
 
 
-class IPNetworkField(CharField):
+class NetIPNetworkField(CharField):
     default_error_messages = dict(invalid=_('Enter a valid ip network (e.g.: 192.168.1.1/24).'))
 
     def clean(self, value):
-        value = super(IPNetworkField, self).clean(value)
+        value = super(NetIPNetworkField, self).clean(value)
         value = value.strip()
         if value in self.empty_values:
             return None
