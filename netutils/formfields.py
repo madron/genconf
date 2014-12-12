@@ -18,7 +18,6 @@ class NetIPAddressField(CharField):
         self.protocol = protocol
         super(NetIPAddressField, self).__init__(*args, **kwargs)
 
-
     def clean(self, value):
         value = super(NetIPAddressField, self).clean(value)
         value = value.strip()
@@ -36,7 +35,18 @@ class NetIPAddressField(CharField):
 
 
 class NetIPNetworkField(CharField):
-    default_error_messages = dict(invalid=_('Enter a valid ip network (e.g.: 192.168.1.1/24).'))
+    default_error_messages = dict(
+        invalid=_('Enter a valid ip network (e.g.: 192.168.1.1/24).'),
+        notipv4=_('Enter a valid ipv4 network (e.g.: 192.168.1.1/24).'),
+        notipv6=_('Enter a valid ipv6 network (e.g.: fe80::/64).'),
+    )
+
+    def __init__(self, protocol='both', *args, **kwargs):
+        if protocol not in ('both', 'ipv4', 'ipv6'):
+            msg = "Unknown protocol: only 'both', 'ipv4' and 'ipv6' are allowed."
+            raise ValueError(msg)
+        self.protocol = protocol
+        super(NetIPNetworkField, self).__init__(*args, **kwargs)
 
     def clean(self, value):
         value = super(NetIPNetworkField, self).clean(value)
@@ -44,6 +54,11 @@ class NetIPNetworkField(CharField):
         if value in self.empty_values:
             return None
         try:
-            return netaddr.IPNetwork(value)
+            value = netaddr.IPNetwork(value)
         except netaddr.AddrFormatError:
             raise ValidationError(self.error_messages['invalid'], code='invalid')
+        if self.protocol == 'ipv4' and not value.version == 4:
+            raise ValidationError(self.error_messages['notipv4'], code='notipv4')
+        if self.protocol == 'ipv6' and not value.version == 6:
+            raise ValidationError(self.error_messages['notipv6'], code='notipv6')
+        return value
