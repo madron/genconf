@@ -5,6 +5,13 @@ from .. import formfields
 
 
 class IPAddressFieldTest(TestCase):
+    def test_protocol(self):
+        formfields.NetIPAddressField()
+        formfields.NetIPAddressField(protocol='both')
+        formfields.NetIPAddressField(protocol='ipv4')
+        formfields.NetIPAddressField(protocol='ipv6')
+        self.assertRaises(ValueError, formfields.NetIPAddressField, protocol='wrong')
+
     def test_empty(self):
         f = formfields.NetIPAddressField(required=False)
         self.assertEqual(f.clean(''), None)
@@ -24,6 +31,11 @@ class IPAddressFieldTest(TestCase):
         self.assertRaises(ValidationError, f.clean, '192.168.1.1.1')
         self.assertRaises(ValidationError, f.clean, '192.168.1.300')
 
+    def test_ipv4_only(self):
+        f = formfields.NetIPAddressField(protocol='ipv4')
+        self.assertEqual(f.clean('127.0.0.1'), IPAddress('127.0.0.1'))
+        self.assertRaises(ValidationError, f.clean, 'fe80::')
+
     def test_ipv6_ok(self):
         f = formfields.NetIPAddressField()
         self.assertEqual(f.clean('fe80::'), IPAddress('fe80::'))
@@ -31,6 +43,11 @@ class IPAddressFieldTest(TestCase):
     def test_ipv6_ko(self):
         f = formfields.NetIPAddressField()
         self.assertRaises(ValidationError, f.clean, 'ge80::')
+
+    def test_ipv6_only(self):
+        f = formfields.NetIPAddressField(protocol='ipv6')
+        self.assertEqual(f.clean('fe80::'), IPAddress('fe80::'))
+        self.assertRaises(ValidationError, f.clean, '127.0.0.1')
 
 
 class IPNetworkFieldTest(TestCase):
