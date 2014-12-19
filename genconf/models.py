@@ -13,7 +13,7 @@ PROJECT_TYPE_CHOICES = [(plugin.name, plugin.description) for plugin in manager.
 class Project(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     type = models.CharField(max_length=50, db_index=True,
-        choices=PROJECT_TYPE_CHOICES)
+        choices=PROJECT_TYPE_CHOICES, blank=True)
     wizard = models.CharField(max_length=50, db_index=True,
         choices=constants.PROJECT_WIZARD_CHOICES, blank=True)
     configuration = models.TextField(blank=True)

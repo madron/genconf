@@ -5,6 +5,7 @@ from adminwizard.admin import AdminWizard
 from . import forms
 from . import models
 from . import views
+from . import wizard_cpe2
 
 
 class ReadOnlyTabularInline(admin.TabularInline):
@@ -52,10 +53,12 @@ class ProjectAdminWizard(AdminWizard):
 
 
 @admin.register(models.ProjectCpe2)
-class ProjectCpe2Admin(admin.ModelAdmin):
+class ProjectCpe2Admin(AdminWizard):
     search_fields = ['name']
     exclude = ['wizard']
     save_on_top = True
+    form = forms.ProjectForm
+    wizard_view = wizard_cpe2.ProjectWizardView
 
 
 class RouterInline(ReadOnlyTabularInline):
