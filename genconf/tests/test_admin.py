@@ -71,6 +71,51 @@ class ProjectAdminTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class ProjectCpe2AdminTest(TestCase):
+    def setUp(self):
+        UserFactory()
+        self.assertTrue(self.client.login(username='test', password='pass'))
+        self.list = reverse('admin:genconf_projectcpe2_changelist')
+
+    def test_list(self):
+        response = self.client.get(self.list)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        data = dict(q='text')
+        response = self.client.get(self.list, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add(self):
+        url = reverse('admin:genconf_project_add')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_detail(self):
+        obj = factories.ProjectFactory(name='Project name', wizard='cpe2')
+        url = reverse('admin:genconf_projectcpe2_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, 'value="Project name"')
+
+    def test_detail_not_found(self):
+        obj = factories.ProjectFactory(name='Project name')
+        url = reverse('admin:genconf_projectcpe2_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_delete(self):
+        obj = factories.ProjectFactory(wizard='cpe2')
+        url = reverse('admin:genconf_projectcpe2_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_not_found(self):
+        obj = factories.ProjectFactory()
+        url = reverse('admin:genconf_projectcpe2_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+
 class RouterAdminTest(TestCase):
     def setUp(self):
         UserFactory()

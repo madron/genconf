@@ -14,6 +14,8 @@ class Project(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     type = models.CharField(max_length=50, db_index=True,
         choices=PROJECT_TYPE_CHOICES)
+    wizard = models.CharField(max_length=50, db_index=True,
+        choices=constants.PROJECT_WIZARD_CHOICES, blank=True)
     configuration = models.TextField(blank=True)
 
     def __str__(self):
@@ -23,6 +25,25 @@ class Project(models.Model):
 class ProjectWizard(Project):
     class Meta:
         proxy = True
+
+
+class ProjectCpe2Manager(models.Manager):
+    def get_queryset(self):
+        qs = super(ProjectCpe2Manager, self).get_queryset()
+        return qs.filter(wizard='cpe2')
+
+
+class ProjectCpe2(Project):
+    objects = ProjectCpe2Manager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'project cpe 2'
+        verbose_name_plural = 'projects cpe 2'
+
+    def save(self, *args, **kwargs):
+        self.tipo = 'fastweb'
+        return super(ProjectCpe2, self).save(*args, **kwargs)
 
 
 class Router(models.Model):

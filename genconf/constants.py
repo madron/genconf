@@ -1,6 +1,10 @@
 from . import hardware
 
 
+PROJECT_WIZARD_CHOICES = (
+    ('cpe2', '2 Cpe'),
+)
+
 INTERFACE_TYPE_CHOICES = (
     ('ethernet', 'Ethernet'),
     ('atm', 'Atm'),

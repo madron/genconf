@@ -51,6 +51,13 @@ class ProjectAdminWizard(AdminWizard):
     wizard_view = views.ProjectWizardView
 
 
+@admin.register(models.ProjectCpe2)
+class ProjectCpe2Admin(admin.ModelAdmin):
+    search_fields = ['name']
+    exclude = ['wizard']
+    save_on_top = True
+
+
 class RouterInline(ReadOnlyTabularInline):
     model = models.Router
     fields = ('url',)
