@@ -3,7 +3,6 @@
     "fields": {
         "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"access_type\": \"adsl\"\n    }, \n    \"fallback\": {\n        \"password\": \"secret\", \n        \"network\": \"192.168.1.1/24\"\n    }\n}",
         "wizard": "cpe2",
-        "type": "twocpe",
         "name": "Test"
     },
     "model": "genconf.project",

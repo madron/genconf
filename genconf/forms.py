@@ -8,18 +8,7 @@ class ProjectForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ProjectForm1(ProjectForm):
-    class Meta:
-        model = models.Project
-        fields = ['name', 'type']
-
-
 class ProjectFormStart(ProjectForm):
     class Meta:
         model = models.Project
         fields = ['name']
-
-
-class ProjectForm2(forms.Form):
-    " This is just a placeholder"
-    pass

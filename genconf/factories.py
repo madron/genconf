@@ -7,7 +7,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     FACTORY_DJANGO_GET_OR_CREATE = ('name',)
 
     name = ''
-    type = 'twocpe'
     configuration = ''
 
 

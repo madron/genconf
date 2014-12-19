@@ -43,15 +43,6 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
         return fields
 
 
-@admin.register(models.ProjectWizard)
-class ProjectAdminWizard(AdminWizard):
-    form = forms.ProjectForm
-    search_fields = ['name']
-    save_on_top = True
-    save_as = True
-    wizard_view = views.ProjectWizardView
-
-
 @admin.register(models.ProjectCpe2)
 class ProjectCpe2Admin(AdminWizard):
     search_fields = ['name']
@@ -78,7 +69,6 @@ class PhysicalLinkInline(ReadOnlyTabularInline):
 
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
-    readonly_fields = ('type',)
     inlines = [
         RouterInline,
         PhysicalLinkInline,
