@@ -63,6 +63,14 @@ class RouterConfigInline(admin.TabularInline):
         return '<a href="%s">%s</a>' % (config_url, obj)
 
 
+class PhysicalLinkConfigInline(admin.TabularInline):
+    model = models.PhysicalLink
+    readonly_fields = ('router_interface_1', 'router_interface_2')
+    fields = readonly_fields
+    can_delete = False
+    extra = 0
+
+
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
@@ -76,7 +84,10 @@ class ProjectAdmin(admin.ModelAdmin):
             fields=['configuration'],
         )],
     ]
-    inlines = [RouterConfigInline]
+    inlines = [
+        RouterConfigInline,
+        PhysicalLinkConfigInline,
+    ]
 
     def has_add_permission(self, request):
         return False
