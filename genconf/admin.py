@@ -49,7 +49,6 @@ class RouterConfigInline(admin.TabularInline):
     readonly_fields = ['name', 'model', 'configuration']
     fields = readonly_fields
     can_delete = False
-    extra = 0
 
     def has_add_permission(self, request):
         return False
@@ -68,7 +67,9 @@ class PhysicalLinkConfigInline(admin.TabularInline):
     readonly_fields = ('router_interface_1', 'router_interface_2')
     fields = readonly_fields
     can_delete = False
-    extra = 0
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(models.Project)
@@ -102,23 +103,43 @@ class ProjectCpe2Admin(AdminWizard):
     wizard_view = wizard_cpe2.ProjectWizardView
 
 
-class RouterInline(ReadOnlyTabularInline):
+class RouterInline(admin.TabularInline):
     model = models.Router
-    fields = ('url',)
+    readonly_fields = ['url', 'configuration']
+    fields = ['url', 'name', 'model', 'configuration']
     # show_change_link will work with django 1.8
     show_change_link = True
+    extra = 0
 
     def url(self, obj):
         return '<a href="%s">%s</a>' % (obj.get_url(), obj)
 
+    def configuration(self, obj):
+        if not obj.pk:
+            return ''
+        info = (obj._meta.app_label, obj._meta.model_name)
+        url_name = 'admin:%s_%s_configuration' % info
+        config_url = urlresolvers.reverse(url_name, args=(obj.pk,))
+        return '<a href="%s">%s</a>' % (config_url, obj)
 
-class PhysicalLinkInline(ReadOnlyTabularInline):
+
+class PhysicalLinkInline(admin.TabularInline):
     model = models.PhysicalLink
-    fields = ('router_interface_1', 'router_interface_2')
+    extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        field = super(PhysicalLinkInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name in ('router_interface_1', 'router_interface_2'):
+            if request.obj:
+                field.queryset = field.queryset.filter(router__project__pk=request.obj.pk)
+            else:
+                field.queryset = field.queryset.none()
+        return field
 
 
 @admin.register(models.ProjectCustom)
 class ProjectCustomAdmin(admin.ModelAdmin):
+    fields = ['name']
     inlines = [
         RouterInline,
         PhysicalLinkInline,
@@ -126,6 +147,10 @@ class ProjectCustomAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+    def get_form(self, request, obj=None, **kwargs):
+        request.obj = obj
+        return super(ProjectCustomAdmin, self).get_form(request, obj, **kwargs)
 
 
 class VlanInline(ReadOnlyTabularInline):
