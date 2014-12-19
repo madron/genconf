@@ -16,9 +16,19 @@ class Project(models.Model):
         return self.name
 
 
-class ProjectWizard(Project):
+class ProjectCustomManager(models.Manager):
+    def get_queryset(self):
+        qs = super(ProjectCustomManager, self).get_queryset()
+        return qs.filter(wizard='')
+
+
+class ProjectCustom(Project):
+    objects = ProjectCustomManager()
+
     class Meta:
         proxy = True
+        verbose_name = 'project custom'
+        verbose_name_plural = 'projects custom'
 
 
 class ProjectCpe2Manager(models.Manager):
@@ -36,7 +46,7 @@ class ProjectCpe2(Project):
         verbose_name_plural = 'projects cpe 2'
 
     def save(self, *args, **kwargs):
-        self.tipo = 'fastweb'
+        self.wizard = 'cpe2'
         return super(ProjectCpe2, self).save(*args, **kwargs)
 
 
@@ -57,6 +67,10 @@ class Router(models.Model):
         info = (self._meta.app_label, self._meta.model_name)
         url_name = 'admin:%s_%s_change' % info
         return urlresolvers.reverse(url_name, args=(self.pk,))
+
+    @property
+    def link(self):
+        return '<a href="%s">%s</a>' % (self.get_url(), self)
 
     def get_interface_names(self, type=None, layer=None):
         interfaces = hardware.ROUTER_TYPE.get(self.model, dict(interfaces=[]))['interfaces']

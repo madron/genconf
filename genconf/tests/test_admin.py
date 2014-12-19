@@ -110,11 +110,23 @@ class RouterAdminTest(TestCase):
         self.assertContains(response,
             reverse('admin:genconf_router_configuration', args=(obj.pk,)))
 
+    def test_detail_wizard(self):
+        obj = factories.RouterFactory(project__wizard='cpe2')
+        url = reverse('admin:genconf_router_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
     def test_delete(self):
         obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_wizard(self):
+        obj = factories.RouterFactory(project__wizard='cpe2')
+        url = reverse('admin:genconf_router_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_configuration(self):
         router = factories.RouterFactory(name='wan1')
@@ -125,7 +137,6 @@ class RouterAdminTest(TestCase):
         fe0 = factories.PhysicalInterfaceFactory(router=router, name='fe0', layer=3)
         fe1 = factories.PhysicalInterfaceFactory(router=router, name='fe1', layer=2)
         subif = factories.SubInterfaceFactory(physical_interface=fe0, name='fe0.1', vlan=vlan_1)
-        ipnetwork=netaddr.IPNetwork('172.18.1.1/16')
         factories.Layer3InterfaceFactory(subinterface=subif, vrf=vrf, ipnetwork=netaddr.IPNetwork('172.18.1.1/16'))
         subif = factories.SubInterfaceFactory(physical_interface=fe0, name='fe0.2', vlan=vlan_2)
         factories.Layer3InterfaceFactory(subinterface=subif, vrf=vrf_voip, ipnetwork=netaddr.IPNetwork('192.168.5.1/24'))
