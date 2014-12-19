@@ -2,7 +2,11 @@ import netaddr
 from django import forms
 from netutils import formfields
 from . import constants
+from . import factories
+from . import hardware
 from .forms import ProjectFormStart
+from .utils import get_physical_interfaces
+from .utils import save_project
 from .wizard_base import BaseProjectWizardView
 
 
@@ -33,9 +37,6 @@ class ProjectWizardView(BaseProjectWizardView):
     ]
 
     def get_project(self, project_instance, data):
-        from genconf import factories
-        from genconf import hardware
-        from genconf.utils import get_physical_interfaces
         project = dict(
             router=dict(
             ),
@@ -112,6 +113,5 @@ class ProjectWizardView(BaseProjectWizardView):
         return project
 
     def save_project(self, project_instance, data):
-        from genconf.utils import save_project
         project = self.get_project(project_instance, data)
         save_project(project)
