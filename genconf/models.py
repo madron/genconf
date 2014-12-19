@@ -1,6 +1,7 @@
 from django.core import urlresolvers
 from django.db import models
 from netaddr import IPNetwork
+from netutils.modelfields import NetIPNetworkField
 from . import constants
 from . import hardware
 from .plugin import manager
@@ -191,7 +192,7 @@ class Layer3Interface(models.Model):
         help_text="""Can be blank for type ethernet and layer 2.
         In all other cases is mandatory.""")
     description = models.CharField(max_length=200, blank=True)
-    ipnetwork = models.CharField(max_length=50, blank=True)
+    ipnetwork = NetIPNetworkField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'layer 3 interface'
