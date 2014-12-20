@@ -153,6 +153,11 @@ class ProjectCustomAdmin(admin.ModelAdmin):
         return super(ProjectCustomAdmin, self).get_form(request, obj, **kwargs)
 
 
+class VrfInline(admin.TabularInline):
+    model = models.Vrf
+    extra = 0
+
+
 class VlanInline(admin.TabularInline):
     model = models.Vlan
     extra = 0
@@ -168,6 +173,7 @@ class RouterAdmin(admin.ModelAdmin):
         )],
     ]
     inlines = [
+        VrfInline,
         VlanInline,
     ]
 
