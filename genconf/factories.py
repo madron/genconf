@@ -40,7 +40,6 @@ class VlanFactory(factory.django.DjangoModelFactory):
     router = factory.SubFactory(RouterFactory)
     tag = 1
     description = ''
-    notes = ''
 
 
 class PhysicalInterfaceFactory(factory.django.DjangoModelFactory):

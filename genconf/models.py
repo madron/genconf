@@ -114,7 +114,6 @@ class Vlan(models.Model):
     router = models.ForeignKey(Router)
     tag = models.IntegerField()
     description = models.CharField(max_length=200, blank=True)
-    notes = models.TextField(blank=True)
 
     class Meta:
         unique_together = (('router', 'tag'),)

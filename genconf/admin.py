@@ -153,14 +153,20 @@ class ProjectCustomAdmin(admin.ModelAdmin):
         return super(ProjectCustomAdmin, self).get_form(request, obj, **kwargs)
 
 
-class VlanInline(ReadOnlyTabularInline):
+class VlanInline(admin.TabularInline):
     model = models.Vlan
-    fields = ('__str__', 'layer3interface', 'notes')
+    extra = 0
 
 
 @admin.register(models.Router)
 class RouterAdmin(admin.ModelAdmin):
+    readonly_fields = ['project']
     change_form_template = 'genconf/router/change_form.html'
+    fieldsets = [
+        ['', dict(
+            fields=[('project', 'name', 'model')],
+        )],
+    ]
     inlines = [
         VlanInline,
     ]
