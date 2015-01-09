@@ -230,9 +230,11 @@ class VlanAdmin(ReadOnlyModelAdmin):
     pass
 
 
-class SubInterfaceInline(ReadOnlyTabularInline):
+class SubInterfaceInline(admin.TabularInline):
     model = models.SubInterface
-    fields = ('name', 'description')
+    form = forms.SubInterfaceForm
+    fields = ('name', 'description', 'layer_3_interface', 'ipnetwork', 'vrf')
+    extra = 0
 
 
 @admin.register(models.PhysicalInterface)
