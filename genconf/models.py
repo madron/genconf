@@ -204,7 +204,7 @@ class SubInterface(models.Model):
         In all other cases is mandatory.""")
     # Ethernet related field
     layer = models.CharField(max_length=50, default='2',
-        choices=((2, 2), (3, 3)),
+        choices=(('2', '2'), ('3', '3')),
         help_text="""Layer 3 -> subinterface with ip,
         layer 2 -> bridged to vlan.
         """)

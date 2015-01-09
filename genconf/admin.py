@@ -273,6 +273,28 @@ class PhysicalInterfaceAdmin(admin.ModelAdmin):
 
 @admin.register(models.SubInterface)
 class SubInterfaceAdmin(admin.ModelAdmin):
+    form = forms.SubInterfaceForm
+    readonly_fields = ['physical_interface']
+    fieldsets = (
+        (None, dict(
+            fields=(
+                ('physical_interface', 'name', 'description',),
+                # ('layer_3_interface', 'ipnetwork', 'vrf'),
+            ),
+        )),
+        ('Ethernet', dict(
+            fields=(
+                ('layer', 'vlan'),
+            ),
+        )),
+        ('Atm', dict(
+            fields=(
+                ('link', 'pvc_vp', 'pvc_vc',),
+                ('pvc_encapsulation', 'pvc_mux', 'pvc_dialer_pool_number',),
+            ),
+        )),
+    )
+
     def get_queryset(self, request):
         qs = super(SubInterfaceAdmin, self).get_queryset(request)
         return qs.filter(physical_interface__router__project__wizard='')
