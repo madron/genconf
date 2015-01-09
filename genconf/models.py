@@ -137,7 +137,7 @@ class PhysicalInterface(models.Model):
     type = models.CharField(max_length=50, default='ethernet',
         choices=constants.INTERFACE_TYPE_CHOICES)
     layer = models.CharField(max_length=50, default='2',
-        choices=((2, 2), (3, 3)),
+        choices=(('2', '2'), ('3', '3')),
         help_text="""Expresses how this interface is used
         (some interfaces can be configured as layer 2 or layer 3).
         Layer 2 -> switching interface.

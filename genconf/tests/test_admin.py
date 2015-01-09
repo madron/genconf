@@ -150,10 +150,13 @@ class RouterAdminTest(TestCase):
 
     def test_detail(self):
         obj = factories.RouterFactory()
+        interface = factories.PhysicalInterfaceFactory(router=obj)
         url = reverse('admin:genconf_router_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertContains(response,
             reverse('admin:genconf_router_configuration', args=(obj.pk,)))
+        self.assertContains(response,
+            reverse('admin:genconf_physicalinterface_change', args=(interface.pk,)))
 
     def test_detail_wizard(self):
         obj = factories.RouterFactory(project__wizard='cpe2')

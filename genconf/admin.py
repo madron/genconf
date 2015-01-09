@@ -166,7 +166,20 @@ class VlanInline(admin.TabularInline):
 class PhysicalInterfaceInline(admin.TabularInline):
     model = models.PhysicalInterface
     form = forms.PhysicalInterfaceForm
+    readonly_fields = ['url']
+    # show_change_link will work with django 1.8
+    show_change_link = True
     extra = 0
+
+    def url(self, obj):
+        return '<a href="%s">%s</a>' % (obj.get_url(), obj.name)
+
+    def get_fields(self, request, obj=None):
+        fields = super(PhysicalInterfaceInline, self).get_fields(request, obj=obj)
+        # Move url at the beginning
+        fields.remove('url')
+        fields.insert(0, 'url')
+        return fields
 
 
 @admin.register(models.Router)
