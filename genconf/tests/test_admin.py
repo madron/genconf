@@ -320,19 +320,28 @@ class PhysicalInterfaceAdminTest(TestCase):
     def test_add(self):
         url = reverse('admin:genconf_physicalinterface_add')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
     def test_detail(self):
-        obj = factories.PhysicalInterfaceFactory()
+        project = factories.ProjectFactory(name='name')
+        obj = factories.PhysicalInterfaceFactory(router__project=project)
         url = reverse('admin:genconf_physicalinterface_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_detail_not_found(self):
+        project = factories.ProjectFactory(name='name', wizard='cpe2')
+        router = factories.RouterFactory(project=project)
+        obj = factories.PhysicalInterfaceFactory(router=router)
+        url = reverse('admin:genconf_physicalinterface_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_delete(self):
         obj = factories.PhysicalInterfaceFactory()
         url = reverse('admin:genconf_physicalinterface_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
 
 class SubInterfaceAdminTest(TestCase):

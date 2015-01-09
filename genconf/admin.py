@@ -235,10 +235,30 @@ class SubInterfaceInline(ReadOnlyTabularInline):
 
 
 @admin.register(models.PhysicalInterface)
-class PhysicalInterfaceAdmin(ReadOnlyModelAdmin):
+class PhysicalInterfaceAdmin(admin.ModelAdmin):
+    form = forms.PhysicalInterfaceForm
+    readonly_fields = ['router']
+    fieldsets = (
+        (None, dict(
+            fields=(
+                ('router', 'name', 'description'),
+                ('type', 'layer', 'mtu'),
+            ),
+        )),
+        ('Ethernet', dict(
+            fields=(
+                ('dot1q_mode', 'native_vlan', 'dot1q_encapsulation', 'duplex', 'speed'),
+            ),
+        )),
+    )
     inlines = [
         SubInterfaceInline,
     ]
+
+    def get_queryset(self, request):
+        qs = super(PhysicalInterfaceAdmin, self).get_queryset(request)
+        return qs.filter(router__project__wizard='')
+
 
 
 @admin.register(models.SubInterface)
