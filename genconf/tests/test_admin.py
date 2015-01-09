@@ -175,6 +175,17 @@ class RouterAdminTest(TestCase):
         self.assertContains(response, '1 (VLAN_1)')
         self.assertNotContains(response, '2 (VLAN_2)')
 
+    def test_detail_vlan_vrf(self):
+        router_1 = factories.RouterFactory(id=1, name='r1')
+        router_2 = factories.RouterFactory(id=2, name='r2')
+        factories.VrfFactory(router=router_1, name='VRF_1')
+        factories.VrfFactory(router=router_2, name='VRF_2')
+        vlan = factories.VlanFactory(router=router_1, tag=2)
+        url = reverse('admin:genconf_router_change', args=(router_1.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, 'VRF_1')
+        self.assertNotContains(response, 'VRF_2')
+
     def test_delete(self):
         obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_delete', args=(obj.pk,))

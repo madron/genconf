@@ -51,10 +51,16 @@ class VlanForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VlanForm, self).__init__(*args, **kwargs)
-        if self.instance and self.instance.layer_3_interface:
-            interface = self.instance.layer_3_interface
-            self.initial['ipnetwork'] = interface.ipnetwork
-            self.initial['vrf'] = interface.vrf.pk
+        if self.instance and self.instance.pk:
+            router = self.instance.router
+            qs = models.Vrf.objects.filter(router=router)
+            if self.instance.layer_3_interface:
+                interface = self.instance.layer_3_interface
+                self.initial['ipnetwork'] = interface.ipnetwork
+                self.initial['vrf'] = interface.vrf.pk
+        else:
+            qs = models.Vlan.objects.none()
+        self.fields['vrf'].queryset = qs
 
     def clean_vrf(self):
         ipnetwork = self.cleaned_data['ipnetwork']
