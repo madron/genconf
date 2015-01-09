@@ -164,6 +164,17 @@ class RouterAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
+    def test_detail_native_vlan(self):
+        router_1 = factories.RouterFactory(id=1, name='r1')
+        router_2 = factories.RouterFactory(id=2, name='r2')
+        factories.VlanFactory(router=router_1, tag=1, description='VLAN_1')
+        factories.VlanFactory(router=router_2, tag=2, description='VLAN_2')
+        factories.PhysicalInterfaceFactory(router=router_1)
+        url = reverse('admin:genconf_router_change', args=(router_1.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, '1 (VLAN_1)')
+        self.assertNotContains(response, '2 (VLAN_2)')
+
     def test_delete(self):
         obj = factories.RouterFactory()
         url = reverse('admin:genconf_router_delete', args=(obj.pk,))

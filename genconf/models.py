@@ -152,7 +152,7 @@ class PhysicalInterface(models.Model):
         choices=constants.DOT1Q_MODE_CHOICES)
     dot1q_encapsulation = models.CharField(max_length=50, default='802.1q',
         choices=constants.DOT1Q_ENCAPSULATION_CHOICES)
-    native_vlan = models.ForeignKey(Vlan)
+    native_vlan = models.ForeignKey(Vlan, blank=True, null=True)
 
     class Meta:
         unique_together = (('router', 'name'),)

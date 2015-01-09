@@ -24,3 +24,12 @@ class PhysicalInterfaceForm(forms.ModelForm):
             duplex=forms.TextInput(attrs=dict(size=3)),
             speed=forms.TextInput(attrs=dict(size=3)),
         )
+
+    def __init__(self, *args, **kwargs):
+        super(PhysicalInterfaceForm, self).__init__(*args, **kwargs)
+        if 'instance' in kwargs:
+            router = kwargs['instance'].router
+            qs = models.Vlan.objects.filter(router=router)
+        else:
+            qs = models.Vlan.objects.none()
+        self.fields['native_vlan'].queryset = qs
