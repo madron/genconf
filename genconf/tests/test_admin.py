@@ -362,6 +362,18 @@ class PhysicalInterfaceAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
+    def test_detail_subinterface_vrf(self):
+        router_1 = factories.RouterFactory(id=1, name='r1')
+        router_2 = factories.RouterFactory(id=2, name='r2')
+        factories.VrfFactory(router=router_1, name='VRF_1')
+        factories.VrfFactory(router=router_2, name='VRF_2')
+        pif = factories.PhysicalInterfaceFactory(router=router_1)
+        factories.SubInterfaceFactory(physical_interface=pif)
+        url = reverse('admin:genconf_physicalinterface_change', args=(router_1.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, 'VRF_1')
+        self.assertNotContains(response, 'VRF_2')
+
     def test_delete(self):
         obj = factories.PhysicalInterfaceFactory()
         url = reverse('admin:genconf_physicalinterface_delete', args=(obj.pk,))

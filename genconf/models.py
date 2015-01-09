@@ -208,7 +208,7 @@ class SubInterface(models.Model):
         help_text="""Layer 3 -> subinterface with ip,
         layer 2 -> bridged to vlan.
         """)
-    vlan = models.ForeignKey(Vlan)
+    vlan = models.ForeignKey(Vlan, blank=True, null=True)
     # Atm related fields
     link = models.CharField(max_length=50, default='point-to-point',
         choices=constants.ATM_LINK_CHOICES)
