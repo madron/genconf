@@ -162,6 +162,10 @@ class PhysicalInterface(models.Model):
         return ('%s %s' % (self.router, self.name)).strip()
 
     @property
+    def project(self):
+        return self.router.project
+
+    @property
     def is_layer2(self):
         return self.layer == 2
 

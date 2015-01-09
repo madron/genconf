@@ -236,6 +236,8 @@ class SubInterfaceInline(ReadOnlyTabularInline):
 
 @admin.register(models.PhysicalInterface)
 class PhysicalInterfaceAdmin(admin.ModelAdmin):
+    list_display = ['project', 'router', 'name', 'description', 'type', 'layer', 'mtu']
+    list_display_links = ['name']
     form = forms.PhysicalInterfaceForm
     readonly_fields = ['router']
     fieldsets = (
