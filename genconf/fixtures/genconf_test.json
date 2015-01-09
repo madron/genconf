@@ -56,7 +56,6 @@
 {
     "fields": {
         "router": 2,
-        "notes": "",
         "tag": 1,
         "description": ""
     },
