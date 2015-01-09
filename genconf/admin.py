@@ -163,6 +163,12 @@ class VlanInline(admin.TabularInline):
     extra = 0
 
 
+class PhysicalInterfaceInline(admin.TabularInline):
+    model = models.PhysicalInterface
+    form = forms.PhysicalInterfaceForm
+    extra = 0
+
+
 @admin.register(models.Router)
 class RouterAdmin(admin.ModelAdmin):
     readonly_fields = ['project']
@@ -175,6 +181,7 @@ class RouterAdmin(admin.ModelAdmin):
     inlines = [
         VrfInline,
         VlanInline,
+        PhysicalInterfaceInline,
     ]
 
     def get_queryset(self, request):
