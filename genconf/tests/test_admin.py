@@ -336,9 +336,12 @@ class PhysicalInterfaceAdminTest(TestCase):
     def test_detail(self):
         project = factories.ProjectFactory(name='name')
         obj = factories.PhysicalInterfaceFactory(router__project=project)
+        subif = factories.SubInterfaceFactory(physical_interface=obj)
         url = reverse('admin:genconf_physicalinterface_change', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response,
+            reverse('admin:genconf_subinterface_change', args=(subif.pk,)))
 
     def test_detail_not_found(self):
         project = factories.ProjectFactory(name='name', wizard='cpe2')
@@ -373,7 +376,7 @@ class SubInterfaceAdminTest(TestCase):
     def test_add(self):
         url = reverse('admin:genconf_subinterface_add')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
     def test_detail(self):
         obj = factories.SubInterfaceFactory()
@@ -381,11 +384,20 @@ class SubInterfaceAdminTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_detail_not_found(self):
+        project = factories.ProjectFactory(name='name', wizard='cpe2')
+        router = factories.RouterFactory(project=project)
+        pif = factories.PhysicalInterfaceFactory(router=router)
+        obj = factories.SubInterfaceFactory(physical_interface=pif)
+        url = reverse('admin:genconf_subinterface_change', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
     def test_delete(self):
         obj = factories.SubInterfaceFactory()
         url = reverse('admin:genconf_subinterface_delete', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
 
 class PhysicalLinkAdminTest(TestCase):

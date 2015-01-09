@@ -233,8 +233,14 @@ class VlanAdmin(ReadOnlyModelAdmin):
 class SubInterfaceInline(admin.TabularInline):
     model = models.SubInterface
     form = forms.SubInterfaceForm
-    fields = ('name', 'description', 'layer_3_interface', 'ipnetwork', 'vrf')
+    fields = ('change', 'name', 'description', 'layer_3_interface', 'ipnetwork', 'vrf')
+    readonly_fields = ['change']
+    # show_change_link will work with django 1.8
+    show_change_link = True
     extra = 0
+
+    def change(self, obj):
+        return '<a href="%s">%s</a>' % (obj.get_url(), obj.name)
 
 
 @admin.register(models.PhysicalInterface)
@@ -266,8 +272,10 @@ class PhysicalInterfaceAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.SubInterface)
-class SubInterfaceAdmin(ReadOnlyModelAdmin):
-    pass
+class SubInterfaceAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super(SubInterfaceAdmin, self).get_queryset(request)
+        return qs.filter(physical_interface__router__project__wizard='')
 
 
 @admin.register(models.PhysicalLink)
