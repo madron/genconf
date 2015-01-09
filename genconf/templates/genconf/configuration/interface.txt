@@ -7,7 +7,7 @@ interface {{ interface.name }}
     ! native_vlan=1,
 exit
 {% for subinterface in interface.subinterface_set.all %}{% if interface.layer == '3' %}
-interface {{ subinterface.name }}{% if subinterface.layer3interface.vrf.name %}
-    vrf {{ subinterface.layer3interface.vrf.name }}{% endif %}
-    ip address {{ subinterface.layer3interface.get_ipnetwork.ip }} {{ subinterface.layer3interface.get_ipnetwork.netmask }}
+interface {{ subinterface.name }}{% if subinterface.layer_3_interface.vrf.name %}
+    vrf {{ subinterface.layer_3_interface.vrf.name }}{% endif %}
+    ip address {{ subinterface.layer_3_interface.get_ipnetwork.ip }} {{ subinterface.layer_3_interface.get_ipnetwork.netmask }}
 {% endif %}{% endfor %}

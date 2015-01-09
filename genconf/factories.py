@@ -67,8 +67,6 @@ class Layer3InterfaceFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = models.Layer3Interface
 
     vrf = factory.SubFactory(VrfFactory)
-    vlan = None
-    subinterface = None
 
 
 class PhysicalLinkFactory(factory.django.DjangoModelFactory):

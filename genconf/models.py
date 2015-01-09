@@ -110,10 +110,26 @@ class Route(models.Model):
         return self.name
 
 
+class Layer3Interface(models.Model):
+    vrf = models.ForeignKey(Vrf, db_index=True)
+    description = models.CharField(max_length=200, blank=True)
+    ipnetwork = NetIPNetworkField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'layer 3 interface'
+
+    def __str__(self):
+        return str(self.ipnetwork)
+
+    def get_ipnetwork(self):
+        return IPNetwork(self.ipnetwork)
+
+
 class Vlan(models.Model):
     router = models.ForeignKey(Router)
     tag = models.IntegerField()
     description = models.CharField(max_length=200, blank=True)
+    layer_3_interface = models.OneToOneField(Layer3Interface, blank=True, null=True)
 
     class Meta:
         unique_together = (('router', 'tag'),)
@@ -183,6 +199,9 @@ class SubInterface(models.Model):
     physical_interface = models.ForeignKey(PhysicalInterface)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
+    layer_3_interface = models.OneToOneField(Layer3Interface, blank=True, null=True,
+        help_text="""Can be blank for type ethernet and layer 2.
+        In all other cases is mandatory.""")
     # Ethernet related field
     layer = models.CharField(max_length=50, default='2',
         choices=((2, 2), (3, 3)),
@@ -212,25 +231,6 @@ class SubInterface(models.Model):
         info = (self._meta.app_label, self._meta.model_name)
         url_name = 'admin:%s_%s_change' % info
         return urlresolvers.reverse(url_name, args=(self.pk,))
-
-
-class Layer3Interface(models.Model):
-    vrf = models.ForeignKey(Vrf, db_index=True)
-    vlan = models.OneToOneField(Vlan, blank=True, null=True)
-    subinterface = models.OneToOneField(SubInterface, blank=True, null=True,
-        help_text="""Can be blank for type ethernet and layer 2.
-        In all other cases is mandatory.""")
-    description = models.CharField(max_length=200, blank=True)
-    ipnetwork = NetIPNetworkField(null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'layer 3 interface'
-
-    def __str__(self):
-        return str(self.ipnetwork)
-
-    def get_ipnetwork(self):
-        return IPNetwork(self.ipnetwork)
 
 
 class PhysicalLink(models.Model):

@@ -78,32 +78,38 @@ class ProjectWizardView(BaseProjectWizardView):
         fallback_network = data['fallback']['network']
         # wan1
         router = project['router']['wan1']
-        interface_1 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
         vlan = router['vlan']['default_vlan']
-        subinterface = factories.SubInterfaceFactory.build(
-            name='%s.%d' % (interface_1.name, vlan.tag),
-            physical_interface=interface_1, layer=3, vlan=vlan)
-        router['subinterface'].append(subinterface)
+        interface_1 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
         ipnetwork = netaddr.IPNetwork(fallback_network.network + 1)
         ipnetwork.prefixlen = fallback_network.prefixlen
-        router['layer3interface'].append(factories.Layer3InterfaceFactory.build(
-            vlan=None, subinterface=subinterface, ipnetwork=ipnetwork,
-            vrf=router['vrf']['default_vrf'], description='Fallback link'
-        ))
+        layer_3_interface = factories.Layer3InterfaceFactory.build(
+            ipnetwork=ipnetwork, vrf=router['vrf']['default_vrf'],
+            description='Fallback link'
+        )
+        router['layer3interface'].append(layer_3_interface)
+        subinterface = factories.SubInterfaceFactory.build(
+            name='%s.%d' % (interface_1.name, vlan.tag),
+            physical_interface=interface_1, layer=3, vlan=vlan,
+            layer_3_interface=layer_3_interface)
+        router['subinterface'].append(subinterface)
         # wan2
         router = project['router']['wan2']
-        interface_2 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
         vlan = router['vlan']['default_vlan']
+        interface_2 = get_physical_interfaces(router, type='ethernet', layer=3)[0]
+        ipnetwork = netaddr.IPNetwork(fallback_network.network + 2)
+        ipnetwork.prefixlen = fallback_network.prefixlen
+        layer_3_interface = factories.Layer3InterfaceFactory.build(
+            ipnetwork=ipnetwork, vrf=router['vrf']['default_vrf'],
+            description='Fallback link'
+        )
+        router['layer3interface'].append(layer_3_interface)
         subinterface = factories.SubInterfaceFactory.build(
             name='%s.%d' % (interface_2.name, vlan.tag),
-            physical_interface=interface_2, layer=3, vlan=vlan)
+            physical_interface=interface_2, layer=3, vlan=vlan,
+            layer_3_interface=layer_3_interface)
         router['subinterface'].append(subinterface)
         ipnetwork = netaddr.IPNetwork(fallback_network.network + 2)
         ipnetwork.prefixlen = fallback_network.prefixlen
-        router['layer3interface'].append(factories.Layer3InterfaceFactory.build(
-            vlan=None, subinterface=subinterface, ipnetwork=ipnetwork,
-            vrf=router['vrf']['default_vrf'], description='Fallback link'
-        ))
         # PhysicalLink
         project['physicallink'].append(factories.PhysicalLinkFactory.build(
                 project=project_instance,

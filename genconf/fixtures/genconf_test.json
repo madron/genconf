@@ -46,6 +46,24 @@
 },
 {
     "fields": {
+        "description": "Fallback link",
+        "vrf": 1,
+        "ipnetwork": "192.168.1.1/24"
+    },
+    "model": "genconf.layer3interface",
+    "pk": 1
+},
+{
+    "fields": {
+        "description": "Fallback link",
+        "vrf": 2,
+        "ipnetwork": "192.168.1.2/24"
+    },
+    "model": "genconf.layer3interface",
+    "pk": 2
+},
+{
+    "fields": {
         "router": 1,
         "tag": 1,
         "description": ""
@@ -298,28 +316,6 @@
         "name": "fe0.1"
     },
     "model": "genconf.subinterface",
-    "pk": 2
-},
-{
-    "fields": {
-        "description": "Fallback link",
-        "vlan": null,
-        "vrf": 1,
-        "ipnetwork": "192.168.1.1/24",
-        "subinterface": 1
-    },
-    "model": "genconf.layer3interface",
-    "pk": 1
-},
-{
-    "fields": {
-        "description": "Fallback link",
-        "vlan": null,
-        "vrf": 2,
-        "ipnetwork": "192.168.1.2/24",
-        "subinterface": 2
-    },
-    "model": "genconf.layer3interface",
     "pk": 2
 },
 {

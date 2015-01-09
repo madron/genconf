@@ -160,6 +160,7 @@ class VrfInline(admin.TabularInline):
 
 class VlanInline(admin.TabularInline):
     model = models.Vlan
+    form = forms.VlanForm
     extra = 0
 
 
@@ -231,7 +232,7 @@ class VlanAdmin(ReadOnlyModelAdmin):
 
 class SubInterfaceInline(ReadOnlyTabularInline):
     model = models.SubInterface
-    fields = ('name', 'layer3interface', 'description')
+    fields = ('name', 'description')
 
 
 @admin.register(models.PhysicalInterface)
@@ -260,7 +261,6 @@ class PhysicalInterfaceAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(PhysicalInterfaceAdmin, self).get_queryset(request)
         return qs.filter(router__project__wizard='')
-
 
 
 @admin.register(models.SubInterface)

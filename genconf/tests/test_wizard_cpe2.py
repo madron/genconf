@@ -84,13 +84,10 @@ class GetProjectTest(TestCase):
         self.assertEqual(interface.physical_interface.router.name, 'wan1')
         self.assertEqual(interface.physical_interface.name, 'fe0/0')
         self.assertEqual(interface.name, 'fe0/0.1')
+        self.assertEqual(interface.layer_3_interface.ipnetwork, netaddr.IPNetwork('192.168.100.5/30'))
         # Layer3Interface
         self.assertEqual(len(router['layer3interface']), 1)
         interface = router['layer3interface'][0]
-        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan1')
-        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0/0')
-        self.assertEqual(interface.subinterface.name, 'fe0/0.1')
-        self.assertEqual(interface.vlan, None)
         self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.100.5/30'))
         self.assertEqual(interface.description, 'Fallback link')
         #
@@ -133,13 +130,10 @@ class GetProjectTest(TestCase):
         self.assertEqual(interface.physical_interface.router.name, 'wan2')
         self.assertEqual(interface.physical_interface.name, 'fe0')
         self.assertEqual(interface.name, 'fe0.1')
+        self.assertEqual(interface.layer_3_interface.ipnetwork, netaddr.IPNetwork('192.168.100.6/30'))
         # Layer3Interface
         self.assertEqual(len(router['layer3interface']), 1)
         interface = router['layer3interface'][0]
-        self.assertEqual(interface.subinterface.physical_interface.router.name, 'wan2')
-        self.assertEqual(interface.subinterface.physical_interface.name, 'fe0')
-        self.assertEqual(interface.subinterface.name, 'fe0.1')
-        self.assertEqual(interface.vlan, None)
         self.assertEqual(interface.ipnetwork, netaddr.IPNetwork('192.168.100.6/30'))
         self.assertEqual(interface.description, 'Fallback link')
         #
