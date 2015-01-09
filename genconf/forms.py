@@ -64,26 +64,25 @@ class VlanForm(forms.ModelForm):
         return self.cleaned_data['vrf']
 
     def save(self, commit=True):
-        if commit:
-            interface = self.cleaned_data['layer_3_interface']
-            ipnetwork = self.cleaned_data['ipnetwork']
-            vrf = self.cleaned_data['vrf']
-            interface_delete = None
-            if interface:
-                if ipnetwork:
-                    interface.ipnetwork = ipnetwork
-                    interface.vrf = vrf
-                    interface.save()
-                else:
-                    interface_delete = interface
-                    interface = None
+        interface = self.cleaned_data['layer_3_interface']
+        ipnetwork = self.cleaned_data['ipnetwork']
+        vrf = self.cleaned_data['vrf']
+        interface_delete = None
+        if interface:
+            if ipnetwork:
+                interface.ipnetwork = ipnetwork
+                interface.vrf = vrf
+                interface.save()
             else:
-                if ipnetwork:
-                    interface = models.Layer3Interface.objects.create(
-                        ipnetwork=ipnetwork, vrf=vrf)
-            self.instance.layer_3_interface = interface
+                interface_delete = interface
+                interface = None
+        else:
+            if ipnetwork:
+                interface = models.Layer3Interface.objects.create(
+                    ipnetwork=ipnetwork, vrf=vrf)
+        self.instance.layer_3_interface = interface
         obj = super(VlanForm, self).save(commit=commit)
-        if commit and interface_delete:
+        if interface_delete:
             interface_delete.delete()
         return obj
 
@@ -114,25 +113,24 @@ class SubInterfaceForm(forms.ModelForm):
         return self.cleaned_data['vrf']
 
     def save(self, commit=True):
-        if commit:
-            interface = self.cleaned_data['layer_3_interface']
-            ipnetwork = self.cleaned_data['ipnetwork']
-            vrf = self.cleaned_data['vrf']
-            interface_delete = None
-            if interface:
-                if ipnetwork:
-                    interface.ipnetwork = ipnetwork
-                    interface.vrf = vrf
-                    interface.save()
-                else:
-                    interface_delete = interface
-                    interface = None
+        interface = self.cleaned_data['layer_3_interface']
+        ipnetwork = self.cleaned_data['ipnetwork']
+        vrf = self.cleaned_data['vrf']
+        interface_delete = None
+        if interface:
+            if ipnetwork:
+                interface.ipnetwork = ipnetwork
+                interface.vrf = vrf
+                interface.save()
             else:
-                if ipnetwork:
-                    interface = models.Layer3Interface.objects.create(
-                        ipnetwork=ipnetwork, vrf=vrf)
-            self.instance.layer_3_interface = interface
+                interface_delete = interface
+                interface = None
+        else:
+            if ipnetwork:
+                interface = models.Layer3Interface.objects.create(
+                    ipnetwork=ipnetwork, vrf=vrf)
+        self.instance.layer_3_interface = interface
         obj = super(SubInterfaceForm, self).save(commit=commit)
-        if commit and interface_delete:
+        if interface_delete:
             interface_delete.delete()
         return obj

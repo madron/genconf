@@ -279,7 +279,7 @@ class SubInterfaceAdmin(admin.ModelAdmin):
         (None, dict(
             fields=(
                 ('physical_interface', 'name', 'description',),
-                # ('layer_3_interface', 'ipnetwork', 'vrf'),
+                ('layer_3_interface', 'ipnetwork', 'vrf'),
             ),
         )),
         ('Ethernet', dict(
