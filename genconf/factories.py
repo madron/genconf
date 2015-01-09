@@ -59,7 +59,6 @@ class SubInterfaceFactory(factory.django.DjangoModelFactory):
 
     physical_interface = factory.SubFactory(PhysicalInterfaceFactory)
     name = ''
-    type = 'ethernet'
     layer = 2
     vlan = factory.SubFactory(VlanFactory)
 

@@ -182,10 +182,7 @@ class PhysicalInterface(models.Model):
 class SubInterface(models.Model):
     physical_interface = models.ForeignKey(PhysicalInterface)
     name = models.CharField(max_length=50)
-    type = models.CharField(max_length=50, default='ethernet',
-        choices=constants.INTERFACE_TYPE_CHOICES)
     description = models.CharField(max_length=200, blank=True)
-    notes = models.TextField(blank=True)
     # Ethernet related field
     layer = models.CharField(max_length=50, default='2',
         choices=((2, 2), (3, 3)),
