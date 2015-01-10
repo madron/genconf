@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from netutils.formfields import NetIPNetworkField
 from . import models
 
+REQUIRED = _('This field is required')
+
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -30,12 +32,20 @@ class PhysicalInterfaceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PhysicalInterfaceForm, self).__init__(*args, **kwargs)
-        if 'instance' in kwargs:
-            router = kwargs['instance'].router
-            qs = models.Vlan.objects.filter(router=router)
-        else:
-            qs = models.Vlan.objects.none()
-        self.fields['native_vlan'].queryset = qs
+        if 'native_vlan' in self.fields:
+            if 'instance' in kwargs:
+                router = kwargs['instance'].router
+                qs = models.Vlan.objects.filter(router=router)
+            else:
+                qs = models.Vlan.objects.none()
+            self.fields['native_vlan'].queryset = qs
+
+    def clean_native_vlan(self):
+        interface_type = self.cleaned_data.get('type', None)
+        native_vlan = self.cleaned_data.get('native_vlan', None)
+        if interface_type == 'ethernet' and not native_vlan:
+            raise ValidationError(REQUIRED)
+        return native_vlan
 
 
 class VlanForm(forms.ModelForm):
@@ -66,7 +76,7 @@ class VlanForm(forms.ModelForm):
         ipnetwork = self.cleaned_data.get('ipnetwork', None)
         vrf = self.cleaned_data['vrf']
         if ipnetwork and not vrf:
-            raise ValidationError(_('This field is required'))
+            raise ValidationError(REQUIRED)
         return self.cleaned_data['vrf']
 
     def save(self, commit=True):
@@ -122,7 +132,7 @@ class SubInterfaceForm(forms.ModelForm):
         ipnetwork = self.cleaned_data.get('ipnetwork', None)
         vrf = self.cleaned_data['vrf']
         if ipnetwork and not vrf:
-            raise ValidationError(_('This field is required'))
+            raise ValidationError(REQUIRED)
         return self.cleaned_data['vrf']
 
     def save(self, commit=True):
