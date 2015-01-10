@@ -41,5 +41,45 @@
     },
     "model": "netcore.vrf",
     "pk": 3
+},
+{
+    "fields": {
+        "bras": 1,
+        "ip": "10.1.7.1",
+        "number": 1,
+        "vrf": null
+    },
+    "model": "netcore.loopback",
+    "pk": 1
+},
+{
+    "fields": {
+        "bras": 1,
+        "ip": "10.1.7.2",
+        "number": 2,
+        "vrf": null
+    },
+    "model": "netcore.loopback",
+    "pk": 2
+},
+{
+    "fields": {
+        "bras": 2,
+        "ip": "10.2.7.1",
+        "number": 1,
+        "vrf": null
+    },
+    "model": "netcore.loopback",
+    "pk": 3
+},
+{
+    "fields": {
+        "bras": 2,
+        "ip": "10.2.7.2",
+        "number": 2,
+        "vrf": null
+    },
+    "model": "netcore.loopback",
+    "pk": 4
 }
 ]
