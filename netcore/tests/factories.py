@@ -27,3 +27,10 @@ class VrfFactory(factory.django.DjangoModelFactory):
 
     bras = factory.SubFactory(BrasFactory)
     name = ''
+
+
+class LoopbackFactory(factory.django.DjangoModelFactory):
+    FACTORY_FOR = models.Loopback
+
+    bras = factory.SubFactory(BrasFactory)
+    vrf = factory.SubFactory(VrfFactory)

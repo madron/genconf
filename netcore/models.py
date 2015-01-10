@@ -15,7 +15,7 @@ class Bras(models.Model):
 
 
 class Vrf(models.Model):
-    bras = models.ForeignKey(Bras)
+    bras = models.ForeignKey(Bras, db_index=True)
     number = models.IntegerField(db_index=True)
     name = models.CharField(max_length=200, db_index=True)
 
@@ -33,3 +33,22 @@ class Vrf(models.Model):
 
     def __str__(self):
         return '%d %s (%s)' % (self.number, self.name, self.bras)
+
+
+class Loopback(models.Model):
+    bras = models.ForeignKey(Bras, db_index=True)
+    number = models.IntegerField()
+    ip = NetIPAddressField()
+    vrf = models.ForeignKey(Vrf, blank=True, null=True)
+
+    class Meta:
+        ordering = ['bras__name', 'number']
+        unique_together = [
+            ['bras', 'number'],
+        ]
+        index_together = [
+            ['bras', 'number'],
+        ]
+
+    def __str__(self):
+        return 'Loopback%d' % self.number
