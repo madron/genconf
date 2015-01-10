@@ -1,10 +1,18 @@
 from django.contrib import admin
+from . import forms
 from . import models
+
+
+class LoopbackInline(admin.TabularInline):
+    model = models.Loopback
+    form = forms.LoopbackForm
+    extra = 0
+    can_delete = False
 
 
 @admin.register(models.Bras)
 class BrasAdmin(admin.ModelAdmin):
-    pass
+    inlines = [LoopbackInline]
 
 
 @admin.register(models.Vrf)

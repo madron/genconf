@@ -29,6 +29,17 @@ class BrasAdminTest(TestCase):
         response = self.client.get(url)
         self.assertContains(response, 'value="Bras name"')
 
+    def test_detail_loopback_vrf(self):
+        bras_1 = factories.BrasFactory(name='bras_1')
+        bras_2 = factories.BrasFactory(name='bras_2')
+        factories.VrfFactory(bras=bras_1, number=1, name='VRF_1')
+        factories.VrfFactory(bras=bras_2, number=2, name='VRF_2')
+        factories.LoopbackFactory(bras=bras_1, number=1, vrf=None)
+        url = reverse('admin:netcore_bras_change', args=(bras_1.pk,))
+        response = self.client.get(url)
+        self.assertContains(response, 'VRF_1')
+        self.assertNotContains(response, 'VRF_2')
+
     def test_delete(self):
         obj = factories.BrasFactory()
         url = reverse('admin:netcore_bras_delete', args=(obj.pk,))

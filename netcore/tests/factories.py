@@ -33,4 +33,5 @@ class LoopbackFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = models.Loopback
 
     bras = factory.SubFactory(BrasFactory)
+    ip = '127.0.0.1'
     vrf = factory.SubFactory(VrfFactory)
