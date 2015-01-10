@@ -91,11 +91,17 @@ class Vrf(models.Model):
         index_together = (('router', 'name'),)
 
     def __str__(self):
-        return self.name or '<default>'
+        return self.name or '(default)'
 
     @property
     def is_global(self):
         return not self.name
+
+    @property
+    def label(self):
+        if self.pk:
+            return str(self)
+        return ''
 
 
 class Route(models.Model):

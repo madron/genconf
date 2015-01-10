@@ -1,6 +1,7 @@
 import netaddr
 from django.test import TestCase
 from .. import factories
+from .. import models
 
 
 class ProjectModelTest(TestCase):
@@ -89,7 +90,15 @@ class RouterModelTest(TestCase):
 class VrfModelTest(TestCase):
     def test_str(self):
         vrf = factories.VrfFactory(name='')
-        self.assertEqual(str(vrf), '<default>')
+        self.assertEqual(str(vrf), '(default)')
+
+    def test_label(self):
+        vrf = factories.VrfFactory(name='')
+        self.assertEqual(vrf.label, '(default)')
+        vrf = factories.VrfFactory(name='vrf')
+        self.assertEqual(vrf.label, 'vrf')
+        vrf = models.Vrf(name='vrf')
+        self.assertEqual(vrf.label, '')
 
 
 class RouteModelTest(TestCase):

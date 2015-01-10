@@ -155,6 +155,8 @@ class ProjectCustomAdmin(admin.ModelAdmin):
 
 class VrfInline(admin.TabularInline):
     model = models.Vrf
+    fields = ('label', 'name', 'default_gateway')
+    readonly_fields = ('label',)
     extra = 0
 
 
