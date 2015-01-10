@@ -35,3 +35,12 @@ class LoopbackFactory(factory.django.DjangoModelFactory):
     bras = factory.SubFactory(BrasFactory)
     ip = '127.0.0.1'
     vrf = factory.SubFactory(VrfFactory)
+
+
+class SectionFactory(factory.django.DjangoModelFactory):
+    FACTORY_FOR = models.Section
+
+    bras = factory.SubFactory(BrasFactory)
+    ipnetwork = '10.0.0.0/30'
+    description = ''
+    vrf = factory.SubFactory(VrfFactory)

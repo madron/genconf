@@ -18,3 +18,9 @@ class LoopbackModelTest(TestCase):
     def test_str(self):
         loopback = factories.LoopbackFactory(number=1, ip='127.0.0.1', vrf=None)
         self.assertEqual(str(loopback), 'Loopback1')
+
+
+class SectionModelTest(TestCase):
+    def test_str(self):
+        section = factories.SectionFactory(ipnetwork='172.30.0.1/30', vrf=None)
+        self.assertEqual(str(section), '172.30.0.1/30')

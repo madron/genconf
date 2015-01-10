@@ -1,5 +1,5 @@
 from django.db import models
-from netutils.modelfields import NetIPAddressField
+from netutils.modelfields import NetIPAddressField, NetIPNetworkField
 
 
 class Bras(models.Model):
@@ -52,3 +52,22 @@ class Loopback(models.Model):
 
     def __str__(self):
         return 'Loopback%d' % self.number
+
+
+class Section(models.Model):
+    bras = models.ForeignKey(Bras, db_index=True)
+    ipnetwork = NetIPNetworkField(db_index=True)
+    description = models.CharField(max_length=200, blank=True)
+    vrf = models.ForeignKey(Vrf, blank=True, null=True)
+
+    class Meta:
+        ordering = ['bras__name', 'ipnetwork']
+        unique_together = [
+            ['bras', 'ipnetwork'],
+        ]
+        index_together = [
+            ['bras', 'ipnetwork'],
+        ]
+
+    def __str__(self):
+        return str(self.ipnetwork)
