@@ -1,0 +1,18 @@
+[
+{
+    "fields": {
+        "management_ip": null,
+        "name": "MANTITAU_10K"
+    },
+    "model": "netcore.bras",
+    "pk": 1
+},
+{
+    "fields": {
+        "management_ip": null,
+        "name": "MILAITCC_10K"
+    },
+    "model": "netcore.bras",
+    "pk": 2
+}
+]
