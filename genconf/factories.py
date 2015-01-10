@@ -3,39 +3,44 @@ from . import models
 
 
 class ProjectFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Project
-    FACTORY_DJANGO_GET_OR_CREATE = ('name',)
+    class Meta:
+        model = models.Project
+        django_get_or_create = ('name',)
 
     name = ''
     configuration = ''
 
 
 class RouterFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Router
-    FACTORY_DJANGO_GET_OR_CREATE = ('name',)
+    class Meta:
+        model = models.Router
+        django_get_or_create = ('name',)
 
     project = factory.SubFactory(ProjectFactory)
     name = ''
 
 
 class VrfFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Vrf
-    FACTORY_DJANGO_GET_OR_CREATE = ('router', 'name')
+    class Meta:
+        model = models.Vrf
+        django_get_or_create = ('router', 'name',)
 
     router = factory.SubFactory(RouterFactory)
     name = ''
 
 
 class RouteFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Route
+    class Meta:
+        model = models.Route
 
     vrf = factory.SubFactory(VrfFactory)
     name = ''
 
 
 class VlanFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Vlan
-    FACTORY_DJANGO_GET_OR_CREATE = ('router', 'tag')
+    class Meta:
+        model = models.Vlan
+        django_get_or_create = ('router', 'tag',)
 
     router = factory.SubFactory(RouterFactory)
     tag = 1
@@ -43,8 +48,9 @@ class VlanFactory(factory.django.DjangoModelFactory):
 
 
 class PhysicalInterfaceFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.PhysicalInterface
-    FACTORY_DJANGO_GET_OR_CREATE = ('router', 'name')
+    class Meta:
+        model = models.PhysicalInterface
+        django_get_or_create = ('router', 'name',)
 
     router = factory.SubFactory(RouterFactory)
     name = ''
@@ -54,8 +60,9 @@ class PhysicalInterfaceFactory(factory.django.DjangoModelFactory):
 
 
 class SubInterfaceFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.SubInterface
-    FACTORY_DJANGO_GET_OR_CREATE = ('physical_interface', 'name')
+    class Meta:
+        model = models.SubInterface
+        django_get_or_create = ('physical_interface', 'name',)
 
     physical_interface = factory.SubFactory(PhysicalInterfaceFactory)
     name = ''
@@ -64,13 +71,15 @@ class SubInterfaceFactory(factory.django.DjangoModelFactory):
 
 
 class Layer3InterfaceFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Layer3Interface
+    class Meta:
+        model = models.Layer3Interface
 
     vrf = factory.SubFactory(VrfFactory)
 
 
 class PhysicalLinkFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.PhysicalLink
+    class Meta:
+        model = models.PhysicalLink
 
     project = factory.SubFactory(ProjectFactory)
     router_interface_1 = factory.SubFactory(PhysicalInterfaceFactory)

@@ -4,8 +4,9 @@ from .. import models
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = User
-    FACTORY_DJANGO_GET_OR_CREATE = ('username',)
+    class Meta:
+        model = User
+        django_get_or_create = ('username',)
 
     username = 'test'
     is_active = True
@@ -17,20 +18,23 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class BrasFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Bras
+    class Meta:
+        model = models.Bras
 
     name = ''
 
 
 class VrfFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Vrf
+    class Meta:
+        model = models.Vrf
 
     bras = factory.SubFactory(BrasFactory)
     name = ''
 
 
 class LoopbackFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Loopback
+    class Meta:
+        model = models.Loopback
 
     bras = factory.SubFactory(BrasFactory)
     ip = '127.0.0.1'
@@ -38,7 +42,8 @@ class LoopbackFactory(factory.django.DjangoModelFactory):
 
 
 class SectionFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = models.Section
+    class Meta:
+        model = models.Section
 
     bras = factory.SubFactory(BrasFactory)
     ipnetwork = '10.0.0.0/30'

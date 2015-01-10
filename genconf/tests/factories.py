@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    FACTORY_FOR = User
-    FACTORY_DJANGO_GET_OR_CREATE = ('username',)
+    class Meta:
+        model = User
+        django_get_or_create = ('username',)
 
     username = 'test'
     is_active = True
