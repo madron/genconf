@@ -163,7 +163,7 @@ class PhysicalInterface(models.Model):
     router = models.ForeignKey(Router)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200, blank=True)
-    type = models.CharField(max_length=50, default='ethernet',
+    type = models.CharField(max_length=50, default='atm',
         choices=constants.INTERFACE_TYPE_CHOICES)
     layer = models.CharField(max_length=50, default='2',
         choices=(('2', '2'), ('3', '3')),
