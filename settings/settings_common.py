@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'adminwizard',
+    'netcore',
     'genconf',
     'django.contrib.formtools',
     'django.contrib.admin',
