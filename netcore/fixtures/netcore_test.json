@@ -14,5 +14,32 @@
     },
     "model": "netcore.bras",
     "pk": 2
+},
+{
+    "fields": {
+        "bras": 1,
+        "number": 1,
+        "name": "first"
+    },
+    "model": "netcore.vrf",
+    "pk": 1
+},
+{
+    "fields": {
+        "bras": 1,
+        "number": 2,
+        "name": "second"
+    },
+    "model": "netcore.vrf",
+    "pk": 2
+},
+{
+    "fields": {
+        "bras": 2,
+        "number": 1,
+        "name": "one more"
+    },
+    "model": "netcore.vrf",
+    "pk": 3
 }
 ]
