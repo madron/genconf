@@ -1,47 +1,11 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
-from django.contrib.admin.utils import flatten_fieldsets
 from django.core import urlresolvers
 from adminwizard.admin import AdminWizard
 from . import forms
 from . import models
 from . import views
 from . import wizard_cpe2
-
-
-class ReadOnlyTabularInline(admin.TabularInline):
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj):
-        return False
-
-    def get_readonly_fields(self, request, obj=None):
-        if self.fields:
-            return self.fields
-        fields = []
-        for field in self.model._meta.get_all_field_names():
-            if (not field == 'id'):
-                fields.append(field)
-        return fields
-
-
-class ReadOnlyModelAdmin(admin.ModelAdmin):
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def get_readonly_fields(self, request, obj=None):
-        if self.declared_fieldsets:
-            fields = flatten_fieldsets(self.declared_fieldsets)
-        else:
-            fields = list(set(
-                [field.name for field in self.opts.local_fields if not field.name == 'id'] +
-                [field.name for field in self.opts.local_many_to_many]
-            ))
-        return fields
 
 
 class RouterConfigInline(admin.TabularInline):
@@ -225,16 +189,6 @@ class VrfAdmin(admin.ModelAdmin):
         return True
 
 
-@admin.register(models.Route)
-class RouteAdmin(ReadOnlyModelAdmin):
-    pass
-
-
-@admin.register(models.Vlan)
-class VlanAdmin(ReadOnlyModelAdmin):
-    pass
-
-
 class SubInterfaceInline(admin.TabularInline):
     model = models.SubInterface
     form = forms.SubInterfaceForm
@@ -306,10 +260,11 @@ class SubInterfaceAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.PhysicalLink)
-class PhysicalLinkAdmin(ReadOnlyModelAdmin):
-    pass
+class PhysicalLinkAdmin(admin.ModelAdmin):
+    readonly_fields = ['project', 'router_interface_1', 'router_interface_2']
 
+    def has_add_permission(self, request):
+        return False
 
-@admin.register(models.Layer3Interface)
-class Layer3InterfaceAdmin(ReadOnlyModelAdmin):
-    pass
+    def has_delete_permission(self, request, obj=None):
+        return False

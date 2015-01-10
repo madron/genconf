@@ -264,72 +264,6 @@ class VrfAdminTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class RouteAdminTest(TestCase):
-    def setUp(self):
-        UserFactory()
-        self.assertTrue(self.client.login(username='test', password='pass'))
-        self.list = reverse('admin:genconf_route_changelist')
-
-    def test_list(self):
-        response = self.client.get(self.list)
-        self.assertEqual(response.status_code, 200)
-
-    def test_search(self):
-        data = dict(q='text')
-        response = self.client.get(self.list, data)
-        self.assertEqual(response.status_code, 200)
-
-    def test_add(self):
-        url = reverse('admin:genconf_route_add')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-    def test_detail(self):
-        obj = factories.RouteFactory()
-        url = reverse('admin:genconf_route_change', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_delete(self):
-        obj = factories.RouteFactory()
-        url = reverse('admin:genconf_route_delete', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-
-class VlanAdminTest(TestCase):
-    def setUp(self):
-        UserFactory()
-        self.assertTrue(self.client.login(username='test', password='pass'))
-        self.list = reverse('admin:genconf_vlan_changelist')
-
-    def test_list(self):
-        response = self.client.get(self.list)
-        self.assertEqual(response.status_code, 200)
-
-    def test_search(self):
-        data = dict(q='text')
-        response = self.client.get(self.list, data)
-        self.assertEqual(response.status_code, 200)
-
-    def test_add(self):
-        url = reverse('admin:genconf_vlan_add')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-    def test_detail(self):
-        obj = factories.VlanFactory()
-        url = reverse('admin:genconf_vlan_change', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_delete(self):
-        obj = factories.VlanFactory()
-        url = reverse('admin:genconf_vlan_delete', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-
 class PhysicalInterfaceAdminTest(TestCase):
     def setUp(self):
         UserFactory()
@@ -458,38 +392,5 @@ class PhysicalLinkAdminTest(TestCase):
     def test_delete(self):
         obj = factories.PhysicalLinkFactory()
         url = reverse('admin:genconf_physicallink_delete', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-
-class Layer3InterfaceAdminTest(TestCase):
-    def setUp(self):
-        UserFactory()
-        self.assertTrue(self.client.login(username='test', password='pass'))
-        self.list = reverse('admin:genconf_layer3interface_changelist')
-
-    def test_list(self):
-        response = self.client.get(self.list)
-        self.assertEqual(response.status_code, 200)
-
-    def test_search(self):
-        data = dict(q='text')
-        response = self.client.get(self.list, data)
-        self.assertEqual(response.status_code, 200)
-
-    def test_add(self):
-        url = reverse('admin:genconf_layer3interface_add')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-
-    def test_detail(self):
-        obj = factories.Layer3InterfaceFactory()
-        url = reverse('admin:genconf_layer3interface_change', args=(obj.pk,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_delete(self):
-        obj = factories.Layer3InterfaceFactory()
-        url = reverse('admin:genconf_layer3interface_delete', args=(obj.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)

@@ -128,10 +128,6 @@ class VlanModelTest(TestCase):
         vlan = factories.VlanFactory(tag=2, description='Wan')
         self.assertEqual(str(vlan), '2 (Wan)')
 
-    def test_get_url(self):
-        vlan = factories.VlanFactory.create(id=1)
-        self.assertEqual(vlan.get_url(), '/genconf/vlan/1/')
-
 
 class PhysicalInterfaceModelTest(TestCase):
     def test_str_no_router_name(self):

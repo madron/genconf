@@ -153,11 +153,6 @@ class Vlan(models.Model):
             return '%d (%s)' % (self.tag, self.description)
         return str(self.tag)
 
-    def get_url(self):
-        info = (self._meta.app_label, self._meta.model_name)
-        url_name = 'admin:%s_%s_change' % info
-        return urlresolvers.reverse(url_name, args=(self.pk,))
-
 
 class PhysicalInterface(models.Model):
     router = models.ForeignKey(Router)
