@@ -20,3 +20,10 @@ class BrasFactory(factory.django.DjangoModelFactory):
     FACTORY_FOR = models.Bras
 
     name = ''
+
+
+class VrfFactory(factory.django.DjangoModelFactory):
+    FACTORY_FOR = models.Vrf
+
+    bras = factory.SubFactory(BrasFactory)
+    name = ''
