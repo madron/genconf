@@ -1,12 +1,21 @@
 [
 {
     "fields": {
-        "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"access_type\": \"adsl\"\n    }, \n    \"fallback\": {\n        \"password\": \"secret\", \n        \"network\": \"192.168.1.1/24\"\n    }\n}",
         "wizard": "cpe2",
-        "name": "Test"
+        "name": "Test",
+        "configuration": "{\n    \"wan1\": {\n        \"router\": \"c1841\", \n        \"access_type\": \"ethernet\"\n    }, \n    \"wan2\": {\n        \"router\": \"c1801\", \n        \"access_type\": \"adsl\"\n    }, \n    \"fallback\": {\n        \"password\": \"secret\", \n        \"network\": \"192.168.1.1/24\"\n    }\n}"
     },
     "model": "genconf.project",
     "pk": 1
+},
+{
+    "fields": {
+        "wizard": "",
+        "name": "Custom",
+        "configuration": "{\r\n    \"wan1\": {\r\n        \"router\": \"c1841\", \r\n        \"access_type\": \"ethernet\"\r\n    }, \r\n    \"wan2\": {\r\n        \"router\": \"c1841\", \r\n        \"access_type\": \"ethernet\"\r\n    }, \r\n    \"fallback\": {\r\n        \"password\": \"secret\", \r\n        \"network\": \"172.16.1.1/30\"\r\n    }\r\n}"
+    },
+    "model": "genconf.project",
+    "pk": 2
 },
 {
     "fields": {
@@ -28,6 +37,24 @@
 },
 {
     "fields": {
+        "project": 2,
+        "model": "c1841",
+        "name": "wan1"
+    },
+    "model": "genconf.router",
+    "pk": 3
+},
+{
+    "fields": {
+        "project": 2,
+        "model": "c1841",
+        "name": "wan2"
+    },
+    "model": "genconf.router",
+    "pk": 4
+},
+{
+    "fields": {
         "router": 1,
         "name": "",
         "default_gateway": ""
@@ -46,24 +73,61 @@
 },
 {
     "fields": {
-        "description": "Fallback link",
+        "router": 3,
+        "name": "",
+        "default_gateway": ""
+    },
+    "model": "genconf.vrf",
+    "pk": 3
+},
+{
+    "fields": {
+        "router": 4,
+        "name": "",
+        "default_gateway": ""
+    },
+    "model": "genconf.vrf",
+    "pk": 4
+},
+{
+    "fields": {
+        "ipnetwork": "192.168.1.1/24",
         "vrf": 1,
-        "ipnetwork": "192.168.1.1/24"
+        "description": "Fallback link"
     },
     "model": "genconf.layer3interface",
     "pk": 1
 },
 {
     "fields": {
-        "description": "Fallback link",
+        "ipnetwork": "192.168.1.2/24",
         "vrf": 2,
-        "ipnetwork": "192.168.1.2/24"
+        "description": "Fallback link"
     },
     "model": "genconf.layer3interface",
     "pk": 2
 },
 {
     "fields": {
+        "ipnetwork": "172.16.1.1/30",
+        "vrf": 3,
+        "description": "Fallback link"
+    },
+    "model": "genconf.layer3interface",
+    "pk": 3
+},
+{
+    "fields": {
+        "ipnetwork": "172.16.1.2/30",
+        "vrf": 4,
+        "description": "Fallback link"
+    },
+    "model": "genconf.layer3interface",
+    "pk": 4
+},
+{
+    "fields": {
+        "layer_3_interface": null,
         "router": 1,
         "tag": 1,
         "description": ""
@@ -73,12 +137,33 @@
 },
 {
     "fields": {
+        "layer_3_interface": null,
         "router": 2,
         "tag": 1,
         "description": ""
     },
     "model": "genconf.vlan",
     "pk": 2
+},
+{
+    "fields": {
+        "layer_3_interface": null,
+        "router": 3,
+        "tag": 1,
+        "description": ""
+    },
+    "model": "genconf.vlan",
+    "pk": 3
+},
+{
+    "fields": {
+        "layer_3_interface": null,
+        "router": 4,
+        "tag": 1,
+        "description": ""
+    },
+    "model": "genconf.vlan",
+    "pk": 4
 },
 {
     "fields": {
@@ -286,16 +371,85 @@
 },
 {
     "fields": {
+        "native_vlan": 3,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/0",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 3,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 13
+},
+{
+    "fields": {
+        "native_vlan": 3,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/1",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 3,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 14
+},
+{
+    "fields": {
+        "native_vlan": 4,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/0",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 4,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 15
+},
+{
+    "fields": {
+        "native_vlan": 4,
+        "dot1q_encapsulation": "802.1q",
+        "layer": "3",
+        "name": "fe0/1",
+        "duplex": "auto",
+        "speed": "auto",
+        "mtu": 1500,
+        "dot1q_mode": "access",
+        "router": 4,
+        "type": "ethernet",
+        "description": ""
+    },
+    "model": "genconf.physicalinterface",
+    "pk": 16
+},
+{
+    "fields": {
         "pvc_vp": 8,
         "layer": "3",
-        "pvc_mux": "vc-mux",
         "description": "",
+        "layer_3_interface": null,
         "vlan": 1,
         "pvc_encapsulation": "pppoa",
         "pvc_vc": 35,
         "link": "point-to-point",
         "physical_interface": 1,
         "pvc_dialer_pool_number": 1,
+        "pvc_mux": "vc-mux",
         "name": "fe0/0.1"
     },
     "model": "genconf.subinterface",
@@ -305,18 +459,55 @@
     "fields": {
         "pvc_vp": 8,
         "layer": "3",
-        "pvc_mux": "vc-mux",
         "description": "",
+        "layer_3_interface": null,
         "vlan": 2,
         "pvc_encapsulation": "pppoa",
         "pvc_vc": 35,
         "link": "point-to-point",
         "physical_interface": 4,
         "pvc_dialer_pool_number": 1,
+        "pvc_mux": "vc-mux",
         "name": "fe0.1"
     },
     "model": "genconf.subinterface",
     "pk": 2
+},
+{
+    "fields": {
+        "pvc_vp": 8,
+        "layer": "3",
+        "description": "",
+        "layer_3_interface": null,
+        "vlan": 3,
+        "pvc_encapsulation": "pppoa",
+        "pvc_vc": 35,
+        "link": "point-to-point",
+        "physical_interface": 13,
+        "pvc_dialer_pool_number": 1,
+        "pvc_mux": "vc-mux",
+        "name": "fe0/0.1"
+    },
+    "model": "genconf.subinterface",
+    "pk": 3
+},
+{
+    "fields": {
+        "pvc_vp": 8,
+        "layer": "3",
+        "description": "",
+        "layer_3_interface": null,
+        "vlan": 4,
+        "pvc_encapsulation": "pppoa",
+        "pvc_vc": 35,
+        "link": "point-to-point",
+        "physical_interface": 15,
+        "pvc_dialer_pool_number": 1,
+        "pvc_mux": "vc-mux",
+        "name": "fe0/0.1"
+    },
+    "model": "genconf.subinterface",
+    "pk": 4
 },
 {
     "fields": {
@@ -326,5 +517,14 @@
     },
     "model": "genconf.physicallink",
     "pk": 1
+},
+{
+    "fields": {
+        "project": 2,
+        "router_interface_1": 13,
+        "router_interface_2": 15
+    },
+    "model": "genconf.physicallink",
+    "pk": 2
 }
 ]
