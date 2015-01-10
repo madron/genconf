@@ -1,4 +1,5 @@
 import netaddr
+from django.core import urlresolvers
 from django.test import TestCase
 from .. import factories
 from .. import models
@@ -92,13 +93,17 @@ class VrfModelTest(TestCase):
         vrf = factories.VrfFactory(name='')
         self.assertEqual(str(vrf), '(default)')
 
-    def test_label(self):
+    def test_delete_vrf_link(self):
+        vrf = factories.VrfFactory(id=1, name='vrf')
+        self.assertEqual(vrf.delete_vrf_link(), '<a href="/genconf/vrf/1/delete/">vrf</a>')
+
+    def test_delete_vrf_link_default(self):
         vrf = factories.VrfFactory(name='')
-        self.assertEqual(vrf.label, '(default)')
-        vrf = factories.VrfFactory(name='vrf')
-        self.assertEqual(vrf.label, 'vrf')
+        self.assertEqual(vrf.delete_vrf_link(), '(default)')
+
+    def test_delete_vrf_link_not_saved(self):
         vrf = models.Vrf(name='vrf')
-        self.assertEqual(vrf.label, '')
+        self.assertEqual(vrf.delete_vrf_link(), '')
 
 
 class RouteModelTest(TestCase):

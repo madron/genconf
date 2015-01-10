@@ -155,8 +155,8 @@ class ProjectCustomAdmin(admin.ModelAdmin):
 
 class VrfInline(admin.TabularInline):
     model = models.Vrf
-    fields = ('label', 'name', 'default_gateway')
-    readonly_fields = ('label',)
+    readonly_fields = ('delete_vrf_link',)
+    can_delete = False
     extra = 0
 
 
@@ -212,8 +212,17 @@ class RouterAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Vrf)
-class VrfAdmin(ReadOnlyModelAdmin):
-    pass
+class VrfAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and not obj.name:
+            return False
+        return True
 
 
 @admin.register(models.Route)

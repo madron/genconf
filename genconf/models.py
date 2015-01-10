@@ -1,5 +1,6 @@
 from django.core import urlresolvers
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from netaddr import IPNetwork
 from netutils.modelfields import NetIPNetworkField
 from . import constants
@@ -97,11 +98,17 @@ class Vrf(models.Model):
     def is_global(self):
         return not self.name
 
-    @property
-    def label(self):
+    def delete_vrf_link(self):
         if self.pk:
-            return str(self)
+            label = str(self)
+            if not self.name:
+                return label
+            info = (self._meta.app_label, self._meta.model_name)
+            url_name = 'admin:%s_%s_delete' % info
+            delete_url = urlresolvers.reverse(url_name, args=(self.pk,))
+            return '<a href="%s">%s</a>' % (delete_url, label)
         return ''
+    delete_vrf_link.short_description = _('delete')
 
 
 class Route(models.Model):

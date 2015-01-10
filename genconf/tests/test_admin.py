@@ -233,12 +233,12 @@ class VrfAdminTest(TestCase):
 
     def test_list(self):
         response = self.client.get(self.list)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_search(self):
         data = dict(q='text')
         response = self.client.get(self.list, data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_add(self):
         url = reverse('admin:genconf_vrf_add')
@@ -249,9 +249,15 @@ class VrfAdminTest(TestCase):
         obj = factories.VrfFactory()
         url = reverse('admin:genconf_vrf_change', args=(obj.pk,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
     def test_delete(self):
+        obj = factories.VrfFactory(name='notdefault')
+        url = reverse('admin:genconf_vrf_delete', args=(obj.pk,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_default(self):
         obj = factories.VrfFactory()
         url = reverse('admin:genconf_vrf_delete', args=(obj.pk,))
         response = self.client.get(url)
