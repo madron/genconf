@@ -1,7 +1,7 @@
 from .settings_common import *
 
 INSTALLED_APPS = list(INSTALLED_APPS)
-INSTALLED_APPS.append('django_nose')
+# INSTALLED_APPS.append('django_nose')
 
 # TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
